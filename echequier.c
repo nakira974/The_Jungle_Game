@@ -9,7 +9,7 @@
 
 
 //typedef struct Animal Animal;
-typedef enum Type Type;
+//typedef enum Type Type;
 char coord[7][9];
 int i, j;
 
@@ -42,19 +42,30 @@ void GenererEchequier(){
     animal.y = 9;
 
 
+
+
     while (true) {
 
         printf("Bonjour à toi joueur intrépide, dit moi ton nom\n");
+
+        for(i = 0; i < 9; i++)
+        {
+            for(j = 0; j < 7; j++)
+            {
+                //scanf("%d", coord[i][j]);
+                coord[i][j] = animal.type;
+            }
+        }
 
         printf(" Le tableau 2D = \n");
         for(i=0; i < 9; i++)
         {
             for(j = 0; j < 7; j++)
             {
-                printf("%4d   |", coord[i][j]);
+                printf("%c  |  ", coord[i][j]);
             }
             printf("\n");
-            printf("________________________________________________________\n");
+            printf("________________________________________\n");
         }
 
         printf("Type: %c, %i, %i\n", animal.type, animal.x, animal.y);
