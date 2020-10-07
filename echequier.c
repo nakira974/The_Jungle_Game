@@ -8,7 +8,7 @@
 #include "verifications.h"
 
 
-//typedef struct Animal Animal;
+typedef struct Animal Animal;
 //typedef enum Type Type;
 char coord[7][9];
 int i, j;
@@ -32,11 +32,14 @@ struct Animal{
     int x;
     int y;
 
-} animal;
+};
 
 
 
 void GenererEchequier(){
+
+    Animal animal;
+
     animal.type = LION;
     animal.x = 7;
     animal.y = 9;
