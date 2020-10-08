@@ -35,9 +35,9 @@ struct Animal{
 };
 
 
-
 void GenererEchequier(){
 
+    char nomJoueur[150];
     Animal animal;
 
     animal.type = LION;
@@ -50,6 +50,8 @@ void GenererEchequier(){
     while (true) {
 
         printf("Bonjour à toi joueur intrépide, dit moi ton nom\n");
+        printf("Pseudo : ");
+        scanf("%s", &nomJoueur);
 
         for(i = 0; i < 9; i++)
         {
