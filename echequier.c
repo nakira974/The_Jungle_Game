@@ -14,6 +14,8 @@ typedef struct Animal Animal;
 //typedef enum Type Type;
 char coord[7][9];
 Animal* animalTab=NULL;
+char * animalType;
+
 
 
 enum Type {
@@ -34,6 +36,7 @@ struct Animal{
     char type;
     int x;
     int y;
+    bool isEnnemy;
 
 };
 
@@ -41,7 +44,6 @@ struct Animal{
 char GenererEchequier(){
 
     char nomJoueur[150];
-    Animal animal;
 
     /*
     animal.type = LION;
@@ -50,8 +52,28 @@ char GenererEchequier(){
      */
     int i,j,k,l=0;
     animalTab= malloc(16 * sizeof(Animal));//Création du tableau d'objets<Animal>
-    for (l = 0; l < 15 ; l++) {
 
+    animalType=malloc(8 * sizeof(char));//nos types d'animaux
+    animalType[0]="ELEPHANT";
+    animalType[1]="LION";
+    animalType[2]="TIGRE";
+    animalType[3]="PANTHERE";
+    animalType[4]="CHIEN";
+    animalType[5]="LOUP";
+    animalType[6]="CHAT";
+    animalType[7]="RAT";
+
+    for (l = 0; l < 7 ; l++) {//1er joueur
+        Animal animal;
+        animal.isEnnemy=false;
+        animal.type=animalType[l];
+        animal=animalTab[l];
+    }
+    for (int k = 8; k < 15; ++k) {
+        Animal animal;
+        animal.isEnnemy=true;
+        animal.type=animalType[k];
+        animal=animalTab[k];
     }
 
     while (true) {
