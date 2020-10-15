@@ -1,5 +1,6 @@
 #include "echequier.h"
 #include "multijoueur.h"
+#include <stdlib.h>
 
 void main() {
 
@@ -11,5 +12,8 @@ void main() {
 
 
     GenererEchequier();
+    free(animalTab);
+    free(animalType);
+
 
 }

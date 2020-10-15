@@ -5,6 +5,9 @@
 #ifndef PROJETJUNGLE_ECHEQUIER_H
 #define PROJETJUNGLE_ECHEQUIER_H
 struct Animal;
+struct Echequier;
+struct Animal* animalTab;
+char* animalType;
 int Deplacement(struct Animal *p_a);
 char GenererEchequier();
 #endif //PROJETJUNGLE_ECHEQUIER_H

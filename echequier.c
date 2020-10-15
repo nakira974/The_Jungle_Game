@@ -9,10 +9,12 @@
 
 
 typedef struct Animal Animal;
+typedef struct Echequier;
+Animal* animalTab=NULL;
+char* animalType=NULL;
 //typedef enum Type Type;
 char coord[7][9];
-Animal* animalTab=NULL;
-char* animalType;
+
 
 
 
@@ -43,9 +45,9 @@ void affichage() {
     int i;
 
 
-    for (i = 0; i < sizeof(&animalTab); i++) {
+    for (i = 0; i < sizeof(animalTab) != '\0'; i++) {
 
-        printf("%s", &animalTab[i].type);
+        printf("'%s'\n", &animalTab[i].type);
 
     }
 }
@@ -69,7 +71,7 @@ char GenererEchequier(){
     animalType[6]=CHAT;
     animalType[7]=RAT;
 
-    for (l = 0; l < 7 ; l++) {//1er joueur
+    for (l = 0; l < 8 ; l++) {//1er joueur
         Animal animal;
         animal.isEnnemy=false;
         animal.type=animalType[l];
