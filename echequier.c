@@ -15,6 +15,7 @@ typedef struct Animal Animal;
 char coord[7][9];
 Animal* animalTab=NULL;
 
+
 enum Type {
 
     ELEPHANT = 'E',
