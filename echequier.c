@@ -9,7 +9,6 @@
 #include <string.h>
 #include "verifications.h"
 
-typedef struct Plateau{};
 
 typedef struct Animal Animal;
 //typedef enum Type Type;
