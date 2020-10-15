@@ -45,7 +45,7 @@ void affichage() {
     int i;
 
 
-    for (i = 0; i < sizeof(animalTab) != '\0'; i++) {
+    for (i = 0; i < sizeof(animalTab); i++) {
 
         printf("'%s'\n", &animalTab[i].type);
 
@@ -54,6 +54,8 @@ void affichage() {
 
 
 char GenererEchequier(){
+
+    Animal animal;
 
     char nomJoueur[150];
 
@@ -72,17 +74,16 @@ char GenererEchequier(){
     animalType[7]=RAT;
 
     for (l = 0; l < 8 ; l++) {//1er joueur
-        Animal animal;
+
         animal.isEnnemy=false;
         animal.type=animalType[l];
         animalTab[l]=animal;
     }
-    /*for (k = 0; k < 7; ++k) {
-        Animal animal;
+    for (k = 8; k < 16; ++k) {
         animal.isEnnemy=true;
         animal.type=animalType[k];
         animalTab[k]=animal;
-    }*/
+    }
 
     affichage();
 /*
