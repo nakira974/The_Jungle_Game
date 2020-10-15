@@ -14,7 +14,6 @@ typedef struct Animal Animal;
 //typedef enum Type Type;
 char coord[7][9];
 Animal* animalTab=NULL;
-int i, j;
 
 enum Type {
 
@@ -43,12 +42,15 @@ char GenererEchequier(){
     char nomJoueur[150];
     Animal animal;
 
+    /*
     animal.type = LION;
     animal.x = 7;
     animal.y = 9;
+     */
+    int i,j,k,l=0;
     animalTab= malloc(16 * sizeof(Animal));//Création du tableau d'objets<Animal>
-    for (int k = 0; k < ; ++k) {
-        
+    for (l = 0; l < 15 ; l++) {
+
     }
 
     while (true) {
