@@ -45,9 +45,9 @@ void affichage() {
     int i;
 
 
-    for (i = 0; i < sizeof(animalTab); i++) {
+    for (i = 0; i < sizeof(*animalTab); i++) {
 
-        printf("'%s'\n", &animalTab[i].type);
+        printf("%c", animalTab[i].type);
 
     }
 }
@@ -61,9 +61,9 @@ char GenererEchequier(){
 
     int i,j,k,l;
 
-    animalTab= malloc(16 * sizeof(Animal));//Création du tableau d'objets<Animal>
+    animalTab= malloc(8 * sizeof(Animal));//Création du tableau d'objets<Animal>
 
-    animalType=malloc(16 * sizeof(char));//nos types d'animaux
+    animalType=malloc(8 * sizeof(char));//nos types d'animaux
     animalType[0]=ELEPHANT;
     animalType[1]=LION;
     animalType[2]=TIGRE;
@@ -75,15 +75,18 @@ char GenererEchequier(){
 
     for (l = 0; l < 8 ; l++) {//1er joueur
 
+
         animal.isEnnemy=false;
         animal.type=animalType[l];
         animalTab[l]=animal;
     }
-    for (k = 8; k < 16; ++k) {
+
+    /*for (k = 8; k < 16; ++k) {
+
         animal.isEnnemy=true;
         animal.type=animalType[k];
         animalTab[k]=animal;
-    }
+    }*/
 
     affichage();
 /*
