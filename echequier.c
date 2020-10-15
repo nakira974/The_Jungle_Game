@@ -4,13 +4,17 @@
 
 #include "echequier.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
 #include "verifications.h"
 
+typedef struct Plateau{};
 
 typedef struct Animal Animal;
 //typedef enum Type Type;
 char coord[7][9];
+Animal* animalTab=NULL;
 int i, j;
 
 enum Type {
@@ -35,7 +39,7 @@ struct Animal{
 };
 
 
-void GenererEchequier(){
+char GenererEchequier(){
 
     char nomJoueur[150];
     Animal animal;
@@ -43,8 +47,7 @@ void GenererEchequier(){
     animal.type = LION;
     animal.x = 7;
     animal.y = 9;
-
-
+    animalTab= malloc(16 * sizeof(Animal));//Création du tableau d'objets<Animal>
 
 
     while (true) {
@@ -74,7 +77,14 @@ void GenererEchequier(){
         }
 
         printf("Type: %c, %i, %i\n", animal.type, animal.x, animal.y);
-        return;
+        return coord;
 
     }
+
+
+}
+
+int Deplacement(Animal *p_animal){
+
+    return 0;
 }
