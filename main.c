@@ -10,6 +10,6 @@ void main() {
     //client1=Initiate_ClientSock(add, srvPort);
 
 
-    //GenererEchequier();
+    GenererEchequier();
 
 }

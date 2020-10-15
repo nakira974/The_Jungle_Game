@@ -47,7 +47,9 @@ char GenererEchequier(){
     animal.x = 7;
     animal.y = 9;
     animalTab= malloc(16 * sizeof(Animal));//Création du tableau d'objets<Animal>
-
+    for (int k = 0; k < ; ++k) {
+        
+    }
 
     while (true) {
 
