@@ -211,6 +211,8 @@ void GenererEchequier(){
         scanf("%s", &nomJoueur);*/
 
         printf(" Le tableau 2D = \n");
+    printf("___________________________________________\n");
+    printf("|  ");
         for(i=0; i < 9; i++)
         {
             for(j = 0; j < 7; j++)
@@ -231,9 +233,12 @@ void GenererEchequier(){
                 printf("  |  ");
             }
             printf("\n");
-            printf("________________________________________\n");
+            printf("___________________________________________\n");
+            printf("|  ");
 
         }
+    printf("\r \n");
+    printf("Affiché!");
 
 
 
