@@ -220,7 +220,7 @@ void GenererEchequier(){
                 char* filled_square = u8"\u2588";
 
                 if(coord[i][j]==0){
-                    if(i==3 && j==1 || i==3 && j==2 || i==4 && j==1 || i==4 && j==2 || i==5 && j==1 || i==5 && j==2){
+                    if(i==3 && j==1 || i==3 && j==2 || i==4 && j==1 || i==4 && j==2 || i==5 && j==1 || i==5 && j==2 || i==3 && j==4 || i==3 && j==5 || i==4 && j==4 || i==4 && j==5 || i==5 && j==4 || i==5 && j==5){
                         printf("%s%s%s",Color_Yellow,filled_square,Color_End);
                     }else{
                         printf("   |  ");
