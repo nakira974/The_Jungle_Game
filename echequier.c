@@ -135,7 +135,7 @@ void setCoord(){
         }
 
     }
-    char* test = u8"\u2588";
+
     //printf("%s%s%s",Color_Yellow,test,Color_End);
     //coord[3][1]=test;
 
@@ -215,11 +215,20 @@ void GenererEchequier(){
         {
             for(j = 0; j < 7; j++)
             {
+                char* filled_square = u8"\u2588";
+
                 if(coord[i][j]==0){
-                    printf("   |  ");
+                    if(i==3 && j==1 || i==3 && j==2 || i==4 && j==1 || i==4 && j==2 || i==5 && j==1 || i==5 && j==2){
+                        printf("%s%s%s",Color_Yellow,filled_square,Color_End);
+                    }else{
+                        printf("   |  ");
+                        continue;
+                    }
+
                 }else{
-                    printf("%c  |  ", coord[i][j]);
+                    printf("%c", coord[i][j]);
                 }
+                printf("  |  ");
             }
             printf("\n");
             printf("________________________________________\n");
