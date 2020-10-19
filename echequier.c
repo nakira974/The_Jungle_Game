@@ -173,7 +173,7 @@ void GenererEchequier(){
             animalTab[l] = animal;
         }else{
 
-
+            //second joueur
         animal.isEnemy = true;
         animal.type = animalType[l-8];
         animalTab[l] = animal;
@@ -222,7 +222,12 @@ void GenererEchequier(){
                 if(coord[i][j]==0){
                     if(i==3 && j==1 || i==3 && j==2 || i==4 && j==1 || i==4 && j==2 || i==5 && j==1 || i==5 && j==2 || i==3 && j==4 || i==3 && j==5 || i==4 && j==4 || i==4 && j==5 || i==5 && j==4 || i==5 && j==5){
                         printf("%s%s%s",Color_Yellow,filled_square,Color_End);
-                    }else{
+                    }else if(i==0 && j==2 || i==0 && j==3 || i==0 && j==4 || i==1 && j==3) {
+                        printf("%s%s%s", Color_Red, filled_square, Color_End);
+                    }else if(i==8 && j==2 || i==8 && j==3 || i==8 && j==4 || i==7 && j==3){
+                            printf("%s%s%s",Color_Blue,filled_square,Color_End);
+                        }else
+                    {
                         printf("   |  ");
                         continue;
                     }
