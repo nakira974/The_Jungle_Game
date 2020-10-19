@@ -233,7 +233,17 @@ void GenererEchequier(){
                     }
 
                 }else{
-                    printf("%c", coord[i][j]);
+                    for(m=0; m < sizeof(*animalTab); m++){
+                        if(animalTab[m].x == i && animalTab[m].y==j){
+                            if(animalTab[m].isEnemy){
+                                printf("%s%c%s",Color_Blue,coord[i][j],Color_End);
+                            }else{
+                                printf("%s%c%s",Color_Red,coord[i][j],Color_End);
+                            }
+
+                        }
+                    }
+
                 }
                 printf("  |  ");
             }
