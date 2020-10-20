@@ -12,17 +12,10 @@
 #define Color_Yellow "\33[0:32m"
 #define Color_End "\33[0m" // To flush out prev settings
 
-
-
 typedef struct Animal Animal;
-//typedef struct Echiquier Echiquier;
 Animal* animalTab=NULL;
 char* animalType=NULL;
-//typedef enum Type Type;
 char coord[9][7];
-
-
-
 
 enum Type {
 
@@ -45,18 +38,6 @@ struct Animal{
     bool isEnemy;
 
 };
-
-void affichage() {
-
-    int i;
-
-
-    for (i = 0; i < sizeof(*animalTab); i++) {
-
-        printf("%c", animalTab[i].type);
-
-    }
-}
 
 
 void setCoord(){
@@ -131,137 +112,114 @@ void setCoord(){
                 animalTab[m].y = 6;
             }
 
-
         }
 
     }
 
-    //printf("%s%s%s",Color_Yellow,test,Color_End);
-    //coord[3][1]=test;
-
 }
 
-void GenererEchequier(){
+void afficherEchiquier() {
+
+    int i, j, m;
+
+    printf(" Jeu de la Jungle \n");
+    printf("___________________________________________\n");
+    printf("|  ");
+    for (i = 0; i < 9; i++) {
+        for (j = 0; j < 7; j++) {
+            char *filled_square = u8"\u2588";
+
+            if (coord[i][j] == 0) {
+                if (i == 3 && j == 1 || i == 3 && j == 2 || i == 4 && j == 1 || i == 4 && j == 2 ||
+                    i == 5 && j == 1 || i == 5 && j == 2 || i == 3 && j == 4 || i == 3 && j == 5 ||
+                    i == 4 && j == 4 || i == 4 && j == 5 || i == 5 && j == 4 || i == 5 && j == 5) {
+                    printf("%s%s%s", Color_Yellow, filled_square, Color_End);
+                } else if (i == 0 && j == 2 || i == 0 && j == 3 || i == 0 && j == 4 || i == 1 && j == 3) {
+                    printf("%s%s%s", Color_Red, filled_square, Color_End);
+                } else if (i == 8 && j == 2 || i == 8 && j == 3 || i == 8 && j == 4 || i == 7 && j == 3) {
+                    printf("%s%s%s", Color_Blue, filled_square, Color_End);
+                } else {
+                    printf("   |  ");
+                    continue;
+                }
+
+            } else {
+
+                //utiliser le meme prototype que ci-dessous pour l'affichage des pions
+                for (m = 0; m < sizeof(*animalTab); m++) {
+                    if (animalTab[m].x == i && animalTab[m].y == j) {
+                        //Enemy = Blue Team
+                        if (animalTab[m].isEnemy) {
+                            printf("%s%c%s", Color_Blue, coord[i][j], Color_End);
+                        } else {
+                            printf("%s%c%s", Color_Red, coord[i][j], Color_End);
+                        }
+
+                    }
+                }
+
+            }
+            printf("  |  ");
+        }
+        printf("\n");
+        printf("___________________________________________\n");
+        printf("|  ");
+
+    }
+    printf("\r \n");
+    printf("Affiché!");
+}
+
+void GenererEchequier() {
 
     Animal animal;
-    /*animal.type = NULL;
-    animal.x = 0;
-    animal.y = NULL;
-    animal.isEnnemy = NULL;*/
+    //char nomJoueur[150];
+    int l, k, m;
 
-    char nomJoueur[150];
+    animalTab = malloc(16 * sizeof(Animal));//Création du tableau d'objets<Animal>
+    animalType = malloc(8 * sizeof(char));//nos types d'animaux
 
-    int i,j,l,m,k;
+    animalType[0] = ELEPHANT;
+    animalType[1] = LION;
+    animalType[2] = TIGRE;
+    animalType[3] = PANTHERE;
+    animalType[4] = CHIEN;
+    animalType[5] = LOUP;
+    animalType[6] = CHAT;
+    animalType[7] = RAT;
 
-    animalTab= malloc(16 * sizeof(Animal));//Création du tableau d'objets<Animal>
+    for (l = 0; l < 16; l++) {//1er joueur
 
-    animalType=malloc(8 * sizeof(char));//nos types d'animaux
-    animalType[0]=ELEPHANT;
-    animalType[1]=LION;
-    animalType[2]=TIGRE;
-    animalType[3]=PANTHERE;
-    animalType[4]=CHIEN;
-    animalType[5]=LOUP;
-    animalType[6]=CHAT;
-    animalType[7]=RAT;
-
-    for (l = 0; l < 16 ; l++) {//1er joueur
-
-        if(l<8) {
+        if (l < 8) {
             animal.isEnemy = false;
             animal.type = animalType[l];
             animalTab[l] = animal;
-        }else{
+        } else {
 
             //second joueur
-        animal.isEnemy = true;
-        animal.type = animalType[l-8];
-        animalTab[l] = animal;
-    }
+            animal.isEnemy = true;
+            animal.type = animalType[l - 8];
+            animalTab[l] = animal;
+        }
     }
 
     setCoord();
 
-    for(m=0; m < sizeof(*animalTab); m++){
-        for(k=0; k<sizeof(*coord); k++){
-            int x,y;
-            x=animalTab[m].x;
-            y=animalTab[m].y;
-            coord[x][y]=animalTab[m].type;
+    //utiliser le meme prototype que ci-dessous pour les déplacement
+    for (m = 0; m < sizeof(*animalTab); m++) {
+        for (k = 0; k < sizeof(*coord); k++) {
+            int x, y;
+            x = animalTab[m].x;
+            y = animalTab[m].y;
+            coord[x][y] = animalTab[m].type;
         }
     }
 
+    afficherEchiquier();
 
-    /*affichage();
+}
 
-      for(i = 0; i < 9; i++)
-   {
-       for(j = 0; j < 7; j++)
-       {
-
-           coord[i][j] = animal.type;
-       }
-   }*/
-
-
-
-
-       /* printf("Bonjour à toi joueur intrépide, dit moi ton nom\n");
-        printf("Pseudo : ");
-        scanf("%s", &nomJoueur);*/
-
-        printf(" Le tableau 2D = \n");
-    printf("___________________________________________\n");
-    printf("|  ");
-        for(i=0; i < 9; i++)
-        {
-            for(j = 0; j < 7; j++)
-            {
-                char* filled_square = u8"\u2588";
-
-                if(coord[i][j]==0){
-                    if(i==3 && j==1 || i==3 && j==2 || i==4 && j==1 || i==4 && j==2 || i==5 && j==1 || i==5 && j==2 || i==3 && j==4 || i==3 && j==5 || i==4 && j==4 || i==4 && j==5 || i==5 && j==4 || i==5 && j==5){
-                        printf("%s%s%s",Color_Yellow,filled_square,Color_End);
-                    }else if(i==0 && j==2 || i==0 && j==3 || i==0 && j==4 || i==1 && j==3) {
-                        printf("%s%s%s", Color_Red, filled_square, Color_End);
-                    }else if(i==8 && j==2 || i==8 && j==3 || i==8 && j==4 || i==7 && j==3){
-                            printf("%s%s%s",Color_Blue,filled_square,Color_End);
-                        }else
-                    {
-                        printf("   |  ");
-                        continue;
-                    }
-
-                }else{
-                    for(m=0; m < sizeof(*animalTab); m++){
-                        if(animalTab[m].x == i && animalTab[m].y==j){
-                            if(animalTab[m].isEnemy){
-                                printf("%s%c%s",Color_Blue,coord[i][j],Color_End);
-                            }else{
-                                printf("%s%c%s",Color_Red,coord[i][j],Color_End);
-                            }
-
-                        }
-                    }
-
-                }
-                printf("  |  ");
-            }
-            printf("\n");
-            printf("___________________________________________\n");
-            printf("|  ");
-
-        }
-    printf("\r \n");
-    printf("Affiché!");
-
-
-
-
-
-
-
-    bool color = true;
+    /*bool color = true;
 
         animal.type = animalType[0];
         animal.x = 2;
@@ -271,7 +229,7 @@ void GenererEchequier(){
 
 
 
-    /*if(color==true) {
+    if(color==true) {
         color = false;
 
         coord[animal.x][animal.y]=animal.type;
@@ -289,33 +247,20 @@ color=true;
     scanf("%d", &y);
     //Deplacement(x, y, );*/
 
-       // printf("Type: %c, %i, %i\n", animal.type, animal.x, animal.y);
-
-
-
-}
-
-
-
 int Deplacement(int x, int y, int x_dest, int y_dest, bool isEnemy){
+
     int i;
 
-            for(i=0;i<sizeof(*animalTab);i++){
+    for(i=0;i<sizeof(*animalTab);i++){
 
-                if(!animalTab[i].isEnemy){
+        if(!animalTab[i].isEnemy) {
 
-                    animalTab[i].x = x;
-                    animalTab[i].y = y;
-                    //coord[x][y]=animalTab[]
+            animalTab[i].x = x;
+            animalTab[i].y = y;
+            //coord[x][y]=animalTab[];
 
-                }
+        }
 
-            }
-
-
-
-
-
-
+    }
     return 0;
 }
