@@ -11,6 +11,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <locale.h>
+
 #define Color_Blue "\33[0:34m" // Color Start
 #define Color_Red "\33[0:31m" // Color Start
 #define Color_Yellow "\33[0:32m"
@@ -124,6 +126,8 @@ void setCoord(){
 
 void afficherEchiquier() {
 
+    setlocale(LC_ALL, "fr_FR.UTF-8");
+
     int i, j, m;
 
     printf(" Jeu de la Jungle \n");
@@ -131,33 +135,33 @@ void afficherEchiquier() {
     printf("|  ");
     for (i = 0; i < 9; i++) {
         for (j = 0; j < 7; j++) {
-            char *filled_square = u8"\u2588";
-
 
             if (coord[i][j] == 0) {
 #ifdef _WIN32
-                //char* filled_square = "\x2588";
-                //_setmode(_fileno(stdout), _O_U16TEXT);
                 HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
                 CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
                 WORD saved_attributes;
-
-                /* Save current attributes */
                 GetConsoleScreenBufferInfo(hConsole, &consoleInfo);
                 saved_attributes = consoleInfo.wAttributes;
                 if (i == 3 && j == 1 || i == 3 && j == 2 || i == 4 && j == 1 || i == 4 && j == 2 ||
                     i == 5 && j == 1 || i == 5 && j == 2 || i == 3 && j == 4 || i == 3 && j == 5 ||
                     i == 4 && j == 4 || i == 4 && j == 5 || i == 5 && j == 4 || i == 5 && j == 5) {
                     SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
-                    printf("%s", filled_square);
+                    _setmode(_fileno(stdout), _O_U16TEXT);
+                    wprintf(L"\x2588");
+                    _setmode(_fileno(stdout), _O_TEXT);
                     SetConsoleTextAttribute(hConsole, saved_attributes);
                 } else if (i == 0 && j == 2 || i == 0 && j == 3 || i == 0 && j == 4 || i == 1 && j == 3) {
                     SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
-                    printf("%s", filled_square);
+                    _setmode(_fileno(stdout), _O_U16TEXT);
+                    wprintf(L"\x2588");
+                    _setmode(_fileno(stdout), _O_TEXT);
                     SetConsoleTextAttribute(hConsole, saved_attributes);
                 } else if (i == 8 && j == 2 || i == 8 && j == 3 || i == 8 && j == 4 || i == 7 && j == 3) {
                     SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE);
-                    printf("%s", filled_square);
+                    _setmode(_fileno(stdout), _O_U16TEXT);
+                    wprintf(L"\x2588");
+                    _setmode(_fileno(stdout), _O_TEXT);
                     SetConsoleTextAttribute(hConsole, saved_attributes);
                 } else {
                     printf("   |  ");
@@ -178,11 +182,11 @@ void afficherEchiquier() {
                         //Enemy = Blue Team
                         if (animalTab[m].isEnemy) {
                             SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE);
-                            printf("%s", filled_square);
+                            printf("%c", coord[i][j]);
                             SetConsoleTextAttribute(hConsole, saved_attributes);
                         } else {
                             SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
-                            printf("%s", filled_square);
+                            printf("%c", coord[i][j]);
                             SetConsoleTextAttribute(hConsole, saved_attributes);
                         }
 
@@ -191,6 +195,7 @@ void afficherEchiquier() {
 
             }
 #else
+            char *filled_square = u8"\u2588";
                 if (i == 3 && j == 1 || i == 3 && j == 2 || i == 4 && j == 1 || i == 4 && j == 2 ||
                     i == 5 && j == 1 || i == 5 && j == 2 || i == 3 && j == 4 || i == 3 && j == 5 ||
                     i == 4 && j == 4 || i == 4 && j == 5 || i == 5 && j == 4 || i == 5 && j == 5) {
