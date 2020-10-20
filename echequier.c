@@ -1,12 +1,16 @@
 //
 // Created by maxime on 07/10/2020.
 //
+#ifdef _WIN32
+#include <windows.h>
+#include <fcntl.h>
+#include <io.h>
+#endif
 
 #include "echequier.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include <locale.h>
 #define Color_Blue "\33[0:34m" // Color Start
 #define Color_Red "\33[0:31m" // Color Start
 #define Color_Yellow "\33[0:32m"
@@ -129,11 +133,70 @@ void afficherEchiquier() {
         for (j = 0; j < 7; j++) {
             char *filled_square = u8"\u2588";
 
+
             if (coord[i][j] == 0) {
+#ifdef _WIN32
+                //char* filled_square = "\x2588";
+                //_setmode(_fileno(stdout), _O_U16TEXT);
+                HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+                CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
+                WORD saved_attributes;
+
+                /* Save current attributes */
+                GetConsoleScreenBufferInfo(hConsole, &consoleInfo);
+                saved_attributes = consoleInfo.wAttributes;
                 if (i == 3 && j == 1 || i == 3 && j == 2 || i == 4 && j == 1 || i == 4 && j == 2 ||
                     i == 5 && j == 1 || i == 5 && j == 2 || i == 3 && j == 4 || i == 3 && j == 5 ||
                     i == 4 && j == 4 || i == 4 && j == 5 || i == 5 && j == 4 || i == 5 && j == 5) {
+                    SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
+                    printf("%s", filled_square);
+                    SetConsoleTextAttribute(hConsole, saved_attributes);
+                } else if (i == 0 && j == 2 || i == 0 && j == 3 || i == 0 && j == 4 || i == 1 && j == 3) {
+                    SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
+                    printf("%s", filled_square);
+                    SetConsoleTextAttribute(hConsole, saved_attributes);
+                } else if (i == 8 && j == 2 || i == 8 && j == 3 || i == 8 && j == 4 || i == 7 && j == 3) {
+                    SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE);
+                    printf("%s", filled_square);
+                    SetConsoleTextAttribute(hConsole, saved_attributes);
+                } else {
+                    printf("   |  ");
+                    continue;
+                }
+            } else {
+                HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+                CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
+                WORD saved_attributes;
+
+                /* Save current attributes */
+                GetConsoleScreenBufferInfo(hConsole, &consoleInfo);
+                saved_attributes = consoleInfo.wAttributes;
+
+                //utiliser le meme prototype que ci-dessous pour l'affichage des pions
+                for (m = 0; m < sizeof(*animalTab); m++) {
+                    if (animalTab[m].x == i && animalTab[m].y == j) {
+                        //Enemy = Blue Team
+                        if (animalTab[m].isEnemy) {
+                            SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE);
+                            printf("%s", filled_square);
+                            SetConsoleTextAttribute(hConsole, saved_attributes);
+                        } else {
+                            SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
+                            printf("%s", filled_square);
+                            SetConsoleTextAttribute(hConsole, saved_attributes);
+                        }
+
+                    }
+                }
+
+            }
+#else
+                if (i == 3 && j == 1 || i == 3 && j == 2 || i == 4 && j == 1 || i == 4 && j == 2 ||
+                    i == 5 && j == 1 || i == 5 && j == 2 || i == 3 && j == 4 || i == 3 && j == 5 ||
+                    i == 4 && j == 4 || i == 4 && j == 5 || i == 5 && j == 4 || i == 5 && j == 5) {
+
                     printf("%s%s%s", Color_Yellow, filled_square, Color_End);
+
                 } else if (i == 0 && j == 2 || i == 0 && j == 3 || i == 0 && j == 4 || i == 1 && j == 3) {
                     printf("%s%s%s", Color_Red, filled_square, Color_End);
                 } else if (i == 8 && j == 2 || i == 8 && j == 3 || i == 8 && j == 4 || i == 7 && j == 3) {
@@ -142,8 +205,7 @@ void afficherEchiquier() {
                     printf("   |  ");
                     continue;
                 }
-
-            } else {
+             } else {
 
                 //utiliser le meme prototype que ci-dessous pour l'affichage des pions
                 for (m = 0; m < sizeof(*animalTab); m++) {
@@ -159,6 +221,8 @@ void afficherEchiquier() {
                 }
 
             }
+#endif
+
             printf("  |  ");
         }
         printf("\n");
