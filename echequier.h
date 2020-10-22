@@ -8,9 +8,12 @@
 #include <stdbool.h>
 
 struct Animal;
-struct Echequier;
+struct Player;
 struct Animal* animalTab;
+struct Player* playerTab;
 char* animalType;
-int Deplacement(int x, int y, int x_dest, int y_dest, bool isEnemy);
+int deplacer_Pion(int x, int y, int x_dest, int y_dest, bool isEnemy);
 void GenererEchequier();
+void loadGame();
+
 #endif //PROJETJUNGLE_ECHEQUIER_H
