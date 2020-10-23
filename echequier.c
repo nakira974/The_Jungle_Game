@@ -28,10 +28,13 @@ Player* playerTab=NULL;
 int player_Count = 2;
 int animal_Count = 16;
 char coord[9][7];
+FILE *fichier;
 
 struct Player{
 
     char nom[150];
+    bool isEnemy;
+    int score;
 
 };
 
@@ -54,25 +57,115 @@ struct Animal{
     int x;
     int y;
     bool isEnemy;
+    bool isAlive;
+    int score;
 
 };
 
-int deplacer_Pion(int x, int y, int x_dest, int y_dest, bool isEnemy){
+bool readSave(char tab[9][7]){
 
-    int i;
+    int i, j;
+    fichier = fopen ("save.txt", "rb");
 
-    for(i=0;i<animal_Count;i++){
+    if (!fichier) {
+        return false;
+    }
 
-        if(!animalTab[i].isEnemy) {
+    fread (tab, sizeof(&tab), sizeof(*tab), fichier);
+    fclose (fichier);
 
-            animalTab[i].x = x;
-            animalTab[i].y = y;
-            //coord[x][y]=animalTab[];
-
+for (i = 0; i < 9; i++) {
+for (j = 0; j < 7; j++) {
+            coord[i][j] = tab[i][j];
         }
+    }
+
+    return true;
+
+}
+
+bool writeSave(char tab[9][7]){
+
+    fichier = fopen ("save.txt", "wb");
+    if (!fichier) {
+        return false;
+    }
+
+    fwrite(tab, sizeof(&tab), sizeof(*tab), fichier);
+    fclose (fichier);
+
+    memset (tab, 0, sizeof(&tab));
+    return true;
+}
+
+bool whoisBetter(Animal attacker, Animal defender) {
+
+    if (attacker.x && attacker.y == defender.x && defender.y) {
+        if (defender.type == ELEPHANT && !attacker.type == ELEPHANT) {
+            return false;
+        } else if (defender.type == LION && !attacker.type == ELEPHANT
+                   || !attacker.type == LION) {
+            return false;
+        } else if (defender.type == TIGRE && !attacker.type == TIGRE
+                   || !attacker.type == ELEPHANT || !attacker.type == LION) {
+            return false;
+        } else if (defender.type == PANTHERE && !attacker.type == PANTHERE
+                   || !attacker.type == TIGRE || !attacker.type == ELEPHANT || !attacker.type == LION) {
+            return false;
+        } else if (defender.type == CHIEN && !attacker.type == CHIEN || !attacker.type == ELEPHANT
+                   || !attacker.type == LION || !attacker.type == TIGRE || !attacker.type == PANTHERE) {
+            return false;
+        } else if (defender.type == LOUP && !attacker.type == LOUP || !attacker.type == CHIEN
+                   || !attacker.type == LION || !attacker.type == TIGRE || !attacker.type == PANTHERE
+                   || !attacker.type == ELEPHANT) {
+            return false;
+        } else if (defender.type == CHAT && !!attacker.type == CHAT || !attacker.type == LOUP || !attacker.type == CHIEN
+                   || !attacker.type == LION || !attacker.type == TIGRE || !attacker.type == PANTHERE ||
+                   !attacker.type == ELEPHANT) {
+            return false;
+        } else if (defender.type == RAT && attacker.type == RAT || !attacker.type == RAT) {
+            return true;
+        } else { return true; }
 
     }
-    return 0;
+}
+
+bool deplacerPion(char animal, char vector, bool player) {
+
+    int i, j, k, l;
+
+    for (i = 0; i < 15; i++) {
+        if (!player) {// Joueur 1
+            if (animal == animalTab[i].type && animalTab[i].isAlive && !animalTab[i].isEnemy) {// Verifications
+                for (j = 0; j < 15; j++) {// On parcourt l'ennemi
+                    if (vector == 'H') {//SI VECTOR == 0 ALORS X +1
+                        animalTab[i].x + 1;
+                        if (!whoisBetter(animalTab[j], animalTab[i])) {
+                            &animalTab[i].x - 1;
+                            return false;
+                        }
+                    } else if (vector == 'D') {
+                        &animalTab[i].y + 1;
+                        if (!whoisBetter(animalTab[j], animalTab[i])) {
+                            &animalTab[i].y - 1;
+                            return false;
+                        }
+                    } else if (vector == 'G') {
+                        animalTab[i].y - 1;
+                        if (!whoisBetter(animalTab[j], animalTab[i])) {
+                            animalTab[i].y + 1;
+                            return false;
+                        }
+                    }
+                    if (&animalTab[j].x == &animalTab[i].x &&
+                        &animalTab[j].y == &animalTab[i].y)// On cherche si un pion ennemi est sur la même case
+                        //On vérifie que pendant notre déplacement si on peut tuer quelqu'un
+                        animalTab[j].isAlive = false;// On le tue
+                    return true;
+                }
+            }
+        }
+    }
 }
 
 void viderBuffer()
@@ -112,7 +205,7 @@ void loadGame(){
 
     Player player;
     Animal animal;
-    int pl_Count = 0;
+    char type;
 
    do{
 
@@ -128,8 +221,24 @@ printf("Nom du second joueur: %s\n", playerTab[1].nom);
 
     for (int i = 0; i < player_Count; ++i) {
 
-        player = playerTab[i];
-        printf("C'est au tour de: %s\n", player.nom);
+        do {
+            player = playerTab[i];
+            printf("C'est au tour de: %s\n", player.nom);
+            printf("Choisissez votre pion: ");
+            scanf("%c", &type);
+            if (strlen(&type) != 0) {
+            animal.type = type;
+            animal.isEnemy = true;
+            animal.isAlive = true;
+            printf("Choisissez votre direction: ");
+            scanf("%c", &type);
+
+        }else{
+                break;
+            }
+
+            printf("%c", type);
+        }while(strlen(&type) == 0);
 
     }
 
@@ -215,8 +324,6 @@ void setCoord(){
 
 void afficherEchiquier() {
 
-
-
     int i, j, m;
 
     printf(" Jeu de la Jungle \n");
@@ -269,6 +376,7 @@ void afficherEchiquier() {
                 for (m = 0; m < animal_Count; m++) {
                     if (animalTab[m].x == i && animalTab[m].y == j) {
                         //Enemy = Blue Team
+                        if (animalTab[m].isAlive){
                         if (animalTab[m].isEnemy) {
                             SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE);
                             printf("%c", coord[i][j]);
@@ -277,6 +385,7 @@ void afficherEchiquier() {
                             SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
                             printf("%c", coord[i][j]);
                             SetConsoleTextAttribute(hConsole, saved_attributes);
+                        }
                         }
 
                     }
@@ -305,11 +414,13 @@ void afficherEchiquier() {
                 for (m = 0; m < animal_Count; m++) {
                     if (animalTab[m].x == i && animalTab[m].y == j) {
                         //Enemy = Blue Team
-                        if (animalTab[m].isEnemy) {
-                            printf("%s%c%s", Color_Blue, coord[i][j], Color_End);
-                        } else {
-                            printf("%s%c%s", Color_Red, coord[i][j], Color_End);
-                        }
+                        if (animalTab[m].isAlive){
+                            if (animalTab[m].isEnemy) {
+                                printf("%s%c%s", Color_Blue, coord[i][j], Color_End);
+                            } else {
+                                printf("%s%c%s", Color_Red, coord[i][j], Color_End);
+                            }
+                    }
 
                     }
                 }
@@ -325,7 +436,6 @@ void afficherEchiquier() {
 
     }
     printf("\r \n");
-    printf("Affiché!");
 }
 
 void GenererEchequier() {
@@ -335,11 +445,8 @@ void GenererEchequier() {
     int l, k, m;
 
     animalTab = malloc(16 * sizeof(Animal));//Création du tableau d'objets<Animal>
-    //int size = 16 * sizeof(Animal)/sizeof(Animal);
     animalType = malloc(8 * sizeof(char));//nos types d'animaux
-    //int ch = 8 * sizeof(char)/sizeof(char);
     playerTab = malloc(2 * sizeof(Player));//nos types d'animaux
-    //int pl_count = 2 * sizeof(Player)/sizeof(Player);
 
     animalType[0] = ELEPHANT;
     animalType[1] = LION;
@@ -354,18 +461,23 @@ void GenererEchequier() {
 
         if (l < 8) {
             animal.isEnemy = false;
+            animal.isAlive = true;
             animal.type = animalType[l];
             animalTab[l] = animal;
         } else {
 
             //second joueur
             animal.isEnemy = true;
+            animal.isAlive = true;
             animal.type = animalType[l - 8];
             animalTab[l] = animal;
         }
     }
 
-    setCoord();
+   if (!readSave(coord)) {
+        setCoord();
+    }
+//}
 
     //utiliser le meme prototype que ci-dessous pour les déplacement
     for (m = 0; m < animal_Count; m++) {
@@ -377,35 +489,8 @@ void GenererEchequier() {
         }
     }
 
-    loadGame();
     afficherEchiquier();
+    loadGame();
+    writeSave(coord);
 
 }
-
-/*bool color = true;
-
-    animal.type = animalType[0];
-    animal.x = 2;
-    animal.y = 5;
-    animal.isEnemy = false;
-    coord[animal.x][animal.y]=animal.type;
-
-
-
-if(color==true) {
-    color = false;
-
-    coord[animal.x][animal.y]=animal.type;
-
-
-}else{
-color=true;
-
-}
-
-    int x,y;
-printf("Entrez la ligne:\n");
-scanf("%d", &x);
-printf("Entrez la colonne:\n");
-scanf("%d", &y);
-//Deplacement(x, y, );*/
