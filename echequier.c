@@ -64,26 +64,20 @@ struct Animal{
 
 bool readSave(){
 
-
     fichier = fopen ("save.txt", "rb");
 
     if (!fichier) {
         return false;
     }
-
     int m;
     for (m = 0; m < animal_Count; m++) {
-
-
+        //on récupère les infos des animaux
         fscanf(fichier, "%c: %i, %i, %d, %d", &animalTab[m].type, &animalTab[m].x, &animalTab[m].y, &animalTab[m].isEnemy, &animalTab[m].isAlive);
+        //on saute chaque ligne
         fseek(fichier, 1, SEEK_CUR);
-
     }
-
     fclose (fichier);
-
     return true;
-
 }
 
 bool writeSave(Animal* animalT){
@@ -92,16 +86,18 @@ bool writeSave(Animal* animalT){
     if (!fichier) {
         return false;
     }
+    //on supprime le fichier précédent pour éviter les erreurs
+    remove("save.txt");
 int m;
     for (m = 0; m < animal_Count; m++) {
 
+        //on sauvegarde les infos de nos animaux
             fprintf(fichier, "%c: ", animalT[m].type);
             fprintf(fichier, "%i, ", animalT[m].x);
             fprintf(fichier, "%i, ", animalT[m].y);
             fprintf(fichier, "%d, ", animalT[m].isEnemy);
-        fprintf(fichier, "%d\n", animalT[m].isAlive);
-
-
+            //on saute une ligne à la fin pour passer à l'animal suivant
+            fprintf(fichier, "%d\n", animalT[m].isAlive);
     }
     fclose (fichier);
     return true;
