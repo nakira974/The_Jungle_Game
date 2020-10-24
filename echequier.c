@@ -62,68 +62,69 @@ struct Animal{
 
 };
 
-bool readSave(char tab[9][7]){
+bool readSave(){
 
-    int i, j;
+
     fichier = fopen ("save.txt", "rb");
 
     if (!fichier) {
         return false;
     }
 
-    fread (tab, sizeof(&tab), sizeof(*tab), fichier);
-    fclose (fichier);
+    int m;
+    for (m = 0; m < animal_Count; m++) {
 
-for (i = 0; i < 9; i++) {
-for (j = 0; j < 7; j++) {
-            coord[i][j] = tab[i][j];
-        }
+
+        fscanf(fichier, "%c: %i, %i, %d, %d", &animalTab[m].type, &animalTab[m].x, &animalTab[m].y, &animalTab[m].isEnemy, &animalTab[m].isAlive);
+        fseek(fichier, 1, SEEK_CUR);
+
     }
+
+    fclose (fichier);
 
     return true;
 
 }
 
-bool writeSave(char tab[9][7]){
+bool writeSave(Animal* animalT){
 
     fichier = fopen ("save.txt", "wb");
     if (!fichier) {
         return false;
     }
+int m;
+    for (m = 0; m < animal_Count; m++) {
 
-    fwrite(tab, sizeof(&tab), sizeof(*tab), fichier);
+            fprintf(fichier, "%c: ", animalT[m].type);
+            fprintf(fichier, "%i, ", animalT[m].x);
+            fprintf(fichier, "%i, ", animalT[m].y);
+            fprintf(fichier, "%d, ", animalT[m].isEnemy);
+        fprintf(fichier, "%d\n", animalT[m].isAlive);
+
+
+    }
     fclose (fichier);
-
-    memset (tab, 0, sizeof(&tab));
     return true;
 }
 
 bool whoisBetter(Animal attacker, Animal defender) {
 
     if (attacker.x && attacker.y == defender.x && defender.y) {
-        if (defender.type == ELEPHANT && !attacker.type == ELEPHANT) {
+        if (defender.type == ELEPHANT && attacker.type != ELEPHANT) {
             return false;
-        } else if (defender.type == LION && !attacker.type == ELEPHANT
-                   || !attacker.type == LION) {
+        } else if (defender.type == LION && attacker.type != ELEPHANT || attacker.type != LION) {
             return false;
-        } else if (defender.type == TIGRE && !attacker.type == TIGRE
-                   || !attacker.type == ELEPHANT || !attacker.type == LION) {
+        } else if (defender.type == TIGRE && attacker.type != TIGRE || attacker.type != ELEPHANT || attacker.type != LION) {
             return false;
-        } else if (defender.type == PANTHERE && !attacker.type == PANTHERE
-                   || !attacker.type == TIGRE || !attacker.type == ELEPHANT || !attacker.type == LION) {
+        } else if (defender.type == PANTHERE && attacker.type != PANTHERE || attacker.type != TIGRE || attacker.type != ELEPHANT || attacker.type != LION) {
             return false;
-        } else if (defender.type == CHIEN && !attacker.type == CHIEN || !attacker.type == ELEPHANT
-                   || !attacker.type == LION || !attacker.type == TIGRE || !attacker.type == PANTHERE) {
+        } else if (defender.type == CHIEN && attacker.type != CHIEN || attacker.type != ELEPHANT || attacker.type != LION || attacker.type != TIGRE || attacker.type != PANTHERE) {
             return false;
-        } else if (defender.type == LOUP && !attacker.type == LOUP || !attacker.type == CHIEN
-                   || !attacker.type == LION || !attacker.type == TIGRE || !attacker.type == PANTHERE
-                   || !attacker.type == ELEPHANT) {
+        } else if (defender.type == LOUP && attacker.type != LOUP || attacker.type != CHIEN|| attacker.type != LION || attacker.type != TIGRE || attacker.type != PANTHERE|| attacker.type != ELEPHANT) {
             return false;
-        } else if (defender.type == CHAT && !!attacker.type == CHAT || !attacker.type == LOUP || !attacker.type == CHIEN
-                   || !attacker.type == LION || !attacker.type == TIGRE || !attacker.type == PANTHERE ||
-                   !attacker.type == ELEPHANT) {
+        } else if (defender.type == CHAT && attacker.type != CHAT || attacker.type != LOUP || attacker.type != CHIEN || attacker.type != LION || attacker.type != TIGRE || attacker.type != PANTHERE || attacker.type != ELEPHANT) {
             return false;
-        } else if (defender.type == RAT && attacker.type == RAT || !attacker.type == RAT) {
+        } else if (defender.type == RAT && attacker.type == RAT || attacker.type != RAT) {
             return true;
         } else { return true; }
 
@@ -247,7 +248,7 @@ printf("Nom du second joueur: %s\n", playerTab[1].nom);
 void setCoord(){
     int m;
 
-    for(m=0;m<sizeof(*animalTab);m++){
+    for(m=0;m<animal_Count;m++){
         if(!animalTab[m].isEnemy) {
             if (animalTab[m].type == ELEPHANT) {
                 animalTab[m].x = 2;
@@ -442,7 +443,7 @@ void GenererEchequier() {
     setlocale(LC_ALL, "fr_FR.UTF-8");
 
     Animal animal;
-    int l, k, m;
+    int l;
 
     animalTab = malloc(16 * sizeof(Animal));//Création du tableau d'objets<Animal>
     animalType = malloc(8 * sizeof(char));//nos types d'animaux
@@ -457,40 +458,47 @@ void GenererEchequier() {
     animalType[6] = CHAT;
     animalType[7] = RAT;
 
-    for (l = 0; l < 16; l++) {//1er joueur
+   if (!readSave()) {
+       for (l = 0; l < 16; l++) {//1er joueur
 
-        if (l < 8) {
-            animal.isEnemy = false;
-            animal.isAlive = true;
-            animal.type = animalType[l];
-            animalTab[l] = animal;
-        } else {
+           if (l < 8) {
+               animal.isEnemy = false;
+               animal.isAlive = true;
+               animal.type = animalType[l];
+               animalTab[l] = animal;
+           } else {
 
-            //second joueur
-            animal.isEnemy = true;
-            animal.isAlive = true;
-            animal.type = animalType[l - 8];
-            animalTab[l] = animal;
-        }
-    }
-
-   if (!readSave(coord)) {
+               //second joueur
+               animal.isEnemy = true;
+               animal.isAlive = true;
+               animal.type = animalType[l - 8];
+               animalTab[l] = animal;
+           }
+       }
         setCoord();
-    }
-//}
 
-    //utiliser le meme prototype que ci-dessous pour les déplacement
-    for (m = 0; m < animal_Count; m++) {
-        for (k = 0; k < sizeof(*coord); k++) {
-            int x, y;
-            x = animalTab[m].x;
-            y = animalTab[m].y;
-            coord[x][y] = animalTab[m].type;
-        }
-    }
+       int x, y, m;
+       //utiliser le meme prototype que ci-dessous pour les déplacement
+       for (m = 0; m < animal_Count; m++) {
+                   x = animalTab[m].x;
+                   y = animalTab[m].y;
+                   coord[x][y] = animalTab[m].type;
+       }
+    }else{
+
+       int x, y, m;
+       //utiliser le meme prototype que ci-dessous pour les déplacement
+       for (m = 0; m < animal_Count; m++) {
+           x = animalTab[m].x;
+           y = animalTab[m].y;
+           coord[x][y] = animalTab[m].type;
+       }
+
+   }
+
 
     afficherEchiquier();
     loadGame();
-    writeSave(coord);
+    writeSave(animalTab);
 
 }
