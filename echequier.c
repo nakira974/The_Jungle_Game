@@ -12,7 +12,6 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <locale.h>
-#include <memory.h>
 
 #define Color_Blue "\33[0:34m" // Color Start
 #define Color_Red "\33[0:31m" // Color Start
@@ -70,6 +69,10 @@ bool readSave(){
         return false;
     }
     int m;
+    fscanf(fichier, "%s", playerTab[0].nom);
+    fseek(fichier, 1, SEEK_CUR);
+    fscanf(fichier, "%s", playerTab[1].nom);
+    fseek(fichier, 1, SEEK_CUR);
     for (m = 0; m < animal_Count; m++) {
         //on récupère les infos des animaux
         fscanf(fichier, "%c: %i, %i, %d, %d", &animalTab[m].type, &animalTab[m].x, &animalTab[m].y, &animalTab[m].isEnemy, &animalTab[m].isAlive);
@@ -89,6 +92,8 @@ bool writeSave(Animal* animalT){
     //on supprime le fichier précédent pour éviter les erreurs
     remove("save.txt");
 int m;
+    fprintf(fichier, "%s\n", playerTab[0].nom);
+    fprintf(fichier, "%s\n", playerTab[1].nom);
     for (m = 0; m < animal_Count; m++) {
 
         //on sauvegarde les infos de nos animaux
@@ -129,12 +134,12 @@ bool whoisBetter(Animal attacker, Animal defender) {
 
 bool deplacerPion(char animal, char vector, bool player) {
 
-    int i, j, k, l;
+    int i, j;
 
-    for (i = 0; i < 15; i++) {
+    for (i = 0; i < 8; i++) {
         if (!player) {// Joueur 1
             if (animal == animalTab[i].type && animalTab[i].isAlive && !animalTab[i].isEnemy) {// Verifications
-                for (j = 0; j < 15; j++) {// On parcourt l'ennemi
+                for (j = 0; j < 8; j++) {// On parcourt l'ennemi
                     if (vector == 'H') {//SI VECTOR == 0 ALORS X +1
                         animalTab[i].x + 1;
                         if (!whoisBetter(animalTab[j], animalTab[i])) {
@@ -204,17 +209,17 @@ void loadGame(){
     Animal animal;
     char type;
 
-   do{
+    while (strlen(playerTab[0].nom) == 0 && strlen(playerTab[1].nom) == 0){
 
-printf("Entrez le nom du premier joueur:\n");
-lire(playerTab[0].nom, 150);
-printf("Nom du premier joueur: %s\n", playerTab[0].nom);
-printf("Entrez le nom du second joueur:\n");
-lire(playerTab[1].nom, 150);
-printf("Nom du second joueur: %s\n", playerTab[1].nom);
+            printf("Entrez le nom du premier joueur:\n");
+            lire(playerTab[0].nom, 150);
+            printf("Nom du premier joueur: %s\n", playerTab[0].nom);
+            printf("Entrez le nom du second joueur:\n");
+            lire(playerTab[1].nom, 150);
+            printf("Nom du second joueur: %s\n", playerTab[1].nom);
 
 
-}while(strlen(playerTab[0].nom) == 0 && strlen(playerTab[1].nom) == 0 );
+        }
 
     for (int i = 0; i < player_Count; ++i) {
 
