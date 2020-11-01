@@ -69,6 +69,7 @@ bool readSave(){
         return false;
     }
     int m;
+    playerTab = malloc(2 * sizeof(Player));//nos types d'animaux
     fscanf(fichier, "%s", playerTab[0].nom);
     fseek(fichier, 1, SEEK_CUR);
     fscanf(fichier, "%s", playerTab[1].nom);
@@ -209,7 +210,8 @@ void loadGame(){
     Animal animal;
     char type;
 
-    while (strlen(playerTab[0].nom) == 0 && strlen(playerTab[1].nom) == 0){
+    while (playerTab == NULL){
+        playerTab = malloc(2 * sizeof(Player));//nos types d'animaux
 
             printf("Entrez le nom du premier joueur:\n");
             lire(playerTab[0].nom, 150);
@@ -221,28 +223,28 @@ void loadGame(){
 
         }
 
-    for (int i = 0; i < player_Count; ++i) {
+        for (int i = 0; i < player_Count; ++i) {
 
-        do {
-            player = playerTab[i];
-            printf("C'est au tour de: %s\n", player.nom);
-            printf("Choisissez votre pion: ");
-            scanf("%c", &type);
-            if (strlen(&type) != 0) {
-            animal.type = type;
-            animal.isEnemy = true;
-            animal.isAlive = true;
-            printf("Choisissez votre direction: ");
-            scanf("%c", &type);
+            do {
+                player = playerTab[i];
+                printf("C'est au tour de: %s\n", player.nom);
+                printf("Choisissez votre pion: ");
+                scanf("%c", &type);
+                if (strlen(&type) != 0) {
+                    animal.type = type;
+                    animal.isEnemy = true;
+                    animal.isAlive = true;
+                    printf("Choisissez votre direction: ");
+                    scanf("%c", &type);
 
-        }else{
-                break;
-            }
+                } else {
+                    break;
+                }
 
-            printf("%c", type);
-        }while(strlen(&type) == 0);
+                printf("%c", type);
+            } while (strlen(&type) == 0);
 
-    }
+        }
 
 }
 
@@ -334,46 +336,44 @@ void afficherEchiquier() {
     for (i = 0; i < 9; i++) {
         for (j = 0; j < 7; j++) {
 
-            if (coord[i][j] == 0) {
+
 #ifdef _WIN32
-                HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-                CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
-                WORD saved_attributes;
-                GetConsoleScreenBufferInfo(hConsole, &consoleInfo);
-                saved_attributes = consoleInfo.wAttributes;
+            HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+            CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
+            WORD saved_attributes;
+            GetConsoleScreenBufferInfo(hConsole, &consoleInfo);
+            saved_attributes = consoleInfo.wAttributes;
+            if (coord[i][j] == 0) {
+
+                _setmode(_fileno(stdout), _O_U16TEXT);
                 if (i == 3 && j == 1 || i == 3 && j == 2 || i == 4 && j == 1 || i == 4 && j == 2 ||
                     i == 5 && j == 1 || i == 5 && j == 2 || i == 3 && j == 4 || i == 3 && j == 5 ||
                     i == 4 && j == 4 || i == 4 && j == 5 || i == 5 && j == 4 || i == 5 && j == 5) {
                     SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
-                    _setmode(_fileno(stdout), _O_U16TEXT);
                     wprintf(L"\x2588");
-                    _setmode(_fileno(stdout), _O_TEXT);
-                    SetConsoleTextAttribute(hConsole, saved_attributes);
                 } else if (i == 0 && j == 2 || i == 0 && j == 3 || i == 0 && j == 4 || i == 1 && j == 3) {
                     SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
-                    _setmode(_fileno(stdout), _O_U16TEXT);
-                    wprintf(L"\x2588");
-                    _setmode(_fileno(stdout), _O_TEXT);
-                    SetConsoleTextAttribute(hConsole, saved_attributes);
+                    if(i == 1 && j == 3){
+                        wprintf(L"\x271D");
+                    }else {
+                        wprintf(L"\x2588");
+                    }
                 } else if (i == 8 && j == 2 || i == 8 && j == 3 || i == 8 && j == 4 || i == 7 && j == 3) {
                     SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE);
-                    _setmode(_fileno(stdout), _O_U16TEXT);
-                    wprintf(L"\x2588");
-                    _setmode(_fileno(stdout), _O_TEXT);
+                    if(i == 7 && j == 3){
+                        wprintf(L"\x271D");
+                    }else {
+                        wprintf(L"\x2588");
+                    }
+                }else {
                     SetConsoleTextAttribute(hConsole, saved_attributes);
-                } else {
+                    _setmode(_fileno(stdout), _O_TEXT);
                     printf("   |  ");
                     continue;
                 }
+                SetConsoleTextAttribute(hConsole, saved_attributes);
+                _setmode(_fileno(stdout), _O_TEXT);
             } else {
-                HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-                CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
-                WORD saved_attributes;
-
-                /* Save current attributes */
-                GetConsoleScreenBufferInfo(hConsole, &consoleInfo);
-                saved_attributes = consoleInfo.wAttributes;
-
                 //utiliser le meme prototype que ci-dessous pour l'affichage des pions
                 for (m = 0; m < animal_Count; m++) {
                     if (animalTab[m].x == i && animalTab[m].y == j) {
@@ -395,7 +395,9 @@ void afficherEchiquier() {
 
             }
 #else
+            if (coord[i][j] == 0) {
             char *filled_square = u8"\u2588";
+            char *skull = u8"\u2620";
                 if (i == 3 && j == 1 || i == 3 && j == 2 || i == 4 && j == 1 || i == 4 && j == 2 ||
                     i == 5 && j == 1 || i == 5 && j == 2 || i == 3 && j == 4 || i == 3 && j == 5 ||
                     i == 4 && j == 4 || i == 4 && j == 5 || i == 5 && j == 4 || i == 5 && j == 5) {
@@ -403,10 +405,18 @@ void afficherEchiquier() {
                     printf("%s%s%s", Color_Yellow, filled_square, Color_End);
 
                 } else if (i == 0 && j == 2 || i == 0 && j == 3 || i == 0 && j == 4 || i == 1 && j == 3) {
-                    printf("%s%s%s", Color_Red, filled_square, Color_End);
+                    if(i == 1 && j == 3){
+                        printf("%s%s%s", Color_Red, skull, Color_End);
+                    }else {
+                        printf("%s%s%s", Color_Red, filled_square, Color_End);
+                    }
                 } else if (i == 8 && j == 2 || i == 8 && j == 3 || i == 8 && j == 4 || i == 7 && j == 3) {
-                    printf("%s%s%s", Color_Blue, filled_square, Color_End);
-                } else {
+                   if(i == 7 && j == 3){
+                        printf("%s%s%s", Color_Red, skull, Color_End);
+                    }else {
+                        printf("%s%s%s", Color_Red, filled_square, Color_End);
+                    }
+                }else {
                     printf("   |  ");
                     continue;
                 }
@@ -448,7 +458,6 @@ void GenererEchequier() {
 
     animalTab = malloc(16 * sizeof(Animal));//Création du tableau d'objets<Animal>
     animalType = malloc(8 * sizeof(char));//nos types d'animaux
-    playerTab = malloc(2 * sizeof(Player));//nos types d'animaux
 
     animalType[0] = ELEPHANT;
     animalType[1] = LION;
@@ -460,6 +469,8 @@ void GenererEchequier() {
     animalType[7] = RAT;
 
    if (!readSave()) {
+
+       playerTab = NULL;
        for (l = 0; l < 16; l++) {//1er joueur
 
            if (l < 8) {
