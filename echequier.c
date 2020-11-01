@@ -13,7 +13,6 @@
 #include <stdbool.h>
 #include <locale.h>
 #include <memory.h>
-#include <conio.h>
 
 #define Color_Blue "\33[0:34m" // Color Start
 #define Color_Red "\33[0:31m" // Color Start
@@ -59,7 +58,6 @@ struct Animal{
     int y;
     bool isEnemy;
     bool isAlive;
-    int score;
 
 };
 
@@ -210,7 +208,9 @@ void loadGame(){
 
     Player player;
     Animal animal;
-    char type, direction;
+    char type;
+    char direction;
+    bool turn = false;
 
     while (playerTab == NULL){
 
@@ -234,33 +234,114 @@ void loadGame(){
                     do {
                     printf("Choisissez votre pion: ");
                     scanf("%c", &type);
-                }while(type == 0);
+                }while(type == 10);
+                    viderBuffer();
 
+                    if(turn==false) {
+                        turn=true;
+                        int nbb;
+                        animal.type = type;
+                        animal.isEnemy = true;
+                        animal.isAlive = true;
+                        for (nbb = 0; nbb < animal_Count; nbb++) {
+                            if (animalTab[nbb].isEnemy == true && animalTab[nbb].type == type && animalTab[nbb].isAlive == true) {
+                                animal.x = animalTab[nbb].x;
+                                animal.y = animalTab[nbb].y;
+                            }
+                        }
+                    }else{
+                        turn=false;
+                        int nbb;
+                        animal.type = type;
+                        animal.isEnemy = false;
+                        animal.isAlive = true;
+                        for (nbb = 0; nbb < animal_Count; nbb++) {
+                            if (animalTab[nbb].isEnemy == false && animalTab[nbb].type == type && animalTab[nbb].isAlive == true) {
+                                animal.x = animalTab[nbb].x;
+                                animal.y = animalTab[nbb].y;
+                            }
+                        }
+                    }
 
-                    animal.type = type;
-                    animal.isEnemy = true;
-                    animal.isAlive = true;
             do {
                 printf("Choisissez votre direction: ");
                 scanf("%c", &direction);
-            }while(direction == 0);
+            }while(direction == 10);
+            viderBuffer();
+            int nb;
 
-                    /*switch(getch()) {
-                        case 65:
-                            printf("Up");
+            switch (direction) {
+
+                case 'A':
+                    printf("Avancer\n");
+                    for(nb =0;nb<animal_Count;nb++){
+                        if(animalTab[nb].x == animal.x && animalTab[nb].y == animal.y && animalTab[nb].isAlive == true){
+                            if(animalTab[nb].isEnemy == true){
+                                coord[animalTab[nb].x][animalTab[nb].y] = 0;
+                                animalTab[nb].x = animal.x - 1;
+                            }else{
+                                coord[animalTab[nb].x][animalTab[nb].y] = 0;
+                                animalTab[nb].x = animal.x + 1;
+                            }
                             break;
-                        case 66:
-                            printf("Up");
+                        }
+                    }
+                    break;
+                case 'R':
+                    printf("Reculer\n");
+                    for(nb =0;nb<animal_Count;nb++){
+                        if(animalTab[nb].x == animal.x && animalTab[nb].y == animal.y && animalTab[nb].isAlive == true){
+                            if(animalTab[nb].isEnemy == true){
+                                coord[animalTab[nb].x][animalTab[nb].y] = 0;
+                                animalTab[nb].x = animal.x + 1;
+                            }else{
+                                coord[animalTab[nb].x][animalTab[nb].y] = 0;
+                                animalTab[nb].x = animal.x - 1;
+                            }
                             break;
-                        case 67:
-                            printf("Up");
+                        }
+                    }
+                    break;
+                case 'D':
+                    printf("Droite\n");
+                    for(nb =0;nb<animal_Count;nb++){
+                        if(animalTab[nb].x == animal.x && animalTab[nb].y == animal.y && animalTab[nb].isAlive == true){
+                            if(animalTab[nb].isEnemy == true){
+                                coord[animalTab[nb].x][animalTab[nb].y] = 0;
+                                animalTab[nb].y = animal.y + 1;
+                            }else{
+                                coord[animalTab[nb].x][animalTab[nb].y] = 0;
+                                animalTab[nb].y = animal.y - 1;
+                            }
                             break;
-                        case 68:
-                            printf("Up");
+                        }
+                    }
+                    break;
+                case 'G':
+                    printf("Gauche\n");
+                    for(nb =0;nb<animal_Count;nb++){
+                        if(animalTab[nb].x == animal.x && animalTab[nb].y == animal.y && animalTab[nb].isAlive == true){
+                            if(animalTab[nb].isEnemy == true){
+                                coord[animalTab[nb].x][animalTab[nb].y] = 0;
+                                animalTab[nb].y = animal.y - 1;
+                            }else{
+                                coord[animalTab[nb].x][animalTab[nb].y] = 0;
+                                animalTab[nb].y = animal.y + 1;
+                            }
                             break;
-                    }*/
+                        }
+                    }
+                    break;
+
+                default:
+                    break;
+
+            }
+
+            afficherEchiquier();
 
         }
+
 
 }
 
@@ -344,7 +425,14 @@ void setCoord(){
 
 void afficherEchiquier() {
 
-    int i, j, m;
+    int i, j, m, b, x, y;
+
+    //utiliser le meme prototype que ci-dessous pour les déplacement
+    for (b = 0; b < animal_Count; b++) {
+        x = animalTab[b].x;
+        y = animalTab[b].y;
+        coord[x][y] = animalTab[b].type;
+    }
 
     printf(" Jeu de la Jungle \n");
     printf("___________________________________________\n");
@@ -440,6 +528,7 @@ void afficherEchiquier() {
 
                 //utiliser le meme prototype que ci-dessous pour l'affichage des pions
                 for (m = 0; m < animal_Count; m++) {
+
                     if (animalTab[m].x == i && animalTab[m].y == j) {
                         //Enemy = Blue Team
                         if (animalTab[m].isAlive){
@@ -504,23 +593,6 @@ void GenererEchequier() {
            }
        }
         setCoord();
-
-       int x, y, m;
-       //utiliser le meme prototype que ci-dessous pour les déplacement
-       for (m = 0; m < animal_Count; m++) {
-                   x = animalTab[m].x;
-                   y = animalTab[m].y;
-                   coord[x][y] = animalTab[m].type;
-       }
-    }else{
-
-       int x, y, m;
-       //utiliser le meme prototype que ci-dessous pour les déplacement
-       for (m = 0; m < animal_Count; m++) {
-           x = animalTab[m].x;
-           y = animalTab[m].y;
-           coord[x][y] = animalTab[m].type;
-       }
 
    }
 

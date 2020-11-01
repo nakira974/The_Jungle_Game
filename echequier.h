@@ -12,6 +12,7 @@ struct Player;
 struct Animal* animalTab;
 struct Player* playerTab;
 char* animalType;
+void afficherEchiquier();
 bool deplacerPion(char animal, char vector, bool isAlive);
 void GenererEchequier();
 void loadGame();
