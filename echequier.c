@@ -433,7 +433,11 @@ void afficherEchiquier() {
         y = animalTab[b].y;
         coord[x][y] = animalTab[b].type;
     }
-
+#ifdef _WIN32
+    system("cls");
+#else
+    system("clear");
+#endif
     printf(" Jeu de la Jungle \n");
     printf("___________________________________________\n");
     printf("|  ");
