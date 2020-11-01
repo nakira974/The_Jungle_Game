@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <locale.h>
+#include <memory.h>
 
 #define Color_Blue "\33[0:34m" // Color Start
 #define Color_Red "\33[0:31m" // Color Start
@@ -86,12 +87,12 @@ bool readSave(){
 
 bool writeSave(Animal* animalT){
 
+    //remove("save.txt");
     fichier = fopen ("save.txt", "wb");
     if (!fichier) {
         return false;
     }
-    //on supprime le fichier précédent pour éviter les erreurs
-    remove("save.txt");
+
 int m;
     fprintf(fichier, "%s\n", playerTab[0].nom);
     fprintf(fichier, "%s\n", playerTab[1].nom);
@@ -397,7 +398,7 @@ void afficherEchiquier() {
 #else
             if (coord[i][j] == 0) {
             char *filled_square = u8"\u2588";
-            char *skull = u8"\u2620";
+            char *sanctuary = u8"\u271D";
                 if (i == 3 && j == 1 || i == 3 && j == 2 || i == 4 && j == 1 || i == 4 && j == 2 ||
                     i == 5 && j == 1 || i == 5 && j == 2 || i == 3 && j == 4 || i == 3 && j == 5 ||
                     i == 4 && j == 4 || i == 4 && j == 5 || i == 5 && j == 4 || i == 5 && j == 5) {
@@ -406,15 +407,15 @@ void afficherEchiquier() {
 
                 } else if (i == 0 && j == 2 || i == 0 && j == 3 || i == 0 && j == 4 || i == 1 && j == 3) {
                     if(i == 1 && j == 3){
-                        printf("%s%s%s", Color_Red, skull, Color_End);
+                        printf("%s%s%s", Color_Red, sanctuary, Color_End);
                     }else {
                         printf("%s%s%s", Color_Red, filled_square, Color_End);
                     }
                 } else if (i == 8 && j == 2 || i == 8 && j == 3 || i == 8 && j == 4 || i == 7 && j == 3) {
                    if(i == 7 && j == 3){
-                        printf("%s%s%s", Color_Red, skull, Color_End);
+                        printf("%s%s%s", Color_Blue, sanctuary, Color_End);
                     }else {
-                        printf("%s%s%s", Color_Red, filled_square, Color_End);
+                        printf("%s%s%s", Color_Blue, filled_square, Color_End);
                     }
                 }else {
                     printf("   |  ");
