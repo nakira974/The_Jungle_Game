@@ -13,6 +13,7 @@
 #include <stdbool.h>
 #include <locale.h>
 #include <memory.h>
+#include <conio.h>
 
 #define Color_Blue "\33[0:34m" // Color Start
 #define Color_Red "\33[0:31m" // Color Start
@@ -209,9 +210,10 @@ void loadGame(){
 
     Player player;
     Animal animal;
-    char type;
+    char type, direction;
 
     while (playerTab == NULL){
+
         playerTab = malloc(2 * sizeof(Player));//nos types d'animaux
 
             printf("Entrez le nom du premier joueur:\n");
@@ -226,24 +228,37 @@ void loadGame(){
 
         for (int i = 0; i < player_Count; ++i) {
 
-            do {
                 player = playerTab[i];
                 printf("C'est au tour de: %s\n", player.nom);
-                printf("Choisissez votre pion: ");
-                scanf("%c", &type);
-                if (strlen(&type) != 0) {
+
+                    do {
+                    printf("Choisissez votre pion: ");
+                    scanf("%c", &type);
+                }while(type == 0);
+
+
                     animal.type = type;
                     animal.isEnemy = true;
                     animal.isAlive = true;
-                    printf("Choisissez votre direction: ");
-                    scanf("%c", &type);
+            do {
+                printf("Choisissez votre direction: ");
+                scanf("%c", &direction);
+            }while(direction == 0);
 
-                } else {
-                    break;
-                }
-
-                printf("%c", type);
-            } while (strlen(&type) == 0);
+                    /*switch(getch()) {
+                        case 65:
+                            printf("Up");
+                            break;
+                        case 66:
+                            printf("Up");
+                            break;
+                        case 67:
+                            printf("Up");
+                            break;
+                        case 68:
+                            printf("Up");
+                            break;
+                    }*/
 
         }
 
