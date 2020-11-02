@@ -1,9 +1,8 @@
 //
 // Created by maxime on 07/10/2020.
 //
-
-#ifndef PROJETJUNGLE_ECHEQUIER_H
-#define PROJETJUNGLE_ECHEQUIER_H
+#ifndef PROJETJUNGLE_ECHIQUIER_H
+#define PROJETJUNGLE_ECHIQUIER_H
 
 #include <stdbool.h>
 
@@ -13,8 +12,9 @@ struct Animal* animalTab;
 struct Player* playerTab;
 char* animalType;
 void afficherEchiquier();
-bool deplacerPion(char animal, char vector, bool isAlive);
+void color(int t, int f);
+bool searchCanEat(struct Animal animal, char direction, bool isEnemy);
 void GenererEchequier();
 void loadGame();
 
-#endif //PROJETJUNGLE_ECHEQUIER_H
+#endif //PROJETJUNGLE_ECHIQUIER_H

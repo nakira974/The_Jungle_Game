@@ -3,4 +3,4 @@ project(ProjetJungle C)
 
 set(CMAKE_C_STANDARD 11)
 
-add_executable(ProjetJungle main.c verifications.c verifications.h echequier.c echequier.h multijoueur.c multijoueur.h)
+add_executable(ProjetJungle main.c verifications.c verifications.h echiquier.c echiquier.h multijoueur.c multijoueur.h)

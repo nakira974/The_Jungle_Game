@@ -1,4 +1,4 @@
-#include "echequier.h"
+#include "echiquier.h"
 #include "multijoueur.h"
 #include <stdlib.h>
 
