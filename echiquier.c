@@ -33,6 +33,7 @@ struct Player{
 
     char nom[150];
     bool isEnemy;
+    int score;
 
 };
 
@@ -56,6 +57,7 @@ struct Animal{
     int y;
     bool isEnemy;
     bool isAlive;
+    bool canEat;
 
 };
 
