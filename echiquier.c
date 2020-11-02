@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <locale.h>
+#include <conio.h>
 
 #define Color_Blue "\33[0:34m" // Color Start
 #define Color_Red "\33[0:31m" // Color Start
@@ -171,47 +172,50 @@ void loadGame(){
 
         }
 
+    do {
         for (int i = 0; i < player_Count; ++i) {
 
-                player = playerTab[i];
-                printf("C'est au tour de: %s\n", player.nom);
+            player = playerTab[i];
+            printf("\nC'est au tour de: %s\n", player.nom);
 
-                    do {
-                    printf("Choisissez votre pion: ");
-                    scanf("%c", &type);
-                }while(type == 10);
-                    viderBuffer();
+            do {
+                printf("Choisissez votre pion: ");
+                scanf("%c", &type);
+            } while (type == 10);
+            viderBuffer();
 
-                    if(turn==false) {
-                        turn=true;
-                        int nbb;
-                        animal.type = type;
-                        animal.isEnemy = true;
-                        animal.isAlive = true;
-                        for (nbb = 0; nbb < animal_Count; nbb++) {
-                            if (animalTab[nbb].isEnemy == true && animalTab[nbb].type == type && animalTab[nbb].isAlive == true) {
-                                animal.x = animalTab[nbb].x;
-                                animal.y = animalTab[nbb].y;
-                            }
-                        }
-                    }else{
-                        turn=false;
-                        int nbb;
-                        animal.type = type;
-                        animal.isEnemy = false;
-                        animal.isAlive = true;
-                        for (nbb = 0; nbb < animal_Count; nbb++) {
-                            if (animalTab[nbb].isEnemy == false && animalTab[nbb].type == type && animalTab[nbb].isAlive == true) {
-                                animal.x = animalTab[nbb].x;
-                                animal.y = animalTab[nbb].y;
-                            }
-                        }
+            if (turn == false) {
+                turn = true;
+                int nbb;
+                animal.type = type;
+                animal.isEnemy = true;
+                animal.isAlive = true;
+                for (nbb = 0; nbb < animal_Count; nbb++) {
+                    if (animalTab[nbb].isEnemy == true && animalTab[nbb].type == type &&
+                        animalTab[nbb].isAlive == true) {
+                        animal.x = animalTab[nbb].x;
+                        animal.y = animalTab[nbb].y;
                     }
+                }
+            } else {
+                turn = false;
+                int nbb;
+                animal.type = type;
+                animal.isEnemy = false;
+                animal.isAlive = true;
+                for (nbb = 0; nbb < animal_Count; nbb++) {
+                    if (animalTab[nbb].isEnemy == false && animalTab[nbb].type == type &&
+                        animalTab[nbb].isAlive == true) {
+                        animal.x = animalTab[nbb].x;
+                        animal.y = animalTab[nbb].y;
+                    }
+                }
+            }
 
             do {
                 printf("Choisissez votre direction: ");
                 scanf("%c", &direction);
-            }while(direction == 10);
+            } while (direction == 10);
             viderBuffer();
             int nb;
 
@@ -219,7 +223,7 @@ void loadGame(){
 
                 case 'A':
                     //printf("Avancer\n");
-                    for(nb =0;nb<animal_Count;nb++) {
+                    for (nb = 0; nb < animal_Count; nb++) {
                         if (animalTab[nb].x == animal.x && animalTab[nb].y == animal.y &&
                             animalTab[nb].isAlive == true) {
                             if (animalTab[nb].isEnemy == true) {
@@ -240,15 +244,16 @@ void loadGame(){
                     break;
                 case 'R':
                     //printf("Reculer\n");
-                    for(nb =0;nb<animal_Count;nb++){
-                        if(animalTab[nb].x == animal.x && animalTab[nb].y == animal.y && animalTab[nb].isAlive == true){
-                            if(animalTab[nb].isEnemy == true){
-                                if(searchCanEat(animal, 'R', true)){
+                    for (nb = 0; nb < animal_Count; nb++) {
+                        if (animalTab[nb].x == animal.x && animalTab[nb].y == animal.y &&
+                            animalTab[nb].isAlive == true) {
+                            if (animalTab[nb].isEnemy == true) {
+                                if (searchCanEat(animal, 'R', true)) {
                                     coord[animalTab[nb].x][animalTab[nb].y] = 0;
                                     animalTab[nb].x = animal.x + 1;
                                 }
-                            }else{
-                                if(searchCanEat(animal, 'R', false)){
+                            } else {
+                                if (searchCanEat(animal, 'R', false)) {
                                     coord[animalTab[nb].x][animalTab[nb].y] = 0;
                                     animalTab[nb].x = animal.x - 1;
                                 }
@@ -259,7 +264,7 @@ void loadGame(){
                     break;
                 case 'D':
                     //printf("Droite\n");
-                    for(nb =0;nb<animal_Count;nb++) {
+                    for (nb = 0; nb < animal_Count; nb++) {
                         if (animalTab[nb].x == animal.x && animalTab[nb].y == animal.y &&
                             animalTab[nb].isAlive == true) {
                             if (animalTab[nb].isEnemy == true) {
@@ -279,7 +284,7 @@ void loadGame(){
                     break;
                 case 'G':
                     //printf("Gauche\n");
-                    for(nb =0;nb<animal_Count;nb++) {
+                    for (nb = 0; nb < animal_Count; nb++) {
                         if (animalTab[nb].x == animal.x && animalTab[nb].y == animal.y &&
                             animalTab[nb].isAlive == true) {
                             if (animalTab[nb].isEnemy == true) {
@@ -306,6 +311,8 @@ void loadGame(){
             afficherEchiquier();
 
         }
+        printf("Voulez-vous continuer? (Oui: Entrer / Non: Echap)");
+    }while(getch()!=27);
 
 
 }
