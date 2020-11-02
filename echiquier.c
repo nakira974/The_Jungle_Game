@@ -114,7 +114,6 @@ void color(int t,int f)
 
 }
 
-
 void viderBuffer()
 {
     int c = 0;
