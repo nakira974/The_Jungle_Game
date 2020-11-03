@@ -495,7 +495,7 @@ void afficherEchiquier() {
 #else
             if (coord[i][j] == 0) {
             char *filled_square = u8"\u2588";
-            char *sanctuary = u8"\u271D";
+            //char *sanctuary = u8"\u271D";
                 if (i == 3 && j == 1 || i == 3 && j == 2 || i == 4 && j == 1 || i == 4 && j == 2 ||
                     i == 5 && j == 1 || i == 5 && j == 2 || i == 3 && j == 4 || i == 3 && j == 5 ||
                     i == 4 && j == 4 || i == 4 && j == 5 || i == 5 && j == 4 || i == 5 && j == 5) {
@@ -504,13 +504,13 @@ void afficherEchiquier() {
 
                 } else if (i == 0 && j == 2 || i == 0 && j == 3 || i == 0 && j == 4 || i == 1 && j == 3) {
                     if(i == 0 && j == 3){
-                        printf(" %s%s%s ", Color_Red, sanctuary, Color_End);
+                        printf(" %s%s%s ", Color_Red, filled_square, Color_End);
                     }else {
                         printf(" %s%s%s ", Color_Purple, filled_square, Color_End);
                     }
                 } else if (i == 8 && j == 2 || i == 8 && j == 3 || i == 8 && j == 4 || i == 7 && j == 3) {
                    if(i == 8 && j == 3){
-                        printf(" %s%s%s ", Color_Blue, sanctuary, Color_End);
+                        printf(" %s%s%s ", Color_Blue, filled_square, Color_End);
                     }else {
                         printf(" %s%s%s ", Color_Purple, filled_square, Color_End);
                     }
