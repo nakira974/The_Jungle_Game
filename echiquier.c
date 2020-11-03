@@ -4,6 +4,7 @@
 #ifdef _WIN32
 #include <windows.h>
 #include <io.h>
+#include <conio.h>
 #else
 #include <memory.h>
 #endif
@@ -13,12 +14,12 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <locale.h>
-#include <conio.h>
 
 #define Color_Blue "\33[0:34m" // Color Start
 #define Color_Red "\33[0:31m" // Color Start
 #define Color_Yellow "\33[0:32m"
 #define Color_End "\33[0m" // To flush out prev settings
+#define Color_Purple "\33[0:95m" // To flush out prev settings
 
 typedef struct Animal Animal;
 typedef struct Player Player;
@@ -110,12 +111,14 @@ int m;
     return true;
 }
 
+#ifdef _WIN32
 void color(int t,int f)
 {
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleTextAttribute(hConsole,f*16+t);
 
 }
+#endif
 
 void viderBuffer()
 {
@@ -150,7 +153,7 @@ int lire(char *chaine, int longueur)
     }
 }
 
-void loadGame(){
+void loadGame() {
 
     Player player;
     Animal animal;
@@ -158,21 +161,23 @@ void loadGame(){
     char direction;
     bool turn = false;
 
-    while (playerTab == NULL){
+    while (playerTab == NULL) {
 
         playerTab = malloc(2 * sizeof(Player));//nos types d'animaux
 
-            printf("Entrez le nom du premier joueur:\n");
-            lire(playerTab[0].nom, 150);
-            printf("Nom du premier joueur: %s\n", playerTab[0].nom);
-            printf("Entrez le nom du second joueur:\n");
-            lire(playerTab[1].nom, 150);
-            printf("Nom du second joueur: %s\n", playerTab[1].nom);
+        printf("Entrez le nom du premier joueur:\n");
+        lire(playerTab[0].nom, 150);
+        printf("Nom du premier joueur: %s\n", playerTab[0].nom);
+        printf("Entrez le nom du second joueur:\n");
+        lire(playerTab[1].nom, 150);
+        printf("Nom du second joueur: %s\n", playerTab[1].nom);
 
 
-        }
+    }
+
 
     do {
+
         for (int i = 0; i < player_Count; ++i) {
 
             player = playerTab[i];
@@ -212,107 +217,117 @@ void loadGame(){
                 }
             }
 
-            do {
-                printf("Choisissez votre direction: ");
-                scanf("%c", &direction);
-            } while (direction == 10);
-            viderBuffer();
-            int nb;
+do{
+            printf("Choisissez votre direction: ");
+            scanf("%c", &direction);
+        }
+        while (direction == 10);
+        viderBuffer();
+        int nb;
 
-            switch (direction) {
+        switch (direction) {
 
-                case 'A':
-                    //printf("Avancer\n");
-                    for (nb = 0; nb < animal_Count; nb++) {
-                        if (animalTab[nb].x == animal.x && animalTab[nb].y == animal.y &&
-                            animalTab[nb].isAlive == true) {
-                            if (animalTab[nb].isEnemy == true) {
-                                if (searchCanEat(animal, 'A', true)) {
+            case 'A':
+                //printf("Avancer\n");
+                for (nb = 0; nb < animal_Count; nb++) {
+                    if (animalTab[nb].x == animal.x && animalTab[nb].y == animal.y &&
+                        animalTab[nb].isAlive == true) {
+                        if (animalTab[nb].isEnemy == true) {
+                            if (searchCanEat(animal, 'A', true)) {
 
-                                    coord[animalTab[nb].x][animalTab[nb].y] = 0;
-                                    animalTab[nb].x = animal.x - 1;
-                                }
-                            } else {
-                                if (searchCanEat(animal, 'A', false)) {
-                                    coord[animalTab[nb].x][animalTab[nb].y] = 0;
-                                    animalTab[nb].x = animal.x + 1;
-                                }
-
+                                coord[animalTab[nb].x][animalTab[nb].y] = 0;
+                                animalTab[nb].x = animal.x - 1;
                             }
-                        }
-                    }
-                    break;
-                case 'R':
-                    //printf("Reculer\n");
-                    for (nb = 0; nb < animal_Count; nb++) {
-                        if (animalTab[nb].x == animal.x && animalTab[nb].y == animal.y &&
-                            animalTab[nb].isAlive == true) {
-                            if (animalTab[nb].isEnemy == true) {
-                                if (searchCanEat(animal, 'R', true)) {
-                                    coord[animalTab[nb].x][animalTab[nb].y] = 0;
-                                    animalTab[nb].x = animal.x + 1;
-                                }
-                            } else {
-                                if (searchCanEat(animal, 'R', false)) {
-                                    coord[animalTab[nb].x][animalTab[nb].y] = 0;
-                                    animalTab[nb].x = animal.x - 1;
-                                }
+                        } else {
+                            if (searchCanEat(animal, 'A', false)) {
+                                coord[animalTab[nb].x][animalTab[nb].y] = 0;
+                                animalTab[nb].x = animal.x + 1;
                             }
 
                         }
                     }
-                    break;
-                case 'D':
-                    //printf("Droite\n");
-                    for (nb = 0; nb < animal_Count; nb++) {
-                        if (animalTab[nb].x == animal.x && animalTab[nb].y == animal.y &&
-                            animalTab[nb].isAlive == true) {
-                            if (animalTab[nb].isEnemy == true) {
-                                if (searchCanEat(animal, 'D', true)) {
-                                    coord[animalTab[nb].x][animalTab[nb].y] = 0;
-                                    animalTab[nb].y = animal.y + 1;
-                                }
-                            } else {
-                                if (searchCanEat(animal, 'D', false)) {
-                                    coord[animalTab[nb].x][animalTab[nb].y] = 0;
-                                    animalTab[nb].y = animal.y - 1;
-                                }
-
+                }
+                break;
+            case 'R':
+                //printf("Reculer\n");
+                for (nb = 0; nb < animal_Count; nb++) {
+                    if (animalTab[nb].x == animal.x && animalTab[nb].y == animal.y &&
+                        animalTab[nb].isAlive == true) {
+                        if (animalTab[nb].isEnemy == true) {
+                            if (searchCanEat(animal, 'R', true)) {
+                                coord[animalTab[nb].x][animalTab[nb].y] = 0;
+                                animalTab[nb].x = animal.x + 1;
+                            }
+                        } else {
+                            if (searchCanEat(animal, 'R', false)) {
+                                coord[animalTab[nb].x][animalTab[nb].y] = 0;
+                                animalTab[nb].x = animal.x - 1;
                             }
                         }
-                    }
-                    break;
-                case 'G':
-                    //printf("Gauche\n");
-                    for (nb = 0; nb < animal_Count; nb++) {
-                        if (animalTab[nb].x == animal.x && animalTab[nb].y == animal.y &&
-                            animalTab[nb].isAlive == true) {
-                            if (animalTab[nb].isEnemy == true) {
-                                if (searchCanEat(animal, 'G', true)) {
-                                    coord[animalTab[nb].x][animalTab[nb].y] = 0;
-                                    animalTab[nb].y = animal.y - 1;
-                                }
-                            } else {
-                                if (searchCanEat(animal, 'G', false)) {
-                                    coord[animalTab[nb].x][animalTab[nb].y] = 0;
-                                    animalTab[nb].y = animal.y + 1;
-                                }
 
+                    }
+                }
+                break;
+            case 'D':
+                //printf("Droite\n");
+                for (nb = 0; nb < animal_Count; nb++) {
+                    if (animalTab[nb].x == animal.x && animalTab[nb].y == animal.y &&
+                        animalTab[nb].isAlive == true) {
+                        if (animalTab[nb].isEnemy == true) {
+                            if (searchCanEat(animal, 'D', true)) {
+                                coord[animalTab[nb].x][animalTab[nb].y] = 0;
+                                animalTab[nb].y = animal.y + 1;
                             }
+                        } else {
+                            if (searchCanEat(animal, 'D', false)) {
+                                coord[animalTab[nb].x][animalTab[nb].y] = 0;
+                                animalTab[nb].y = animal.y - 1;
+                            }
+
                         }
                     }
-                    break;
+                }
+                break;
+            case 'G':
+                //printf("Gauche\n");
+                for (nb = 0; nb < animal_Count; nb++) {
+                    if (animalTab[nb].x == animal.x && animalTab[nb].y == animal.y &&
+                        animalTab[nb].isAlive == true) {
+                        if (animalTab[nb].isEnemy == true) {
+                            if (searchCanEat(animal, 'G', true)) {
+                                coord[animalTab[nb].x][animalTab[nb].y] = 0;
+                                animalTab[nb].y = animal.y - 1;
+                            }
+                        } else {
+                            if (searchCanEat(animal, 'G', false)) {
+                                coord[animalTab[nb].x][animalTab[nb].y] = 0;
+                                animalTab[nb].y = animal.y + 1;
+                            }
 
-                default:
-                    break;
+                        }
+                    }
+                }
+                break;
 
-            }
+            default:
+                break;
 
-            afficherEchiquier();
+
+
 
         }
-        printf("Voulez-vous continuer? (Oui: Entrer / Non: Echap)");
+
+        afficherEchiquier();
+
+    }
+
+    printf("Voulez-vous continuer? (Oui: Entrer / Non: Echap)");
+#ifdef _WIN32
     }while(getch()!=27);
+#else
+}while(getc(stdin)!=27);
+#endif
+
 
 
 }
@@ -485,22 +500,22 @@ void afficherEchiquier() {
                     i == 5 && j == 1 || i == 5 && j == 2 || i == 3 && j == 4 || i == 3 && j == 5 ||
                     i == 4 && j == 4 || i == 4 && j == 5 || i == 5 && j == 4 || i == 5 && j == 5) {
 
-                    printf("%s%s%s", Color_Yellow, filled_square, Color_End);
+                    printf(" %s%s%s ", Color_Yellow, filled_square, Color_End);
 
                 } else if (i == 0 && j == 2 || i == 0 && j == 3 || i == 0 && j == 4 || i == 1 && j == 3) {
-                    if(i == 1 && j == 3){
-                        printf("%s%s%s", Color_Red, sanctuary, Color_End);
+                    if(i == 0 && j == 3){
+                        printf(" %s%s%s ", Color_Red, sanctuary, Color_End);
                     }else {
-                        printf("%s%s%s", Color_Red, filled_square, Color_End);
+                        printf(" %s%s%s ", Color_Purple, filled_square, Color_End);
                     }
                 } else if (i == 8 && j == 2 || i == 8 && j == 3 || i == 8 && j == 4 || i == 7 && j == 3) {
-                   if(i == 7 && j == 3){
-                        printf("%s%s%s", Color_Blue, sanctuary, Color_End);
+                   if(i == 8 && j == 3){
+                        printf(" %s%s%s ", Color_Blue, sanctuary, Color_End);
                     }else {
-                        printf("%s%s%s", Color_Blue, filled_square, Color_End);
+                        printf(" %s%s%s ", Color_Purple, filled_square, Color_End);
                     }
                 }else {
-                    printf("   |  ");
+                    printf("   |");
                     continue;
                 }
              } else {
@@ -512,9 +527,9 @@ void afficherEchiquier() {
                         //Enemy = Blue Team
                         if (animalTab[m].isAlive){
                             if (animalTab[m].isEnemy) {
-                                printf("%s%c%s", Color_Blue, coord[i][j], Color_End);
+                                printf(" %s%c%s ", Color_Blue, coord[i][j], Color_End);
                             } else {
-                                printf("%s%c%s", Color_Red, coord[i][j], Color_End);
+                                printf(" %s%c%s ", Color_Red, coord[i][j], Color_End);
                             }
                     }
 
