@@ -559,8 +559,6 @@ bool searchCanEat(Animal animal, char direction, bool isEnemy){
                     animal.x = animal.x - 1;
                     for (b = 0; b < animal_Count; b++) {
                         if(animalTab[b].x == animal.x && animalTab[b].y == animal.y && animalTab[b].isAlive && !animalTab[b].isEnemy){
-
-                            //printf("%i, %i, %i, %i", animalTab[b].x, animalTab[b].y, animal.x, animal.y);
                             //checker la possibilité d'attaque
                             //check les possibilités et ajouter les capacités à la structure Animal et le score à la structure Player
                             //effectuer la mort du pion et le score
@@ -579,8 +577,6 @@ bool searchCanEat(Animal animal, char direction, bool isEnemy){
                     animal.x = animal.x + 1;
                     for (b = 0; b < animal_Count; b++) {
                         if(animalTab[b].x == animal.x && animalTab[b].y == animal.y && animalTab[b].isAlive && animalTab[b].isEnemy){
-
-                            //printf("%i, %i, %i, %i", animalTab[b].x, animalTab[b].y, animal.x, animal.y);
                             //checker la possibilité d'attaque
                             //check les possibilités et ajouter les capacités à la structure Animal et le score à la structure Player
                             //effectuer la mort du pion et le score
@@ -603,8 +599,6 @@ bool searchCanEat(Animal animal, char direction, bool isEnemy){
                     animal.x = animal.x + 1;
                     for (b = 0; b < animal_Count; b++) {
                         if(animalTab[b].x == animal.x && animalTab[b].y == animal.y && animalTab[b].isAlive && !animalTab[b].isEnemy){
-
-                            //printf("%i, %i, %i, %i", animalTab[b].x, animalTab[b].y, animal.x, animal.y);
                             //checker la possibilité d'attaque
                             //check les possibilités et ajouter les capacités à la structure Animal et le score à la structure Player
                             //effectuer la mort du pion et le score
@@ -623,8 +617,6 @@ bool searchCanEat(Animal animal, char direction, bool isEnemy){
                     animal.x = animal.x - 1;
                     for (b = 0; b < animal_Count; b++) {
                         if(animalTab[b].x == animal.x && animalTab[b].y == animal.y && animalTab[b].isAlive && animalTab[b].isEnemy){
-
-                            //printf("%i, %i, %i, %i", animalTab[b].x, animalTab[b].y, animal.x, animal.y);
                             //checker la possibilité d'attaque
                             //check les possibilités et ajouter les capacités à la structure Animal et le score à la structure Player
                             //effectuer la mort du pion et le score
@@ -647,8 +639,6 @@ bool searchCanEat(Animal animal, char direction, bool isEnemy){
                     animal.y = animal.y + 1;
                     for (b = 0; b < animal_Count; b++) {
                         if(animalTab[b].x == animal.x && animalTab[b].y == animal.y && animalTab[b].isAlive && !animalTab[b].isEnemy){
-
-                            //printf("%i, %i, %i, %i", animalTab[b].x, animalTab[b].y, animal.x, animal.y);
                             //checker la possibilité d'attaque
                             //check les possibilités et ajouter les capacités à la structure Animal et le score à la structure Player
                             //effectuer la mort du pion et le score
@@ -667,8 +657,6 @@ bool searchCanEat(Animal animal, char direction, bool isEnemy){
                     animal.y = animal.y - 1;
                     for (b = 0; b < animal_Count; b++) {
                         if(animalTab[b].x == animal.x && animalTab[b].y == animal.y && animalTab[b].isAlive && animalTab[b].isEnemy){
-
-                            //printf("%i, %i, %i, %i", animalTab[b].x, animalTab[b].y, animal.x, animal.y);
                             //checker la possibilité d'attaque
                             //check les possibilités et ajouter les capacités à la structure Animal et le score à la structure Player
                             //effectuer la mort du pion et le score
@@ -691,8 +679,6 @@ bool searchCanEat(Animal animal, char direction, bool isEnemy){
                     animal.y = animal.y - 1;
                     for (b = 0; b < animal_Count; b++) {
                         if(animalTab[b].x == animal.x && animalTab[b].y == animal.y && animalTab[b].isAlive && !animalTab[b].isEnemy){
-
-                            //printf("%i, %i, %i, %i", animalTab[b].x, animalTab[b].y, animal.x, animal.y);
                             //checker la possibilité d'attaque
                             //check les possibilités et ajouter les capacités à la structure Animal et le score à la structure Player
                             //effectuer la mort du pion et le score
@@ -711,8 +697,6 @@ bool searchCanEat(Animal animal, char direction, bool isEnemy){
                     animal.y = animal.y + 1;
                     for (b = 0; b < animal_Count; b++) {
                         if(animalTab[b].x == animal.x && animalTab[b].y == animal.y && animalTab[b].isAlive && animalTab[b].isEnemy){
-
-                            //printf("%i, %i, %i, %i", animalTab[b].x, animalTab[b].y, animal.x, animal.y);
                             //checker la possibilité d'attaque
                             //check les possibilités et ajouter les capacités à la structure Animal et le score à la structure Player
                             //effectuer la mort du pion et le score
