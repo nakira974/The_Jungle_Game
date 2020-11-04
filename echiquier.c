@@ -28,7 +28,6 @@ char* animalType=NULL;
 Player* playerTab=NULL;
 int player_Count = 2;
 int animal_Count = 16;
-int animaltype_Count = 8;
 char coord[9][7];
 FILE *fichier;
 
