@@ -28,7 +28,6 @@ char* animalType=NULL;
 Player* playerTab=NULL;
 int player_Count = 2;
 int animal_Count = 16;
-int animaltype_Count = 8;
 char coord[9][7];
 FILE *fichier;
 
@@ -555,28 +554,27 @@ void afficherEchiquier() {
 
 bool checkEat(Animal *enemy, Animal ally){
 
-    int u, b;
+    if(enemy->isEnemy != ally.isEnemy) {
 
-    if(enemy->type != ally.type) {
 
             if (enemy->index > ally.index) {
                 enemy->isAlive = false;
                 coord[enemy->x][enemy->y] = 0;
                 return true;
 
-        }else if(enemy->type == 'E' && ally.type == 'R'){
+            } else if (enemy->type == 'E' && ally.type == 'R') {
 
                 enemy->isAlive = false;
                 coord[enemy->x][enemy->y] = 0;
                 return true;
 
-            }else{
+            } else {
                 return false;
             }
-            return false;
 
-    }
+    }else{
         return false;
+    }
 
 }
 
@@ -590,14 +588,14 @@ bool searchCanEat(Animal animal, char direction, bool isEnemy){
                 if(isEnemy){
                     animal.x = animal.x - 1;
                     for (b = 0; b < animal_Count; b++) {
-                        if(animalTab[b].x == animal.x && animalTab[b].y == animal.y && animalTab[b].isAlive && !animalTab[b].isEnemy){
-                            //checker la possibilité d'attaque
-                            //check les possibilités et ajouter les capacités à la structure Animal et le score à la structure Player
-                            //effectuer la mort du pion et le score
+                        if(animalTab[b].x == animal.x && animalTab[b].y == animal.y && animalTab[b].isAlive){
+                            if(!animalTab[b].isEnemy) {
+                                if (checkEat(&animalTab[b], animal)) {
+                                    return true;
 
-                            if(checkEat(&animalTab[b], animal)){
-                                return true;
-
+                                } else {
+                                    return false;
+                                }
                             }else{
                                 return false;
                             }
@@ -606,12 +604,14 @@ bool searchCanEat(Animal animal, char direction, bool isEnemy){
                 }else{
                     animal.x = animal.x + 1;
                     for (b = 0; b < animal_Count; b++) {
-                        if(animalTab[b].x == animal.x && animalTab[b].y == animal.y && animalTab[b].isAlive && animalTab[b].isEnemy){
-                            //checker la possibilité d'attaque
-                            //check les possibilités et ajouter les capacités à la structure Animal et le score à la structure Player
-                            //effectuer la mort du pion et le score
-                            if(checkEat(&animalTab[b], animal)){
-                                return true;
+                        if(animalTab[b].x == animal.x && animalTab[b].y == animal.y && animalTab[b].isAlive){
+                            if(!animalTab[b].isEnemy) {
+                                if (checkEat(&animalTab[b], animal)) {
+                                    return true;
+
+                                } else {
+                                    return false;
+                                }
                             }else{
                                 return false;
                             }
@@ -624,13 +624,14 @@ bool searchCanEat(Animal animal, char direction, bool isEnemy){
                 if(isEnemy){
                     animal.x = animal.x + 1;
                     for (b = 0; b < animal_Count; b++) {
-                        if(animalTab[b].x == animal.x && animalTab[b].y == animal.y && animalTab[b].isAlive && !animalTab[b].isEnemy){
-                            //checker la possibilité d'attaque
-                            //check les possibilités et ajouter les capacités à la structure Animal et le score à la structure Player
-                            //effectuer la mort du pion et le score
-                            if(checkEat(&animalTab[b], animal)) {
-                                return true;
+                        if(animalTab[b].x == animal.x && animalTab[b].y == animal.y && animalTab[b].isAlive){
+                            if(!animalTab[b].isEnemy) {
+                                if (checkEat(&animalTab[b], animal)) {
+                                    return true;
 
+                                } else {
+                                    return false;
+                                }
                             }else{
                                 return false;
                             }
@@ -639,13 +640,14 @@ bool searchCanEat(Animal animal, char direction, bool isEnemy){
                 }else{
                     animal.x = animal.x - 1;
                     for (b = 0; b < animal_Count; b++) {
-                        if(animalTab[b].x == animal.x && animalTab[b].y == animal.y && animalTab[b].isAlive && animalTab[b].isEnemy){
-                            //checker la possibilité d'attaque
-                            //check les possibilités et ajouter les capacités à la structure Animal et le score à la structure Player
-                            //effectuer la mort du pion et le score
-                            if(checkEat(&animalTab[b], animal)) {
-                                return true;
+                        if(animalTab[b].x == animal.x && animalTab[b].y == animal.y && animalTab[b].isAlive){
+                            if(!animalTab[b].isEnemy) {
+                                if (checkEat(&animalTab[b], animal)) {
+                                    return true;
 
+                                } else {
+                                    return false;
+                                }
                             }else{
                                 return false;
                             }
@@ -658,13 +660,14 @@ bool searchCanEat(Animal animal, char direction, bool isEnemy){
                 if(isEnemy){
                     animal.y = animal.y + 1;
                     for (b = 0; b < animal_Count; b++) {
-                        if(animalTab[b].x == animal.x && animalTab[b].y == animal.y && animalTab[b].isAlive && !animalTab[b].isEnemy){
-                            //checker la possibilité d'attaque
-                            //check les possibilités et ajouter les capacités à la structure Animal et le score à la structure Player
-                            //effectuer la mort du pion et le score
-                            if(checkEat(&animalTab[b], animal)) {
-                                return true;
+                        if(animalTab[b].x == animal.x && animalTab[b].y == animal.y && animalTab[b].isAlive){
+                            if(!animalTab[b].isEnemy) {
+                                if (checkEat(&animalTab[b], animal)) {
+                                    return true;
 
+                                } else {
+                                    return false;
+                                }
                             }else{
                                 return false;
                             }
@@ -673,13 +676,14 @@ bool searchCanEat(Animal animal, char direction, bool isEnemy){
                 }else{
                     animal.y = animal.y - 1;
                     for (b = 0; b < animal_Count; b++) {
-                        if(animalTab[b].x == animal.x && animalTab[b].y == animal.y && animalTab[b].isAlive && animalTab[b].isEnemy){
-                            //checker la possibilité d'attaque
-                            //check les possibilités et ajouter les capacités à la structure Animal et le score à la structure Player
-                            //effectuer la mort du pion et le score
-                            if(checkEat(&animalTab[b], animal)) {
-                                return true;
+                        if(animalTab[b].x == animal.x && animalTab[b].y == animal.y && animalTab[b].isAlive){
+                            if(!animalTab[b].isEnemy) {
+                                if (checkEat(&animalTab[b], animal)) {
+                                    return true;
 
+                                } else {
+                                    return false;
+                                }
                             }else{
                                 return false;
                             }
@@ -692,13 +696,14 @@ bool searchCanEat(Animal animal, char direction, bool isEnemy){
                 if(isEnemy){
                     animal.y = animal.y - 1;
                     for (b = 0; b < animal_Count; b++) {
-                        if(animalTab[b].x == animal.x && animalTab[b].y == animal.y && animalTab[b].isAlive && !animalTab[b].isEnemy){
-                            //checker la possibilité d'attaque
-                            //check les possibilités et ajouter les capacités à la structure Animal et le score à la structure Player
-                            //effectuer la mort du pion et le score
-                            if(checkEat(&animalTab[b], animal)) {
-                                return true;
+                        if(animalTab[b].x == animal.x && animalTab[b].y == animal.y && animalTab[b].isAlive){
+                            if(!animalTab[b].isEnemy) {
+                                if (checkEat(&animalTab[b], animal)) {
+                                    return true;
 
+                                } else {
+                                    return false;
+                                }
                             }else{
                                 return false;
                             }
@@ -707,13 +712,14 @@ bool searchCanEat(Animal animal, char direction, bool isEnemy){
                 }else{
                     animal.y = animal.y + 1;
                     for (b = 0; b < animal_Count; b++) {
-                        if(animalTab[b].x == animal.x && animalTab[b].y == animal.y && animalTab[b].isAlive && animalTab[b].isEnemy){
-                            //checker la possibilité d'attaque
-                            //check les possibilités et ajouter les capacités à la structure Animal et le score à la structure Player
-                            //effectuer la mort du pion et le score
-                            if(checkEat(&animalTab[b], animal)) {
-                                return true;
+                        if(animalTab[b].x == animal.x && animalTab[b].y == animal.y && animalTab[b].isAlive){
+                            if(!animalTab[b].isEnemy) {
+                                if (checkEat(&animalTab[b], animal)) {
+                                    return true;
 
+                                } else {
+                                    return false;
+                                }
                             }else{
                                 return false;
                             }
