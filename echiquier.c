@@ -557,7 +557,7 @@ bool checkEat(Animal *enemy, Animal ally){
     if(enemy->isEnemy != ally.isEnemy) {
 
 
-            if (enemy->index > ally.index) {
+            if (enemy->index >= ally.index) {
                 enemy->isAlive = false;
                 coord[enemy->x][enemy->y] = 0;
                 return true;
@@ -605,7 +605,7 @@ bool searchCanEat(Animal animal, char direction, bool isEnemy){
                     animal.x = animal.x + 1;
                     for (b = 0; b < animal_Count; b++) {
                         if(animalTab[b].x == animal.x && animalTab[b].y == animal.y && animalTab[b].isAlive){
-                            if(!animalTab[b].isEnemy) {
+                            if(animalTab[b].isEnemy) {
                                 if (checkEat(&animalTab[b], animal)) {
                                     return true;
 
@@ -641,7 +641,7 @@ bool searchCanEat(Animal animal, char direction, bool isEnemy){
                     animal.x = animal.x - 1;
                     for (b = 0; b < animal_Count; b++) {
                         if(animalTab[b].x == animal.x && animalTab[b].y == animal.y && animalTab[b].isAlive){
-                            if(!animalTab[b].isEnemy) {
+                            if(animalTab[b].isEnemy) {
                                 if (checkEat(&animalTab[b], animal)) {
                                     return true;
 
@@ -677,7 +677,7 @@ bool searchCanEat(Animal animal, char direction, bool isEnemy){
                     animal.y = animal.y - 1;
                     for (b = 0; b < animal_Count; b++) {
                         if(animalTab[b].x == animal.x && animalTab[b].y == animal.y && animalTab[b].isAlive){
-                            if(!animalTab[b].isEnemy) {
+                            if(animalTab[b].isEnemy) {
                                 if (checkEat(&animalTab[b], animal)) {
                                     return true;
 
@@ -713,7 +713,7 @@ bool searchCanEat(Animal animal, char direction, bool isEnemy){
                     animal.y = animal.y + 1;
                     for (b = 0; b < animal_Count; b++) {
                         if(animalTab[b].x == animal.x && animalTab[b].y == animal.y && animalTab[b].isAlive){
-                            if(!animalTab[b].isEnemy) {
+                            if(animalTab[b].isEnemy) {
                                 if (checkEat(&animalTab[b], animal)) {
                                     return true;
 
