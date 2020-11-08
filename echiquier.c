@@ -52,6 +52,17 @@ enum Type {
 
 };
 
+enum Zone {
+
+    PIEGE_BLEU,
+    PIEGE_ROUGE,
+    SANCTUAIRE_BLEU,
+    SANCTUAIRE_ROUGE,
+    LAC,
+    AUCUNE
+
+};
+
 struct Animal{
 
     char type;
@@ -61,6 +72,7 @@ struct Animal{
     bool isAlive;
     bool canEat;
     int index;
+    enum Zone zone;
 
 };
 
@@ -79,7 +91,7 @@ bool readSave(){
     fseek(fichier, 1, SEEK_CUR);
     for (m = 0; m < animal_Count; m++) {
         //on récupère les infos des animaux
-        fscanf(fichier, "%c: %i, %i, %d, %d, %i", &animalTab[m].type, &animalTab[m].x, &animalTab[m].y, &animalTab[m].isEnemy, &animalTab[m].isAlive, &animalTab[m].index);
+        fscanf(fichier, "%c: %i, %i, %d, %d, %i, %i", &animalTab[m].type, &animalTab[m].x, &animalTab[m].y, &animalTab[m].isEnemy, &animalTab[m].isAlive, &animalTab[m].index, &animalTab[m].zone);
         //on saute chaque ligne
         fseek(fichier, 1, SEEK_CUR);
     }
@@ -105,9 +117,10 @@ int m;
             fprintf(fichier, "%i, ", animalT[m].x);
             fprintf(fichier, "%i, ", animalT[m].y);
             fprintf(fichier, "%d, ", animalT[m].isEnemy);
-            //on saute une ligne à la fin pour passer à l'animal suivant
             fprintf(fichier, "%d, ", animalT[m].isAlive);
-        fprintf(fichier, "%i\n", animalT[m].index);
+        fprintf(fichier, "%i, ", animalT[m].index);
+        fprintf(fichier, "%i\n", animalT[m].zone);
+        //on saute une ligne à la fin pour passer à l'animal suivant
     }
     fclose (fichier);
     return true;
@@ -203,6 +216,7 @@ void loadGame() {
                         animal.index = animalTab[nbb].index;
                         animal.x = animalTab[nbb].x;
                         animal.y = animalTab[nbb].y;
+                        animal.zone = animalTab[nbb].zone;
                     }
                 }
             } else {
@@ -217,6 +231,7 @@ void loadGame() {
                         animal.index = animalTab[nbb].index;
                         animal.x = animalTab[nbb].x;
                         animal.y = animalTab[nbb].y;
+                        animal.zone = animalTab[nbb].zone;
                     }
                 }
             }
@@ -237,15 +252,18 @@ do{
                     if (animalTab[nb].x == animal.x && animalTab[nb].y == animal.y &&
                         animalTab[nb].isAlive == true) {
                         if (animalTab[nb].isEnemy == true) {
-                            if (searchCanEat(animal, 'A', true)) {
-
-                                coord[animalTab[nb].x][animalTab[nb].y] = 0;
-                                animalTab[nb].x = animal.x - 1;
+                            if(animalTab[nb].x-1 < 9 && animalTab[nb].x-1 > -1) {
+                                if (searchCanEat(animal, 'A', true)) {
+                                    coord[animalTab[nb].x][animalTab[nb].y] = 0;
+                                    animalTab[nb].x = animal.x - 1;
+                                }
                             }
                         } else {
-                            if (searchCanEat(animal, 'A', false)) {
-                                coord[animalTab[nb].x][animalTab[nb].y] = 0;
-                                animalTab[nb].x = animal.x + 1;
+                            if(animalTab[nb].x+1 < 9 && animalTab[nb].x+1 > -1) {
+                                if (searchCanEat(animal, 'A', false)) {
+                                    coord[animalTab[nb].x][animalTab[nb].y] = 0;
+                                    animalTab[nb].x = animal.x + 1;
+                                }
                             }
 
                         }
@@ -258,14 +276,18 @@ do{
                     if (animalTab[nb].x == animal.x && animalTab[nb].y == animal.y &&
                         animalTab[nb].isAlive == true) {
                         if (animalTab[nb].isEnemy == true) {
-                            if (searchCanEat(animal, 'R', true)) {
-                                coord[animalTab[nb].x][animalTab[nb].y] = 0;
-                                animalTab[nb].x = animal.x + 1;
+                            if(animalTab[nb].x+1 < 9 && animalTab[nb].x+1 > -1) {
+                                if (searchCanEat(animal, 'R', true)) {
+                                    coord[animalTab[nb].x][animalTab[nb].y] = 0;
+                                    animalTab[nb].x = animal.x + 1;
+                                }
                             }
                         } else {
-                            if (searchCanEat(animal, 'R', false)) {
-                                coord[animalTab[nb].x][animalTab[nb].y] = 0;
-                                animalTab[nb].x = animal.x - 1;
+                            if(animalTab[nb].x-1 < 9 && animalTab[nb].x-1 > -1) {
+                                if (searchCanEat(animal, 'R', false)) {
+                                    coord[animalTab[nb].x][animalTab[nb].y] = 0;
+                                    animalTab[nb].x = animal.x - 1;
+                                }
                             }
                         }
 
@@ -278,14 +300,18 @@ do{
                     if (animalTab[nb].x == animal.x && animalTab[nb].y == animal.y &&
                         animalTab[nb].isAlive == true) {
                         if (animalTab[nb].isEnemy == true) {
-                            if (searchCanEat(animal, 'D', true)) {
-                                coord[animalTab[nb].x][animalTab[nb].y] = 0;
-                                animalTab[nb].y = animal.y + 1;
+                            if(animalTab[nb].y+1 < 7 && animalTab[nb].y+1 > -1) {
+                                if (searchCanEat(animal, 'D', true)) {
+                                    coord[animalTab[nb].x][animalTab[nb].y] = 0;
+                                    animalTab[nb].y = animal.y + 1;
+                                }
                             }
                         } else {
-                            if (searchCanEat(animal, 'D', false)) {
-                                coord[animalTab[nb].x][animalTab[nb].y] = 0;
-                                animalTab[nb].y = animal.y - 1;
+                            if(animalTab[nb].y-1 < 7 && animalTab[nb].y-1 > -1) {
+                                if (searchCanEat(animal, 'D', false)) {
+                                    coord[animalTab[nb].x][animalTab[nb].y] = 0;
+                                    animalTab[nb].y = animal.y - 1;
+                                }
                             }
 
                         }
@@ -297,20 +323,25 @@ do{
                 for (nb = 0; nb < animal_Count; nb++) {
                     if (animalTab[nb].x == animal.x && animalTab[nb].y == animal.y &&
                         animalTab[nb].isAlive == true) {
-                        if (animalTab[nb].isEnemy == true) {
-                            if (searchCanEat(animal, 'G', true)) {
-                                coord[animalTab[nb].x][animalTab[nb].y] = 0;
-                                animalTab[nb].y = animal.y - 1;
-                            }
-                        } else {
-                            if (searchCanEat(animal, 'G', false)) {
-                                coord[animalTab[nb].x][animalTab[nb].y] = 0;
-                                animalTab[nb].y = animal.y + 1;
-                            }
+                            if (animalTab[nb].isEnemy == true) {
+                                if(animalTab[nb].y-1 < 7 && animalTab[nb].y-1 > -1) {
+                                    if (searchCanEat(animal, 'G', true)) {
+                                        coord[animalTab[nb].x][animalTab[nb].y] = 0;
+                                        animalTab[nb].y = animal.y - 1;
+                                    }
+                                }
+                            } else {
+                                if(animalTab[nb].y+1 < 7 && animalTab[nb].y+1 > -1) {
+                                    if (searchCanEat(animal, 'G', false)) {
+                                        coord[animalTab[nb].x][animalTab[nb].y] = 0;
+                                        animalTab[nb].y = animal.y + 1;
+                                    }
+                                }
 
+                            }
                         }
                     }
-                }
+
                 break;
 
             default:
@@ -411,6 +442,49 @@ void setCoord(){
         }
 
     }
+
+}
+
+enum Zone checkZone(Animal animal){
+
+
+    int i, j;
+
+    for (i = 0; i < 9; i++) {
+        for (j = 0; j < 7; j++) {
+
+                if (animal.x == 3 && animal.y == 1 || animal.x == 3 && animal.y == 2 || animal.x == 4 && animal.y == 1 || animal.x == 4 && animal.y == 2 ||
+                        animal.x == 5 && animal.y == 1 || animal.x == 5 && animal.y == 2 || animal.x == 3 && animal.y == 4 || animal.x == 3 && animal.y == 5 ||
+                        animal.x == 4 && animal.y == 4 || animal.x == 4 && animal.y == 5 || animal.x == 5 && animal.y == 4 || animal.x == 5 && animal.y == 5) {
+                    //zone lac
+                    return LAC;
+                } else if (animal.x == 0 && animal.y == 2 || animal.x == 0 && animal.y == 3 || animal.x == 0 && animal.y == 4 || animal.x == 1 && animal.y == 3) {
+                    if(animal.x == 0 && animal.y == 3){
+                       //zone sanctuaire rouge
+                       return SANCTUAIRE_ROUGE;
+                    }else {
+                        //zone piege rouge
+                        return PIEGE_ROUGE;
+                    }
+                } else if (animal.x == 8 && animal.y == 2 || animal.x == 8 && animal.y == 3 || animal.x == 8 && animal.y == 4 || animal.x == 7 && animal.y == 3) {
+                    if(animal.x == 8 && animal.y == 3){
+                        //zone sanctuaire bleu
+                        return SANCTUAIRE_BLEU;
+                    }else {
+                        //zone piege bleu
+                        return PIEGE_BLEU;
+                    }
+                }else {
+                    return AUCUNE;
+                }
+
+
+
+
+        }
+    }
+
+
 
 }
 
@@ -553,6 +627,52 @@ void afficherEchiquier() {
 }
 
 bool checkEat(Animal *enemy, Animal ally){
+
+    //faire les comparaisons
+
+    switch(checkZone(*enemy)){
+
+        case SANCTUAIRE_BLEU:
+            break;
+        case SANCTUAIRE_ROUGE:
+            break;
+        case PIEGE_BLEU:
+            break;
+        case PIEGE_ROUGE:
+            break;
+        case LAC:
+            break;
+        case AUCUNE:
+            break;
+        default:
+            break;
+
+    }
+
+    switch(checkZone(ally)){
+
+        case SANCTUAIRE_BLEU:
+            break;
+        case SANCTUAIRE_ROUGE:
+            break;
+        case PIEGE_BLEU:
+            break;
+        case PIEGE_ROUGE:
+            break;
+        case LAC:
+            break;
+        case AUCUNE:
+            break;
+        default:
+            break;
+
+    }
+
+    if(enemy->zone == checkZone(*enemy) && ally.zone == checkZone(ally)){
+
+
+
+    }
 
     if(enemy->isEnemy != ally.isEnemy) {
 
@@ -764,6 +884,7 @@ void GenererEchequier() {
                animal.isAlive = true;
                animal.index = l;
                animal.type = animalType[l];
+               animal.zone = AUCUNE;
                animalTab[l] = animal;
            } else {
 
@@ -772,6 +893,7 @@ void GenererEchequier() {
                animal.isAlive = true;
                animal.index = l-8;
                animal.type = animalType[l - 8];
+               animal.zone = AUCUNE;
                animalTab[l] = animal;
            }
        }
