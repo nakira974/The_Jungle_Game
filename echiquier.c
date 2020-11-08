@@ -256,6 +256,7 @@ do{
                                 if (searchCanEat(animal, 'A', true)) {
                                     coord[animalTab[nb].x][animalTab[nb].y] = 0;
                                     animalTab[nb].x = animal.x - 1;
+                                    animalTab[nb].zone = checkZone(animalTab[nb]);
                                 }
                             }
                         } else {
@@ -263,6 +264,7 @@ do{
                                 if (searchCanEat(animal, 'A', false)) {
                                     coord[animalTab[nb].x][animalTab[nb].y] = 0;
                                     animalTab[nb].x = animal.x + 1;
+                                    animalTab[nb].zone = checkZone(animalTab[nb]);
                                 }
                             }
 
@@ -280,6 +282,7 @@ do{
                                 if (searchCanEat(animal, 'R', true)) {
                                     coord[animalTab[nb].x][animalTab[nb].y] = 0;
                                     animalTab[nb].x = animal.x + 1;
+                                    animalTab[nb].zone = checkZone(animalTab[nb]);
                                 }
                             }
                         } else {
@@ -287,6 +290,7 @@ do{
                                 if (searchCanEat(animal, 'R', false)) {
                                     coord[animalTab[nb].x][animalTab[nb].y] = 0;
                                     animalTab[nb].x = animal.x - 1;
+                                    animalTab[nb].zone = checkZone(animalTab[nb]);
                                 }
                             }
                         }
@@ -304,6 +308,7 @@ do{
                                 if (searchCanEat(animal, 'D', true)) {
                                     coord[animalTab[nb].x][animalTab[nb].y] = 0;
                                     animalTab[nb].y = animal.y + 1;
+                                    animalTab[nb].zone = checkZone(animalTab[nb]);
                                 }
                             }
                         } else {
@@ -311,6 +316,7 @@ do{
                                 if (searchCanEat(animal, 'D', false)) {
                                     coord[animalTab[nb].x][animalTab[nb].y] = 0;
                                     animalTab[nb].y = animal.y - 1;
+                                    animalTab[nb].zone = checkZone(animalTab[nb]);
                                 }
                             }
 
@@ -328,6 +334,7 @@ do{
                                     if (searchCanEat(animal, 'G', true)) {
                                         coord[animalTab[nb].x][animalTab[nb].y] = 0;
                                         animalTab[nb].y = animal.y - 1;
+                                        animalTab[nb].zone = checkZone(animalTab[nb]);
                                     }
                                 }
                             } else {
@@ -335,6 +342,7 @@ do{
                                     if (searchCanEat(animal, 'G', false)) {
                                         coord[animalTab[nb].x][animalTab[nb].y] = 0;
                                         animalTab[nb].y = animal.y + 1;
+                                        animalTab[nb].zone = checkZone(animalTab[nb]);
                                     }
                                 }
 
