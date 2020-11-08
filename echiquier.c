@@ -626,30 +626,13 @@ void afficherEchiquier() {
     printf("\r \n");
 }
 
-bool checkEat(Animal *enemy, Animal ally){
+bool checkEat(Animal *enemy, Animal *ally){
 
     //faire les comparaisons
+    enemy->zone = checkZone(*enemy);
+    ally->zone = checkZone(*ally);
 
-    switch(checkZone(*enemy)){
-
-        case SANCTUAIRE_BLEU:
-            break;
-        case SANCTUAIRE_ROUGE:
-            break;
-        case PIEGE_BLEU:
-            break;
-        case PIEGE_ROUGE:
-            break;
-        case LAC:
-            break;
-        case AUCUNE:
-            break;
-        default:
-            break;
-
-    }
-
-    switch(checkZone(ally)){
+    switch(enemy->zone){
 
         case SANCTUAIRE_BLEU:
             break;
@@ -668,21 +651,40 @@ bool checkEat(Animal *enemy, Animal ally){
 
     }
 
-    if(enemy->zone == checkZone(*enemy) && ally.zone == checkZone(ally)){
+    switch(ally->zone){
+
+        case SANCTUAIRE_BLEU:
+            break;
+        case SANCTUAIRE_ROUGE:
+            break;
+        case PIEGE_BLEU:
+            break;
+        case PIEGE_ROUGE:
+            break;
+        case LAC:
+            break;
+        case AUCUNE:
+            break;
+        default:
+            break;
+
+    }
+
+    if(enemy->zone == LAC){
 
 
 
     }
 
-    if(enemy->isEnemy != ally.isEnemy) {
+    if(enemy->isEnemy != ally->isEnemy) {
 
 
-            if (enemy->index >= ally.index) {
+            if (enemy->index >= ally->index) {
                 enemy->isAlive = false;
                 coord[enemy->x][enemy->y] = 0;
                 return true;
 
-            } else if (enemy->type == 'E' && ally.type == 'R') {
+            } else if (enemy->type == 'E' && ally->type == 'R') {
 
                 enemy->isAlive = false;
                 coord[enemy->x][enemy->y] = 0;
@@ -710,7 +712,7 @@ bool searchCanEat(Animal animal, char direction, bool isEnemy){
                     for (b = 0; b < animal_Count; b++) {
                         if(animalTab[b].x == animal.x && animalTab[b].y == animal.y && animalTab[b].isAlive){
                             if(!animalTab[b].isEnemy) {
-                                if (checkEat(&animalTab[b], animal)) {
+                                if (checkEat(&animalTab[b], &animal)) {
                                     return true;
 
                                 } else {
@@ -726,7 +728,7 @@ bool searchCanEat(Animal animal, char direction, bool isEnemy){
                     for (b = 0; b < animal_Count; b++) {
                         if(animalTab[b].x == animal.x && animalTab[b].y == animal.y && animalTab[b].isAlive){
                             if(animalTab[b].isEnemy) {
-                                if (checkEat(&animalTab[b], animal)) {
+                                if (checkEat(&animalTab[b], &animal)) {
                                     return true;
 
                                 } else {
@@ -746,7 +748,7 @@ bool searchCanEat(Animal animal, char direction, bool isEnemy){
                     for (b = 0; b < animal_Count; b++) {
                         if(animalTab[b].x == animal.x && animalTab[b].y == animal.y && animalTab[b].isAlive){
                             if(!animalTab[b].isEnemy) {
-                                if (checkEat(&animalTab[b], animal)) {
+                                if (checkEat(&animalTab[b], &animal)) {
                                     return true;
 
                                 } else {
@@ -762,7 +764,7 @@ bool searchCanEat(Animal animal, char direction, bool isEnemy){
                     for (b = 0; b < animal_Count; b++) {
                         if(animalTab[b].x == animal.x && animalTab[b].y == animal.y && animalTab[b].isAlive){
                             if(animalTab[b].isEnemy) {
-                                if (checkEat(&animalTab[b], animal)) {
+                                if (checkEat(&animalTab[b], &animal)) {
                                     return true;
 
                                 } else {
@@ -782,7 +784,7 @@ bool searchCanEat(Animal animal, char direction, bool isEnemy){
                     for (b = 0; b < animal_Count; b++) {
                         if(animalTab[b].x == animal.x && animalTab[b].y == animal.y && animalTab[b].isAlive){
                             if(!animalTab[b].isEnemy) {
-                                if (checkEat(&animalTab[b], animal)) {
+                                if (checkEat(&animalTab[b], &animal)) {
                                     return true;
 
                                 } else {
@@ -798,7 +800,7 @@ bool searchCanEat(Animal animal, char direction, bool isEnemy){
                     for (b = 0; b < animal_Count; b++) {
                         if(animalTab[b].x == animal.x && animalTab[b].y == animal.y && animalTab[b].isAlive){
                             if(animalTab[b].isEnemy) {
-                                if (checkEat(&animalTab[b], animal)) {
+                                if (checkEat(&animalTab[b], &animal)) {
                                     return true;
 
                                 } else {
@@ -818,7 +820,7 @@ bool searchCanEat(Animal animal, char direction, bool isEnemy){
                     for (b = 0; b < animal_Count; b++) {
                         if(animalTab[b].x == animal.x && animalTab[b].y == animal.y && animalTab[b].isAlive){
                             if(!animalTab[b].isEnemy) {
-                                if (checkEat(&animalTab[b], animal)) {
+                                if (checkEat(&animalTab[b], &animal)) {
                                     return true;
 
                                 } else {
@@ -834,7 +836,7 @@ bool searchCanEat(Animal animal, char direction, bool isEnemy){
                     for (b = 0; b < animal_Count; b++) {
                         if(animalTab[b].x == animal.x && animalTab[b].y == animal.y && animalTab[b].isAlive){
                             if(animalTab[b].isEnemy) {
-                                if (checkEat(&animalTab[b], animal)) {
+                                if (checkEat(&animalTab[b], &animal)) {
                                     return true;
 
                                 } else {
