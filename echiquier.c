@@ -1022,7 +1022,7 @@ void Create_MaximeZone(){
     zoneMaxime.zone=LAC;
     for (i=4 ; i < 7; i++){
         for(j=2 ; j < 3; j++){
-            for(k=0; k < 6 ; k++){
+            for(k=0; k < 2 ; k++){
                 lacSurface[k][k]=i+j;
             }
         }
@@ -1033,7 +1033,7 @@ void Create_MaximeZone(){
     zoneMaxime.zone=LAC;
     for (i=4 ; i < 7; i++){
         for(j=5 ; j < 6; j++){
-            for(k=0; k < 6 ; k++){
+            for(k=0; k < 2 ; k++){
                 lacSurface[k][k]=i+j;
             }
         }
