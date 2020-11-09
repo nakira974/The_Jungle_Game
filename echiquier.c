@@ -70,10 +70,6 @@ enum Zone {
 };
 
 struct ZoneMaxime{
-    char name;
-    int x;
-    int y;
-    bool isEnnemy;
     enum Zone zone;
     int* surface;
 };
@@ -1024,7 +1020,6 @@ void Create_MaximeZone(){
     //LEFT
     int lacSurface[3][3];
     zoneMaxime.zone=LAC;
-    zoneMaxime.isEnnemy=false;
     for (i=4 ; i < 7; i++){
         for(j=2 ; j < 3; j++){
             for(k=0; k < 6 ; k++){
