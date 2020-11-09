@@ -23,7 +23,7 @@
 
 typedef struct Animal Animal;
 typedef struct Player Player;
-typedef ZoneMaxime ZoneMaxime;
+typedef struct ZoneMaxime ZoneMaxime;
 ZoneMaxime* zoneMaximeTab=NULL;
 Animal* animalTab=NULL;
 char* animalType=NULL;
@@ -1027,7 +1027,7 @@ void Create_MaximeZone(){
             }
         }
     }zoneMaxime.surface= (int *) &lacSurface;//LAC OUEST
-    zoneMaximeTab[0]=&zoneMaxime;//ON AJOUTE DANS NOTRE LISTE D'OBJETS
+    zoneMaximeTab[0]=zoneMaxime;//ON AJOUTE DANS NOTRE LISTE D'OBJETS
 
     lacSurface[3][3];
     zoneMaxime.zone=LAC;
@@ -1038,19 +1038,19 @@ void Create_MaximeZone(){
             }
         }
     }zoneMaxime.surface= (int *) &lacSurface;//LAC EST
-    zoneMaximeTab[1]=&zoneMaxime;
+    zoneMaximeTab[1]=zoneMaxime;
     free(lacSurface);
 
     int sanctuarySurface[0][0];
     zoneMaxime.zone=SANCTUAIRE_BLEU;
     sanctuarySurface[0][0]=0 + 3;
     zoneMaxime.surface= (int*) &sanctuarySurface;
-    zoneMaximeTab[2]=&zoneMaxime;
+    zoneMaximeTab[2]=zoneMaxime;
 
     zoneMaxime.zone=SANCTUAIRE_ROUGE;
     sanctuarySurface[0][0]=9 +3;
     zoneMaxime.surface= (int*) &sanctuarySurface;
-    zoneMaximeTab[3]=&zoneMaxime;
+    zoneMaximeTab[3]=zoneMaxime;
     free(sanctuarySurface);
 
     int trapSurface[2][2];
@@ -1059,14 +1059,14 @@ void Create_MaximeZone(){
     trapSurface[1][1]= 0 + 4;
     trapSurface[1][1]= 1 + 3;
     zoneMaxime.surface= (int*) &trapSurface;
-    zoneMaximeTab[4]=&zoneMaxime;
+    zoneMaximeTab[4]=zoneMaxime;
 
     zoneMaxime.zone=PIEGE_ROUGE;
     trapSurface[0][0]= 9 + 2 ;
     trapSurface[1][1]= 9 + 4;
     trapSurface[1][1]= 8 + 3;
     zoneMaxime.surface= (int*) &trapSurface;
-    zoneMaximeTab[5]=&zoneMaxime;
+    zoneMaximeTab[5]=zoneMaxime;
     free(trapSurface);
 
 

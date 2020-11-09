@@ -8,9 +8,9 @@
 
 struct Animal;
 struct Player;
+struct ZoneMaxime;
 struct Animal* animalTab;
 struct Player* playerTab;
-typedef ZoneMaxime ZoneMaxime;
 char* animalType;
 void afficherEchiquier();
 void color(int t, int f);
