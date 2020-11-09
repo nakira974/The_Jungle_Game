@@ -23,6 +23,8 @@
 
 typedef struct Animal Animal;
 typedef struct Player Player;
+typedef ZoneMaxime ZoneMaxime;
+ZoneMaxime* zoneMaximeTab=NULL;
 Animal* animalTab=NULL;
 char* animalType=NULL;
 Player* playerTab=NULL;
@@ -31,6 +33,7 @@ int animal_Count = 16;
 char coord[9][7];
 FILE *fichier;
 bool win = false;
+
 
 struct Player{
 
@@ -53,6 +56,8 @@ enum Type {
 
 };
 
+
+
 enum Zone {
 
     PIEGE_BLEU,
@@ -63,6 +68,16 @@ enum Zone {
     AUCUNE
 
 };
+
+struct ZoneMaxime{
+    char name;
+    int x;
+    int y;
+    bool isEnnemy;
+    enum Zone zone;
+    int* surface;
+};
+
 
 struct Animal{
 
@@ -76,6 +91,34 @@ struct Animal{
     enum Zone zone;
 
 };
+
+bool checkEat(Animal *enemy, Animal ally) {
+
+    if(enemy->isEnemy != ally.isEnemy) {
+
+
+        if (enemy->index >= ally.index) {
+
+            enemy->isAlive = false;
+            coord[enemy->x][enemy->y] = 0;
+            return true;
+
+        } else if (enemy->type == 'E' && ally.type == 'R') {
+
+            enemy->isAlive = false;
+            coord[enemy->x][enemy->y] = 0;
+            return true;
+
+        } else{
+
+            return false;
+        }
+
+    }else{
+        return false;
+    }
+
+}
 
 bool readSave(){
 
@@ -725,33 +768,7 @@ void afficherEchiquier() {
     printf("\r \n");
 }
 
-bool checkEat(Animal *enemy, Animal ally){
-
-    if(enemy->isEnemy != ally.isEnemy) {
-
-
-            if (enemy->index >= ally.index) {
-
-                    enemy->isAlive = false;
-                    coord[enemy->x][enemy->y] = 0;
-                    return true;
-
-            } else if (enemy->type == 'E' && ally.type == 'R') {
-
-                enemy->isAlive = false;
-                coord[enemy->x][enemy->y] = 0;
-                return true;
-
-            } else{
-
-                return false;
-            }
-
-    }else{
-        return false;
-    }
-
-}
+bool checkEat(Animal *enemy, Animal ally);
 
 bool searchCanEat(Animal animal, char direction, bool isEnemy){
 
@@ -995,5 +1012,68 @@ void GenererEchequier() {
     if(!win) {
         writeSave(animalTab);
     }
+
+}
+
+void Create_MaximeZone(){
+
+    int i, j, k;
+    struct ZoneMaxime zoneMaxime;
+    zoneMaximeTab = malloc(6 * sizeof(struct ZoneMaxime));
+    //Création des lacs
+    //LEFT
+    int lacSurface[3][3];
+    zoneMaxime.zone=LAC;
+    zoneMaxime.isEnnemy=false;
+    for (i=4 ; i < 7; i++){
+        for(j=2 ; j < 3; j++){
+            for(k=0; k < 6 ; k++){
+                lacSurface[k][k]=i+j;
+            }
+        }
+    }zoneMaxime.surface= (int *) &lacSurface;//LAC OUEST
+    zoneMaximeTab[0]=&zoneMaxime;//ON AJOUTE DANS NOTRE LISTE D'OBJETS
+
+    lacSurface[3][3];
+    zoneMaxime.zone=LAC;
+    for (i=4 ; i < 7; i++){
+        for(j=5 ; j < 6; j++){
+            for(k=0; k < 6 ; k++){
+                lacSurface[k][k]=i+j;
+            }
+        }
+    }zoneMaxime.surface= (int *) &lacSurface;//LAC EST
+    zoneMaximeTab[1]=&zoneMaxime;
+    free(lacSurface);
+
+    int sanctuarySurface[0][0];
+    zoneMaxime.zone=SANCTUAIRE_BLEU;
+    sanctuarySurface[0][0]=0 + 3;
+    zoneMaxime.surface= (int*) &sanctuarySurface;
+    zoneMaximeTab[2]=&zoneMaxime;
+
+    zoneMaxime.zone=SANCTUAIRE_ROUGE;
+    sanctuarySurface[0][0]=9 +3;
+    zoneMaxime.surface= (int*) &sanctuarySurface;
+    zoneMaximeTab[3]=&zoneMaxime;
+    free(sanctuarySurface);
+
+    int trapSurface[2][2];
+    zoneMaxime.zone=PIEGE_BLEU;
+    trapSurface[0][0]= 0 + 2 ;
+    trapSurface[1][1]= 0 + 4;
+    trapSurface[1][1]= 1 + 3;
+    zoneMaxime.surface= (int*) &trapSurface;
+    zoneMaximeTab[4]=&zoneMaxime;
+
+    zoneMaxime.zone=PIEGE_ROUGE;
+    trapSurface[0][0]= 9 + 2 ;
+    trapSurface[1][1]= 9 + 4;
+    trapSurface[1][1]= 8 + 3;
+    zoneMaxime.surface= (int*) &trapSurface;
+    zoneMaximeTab[5]=&zoneMaxime;
+    free(trapSurface);
+
+
 
 }
