@@ -266,8 +266,9 @@ do{
                                         }else if(animalTab[nb].zone == SANCTUAIRE_ROUGE){
                                             printf("%s de l'equipe BLEUE a gagne(e) la partie!", playerTab[0].nom);
                                             win = true;
+                                        }else if(animalTab[nb].zone == SANCTUAIRE_BLEU){
+                                            animalTab[nb].x = animal.x;
                                         }
-
                                     }else{
                                         animalTab[nb].canEat = true;
                                     }
@@ -283,6 +284,8 @@ do{
                                     }else if(animalTab[nb].zone == SANCTUAIRE_BLEU){
                                         printf("%s de l'equipe ROUGE a gagne(e) la partie!", playerTab[1].nom);
                                         win = true;
+                                    }else if(animalTab[nb].zone == SANCTUAIRE_ROUGE){
+                                        animalTab[nb].x = animal.x;
                                     }
                                 }else{
                                     animalTab[nb].canEat = true;
@@ -309,6 +312,8 @@ do{
                                     }else if(animalTab[nb].zone == SANCTUAIRE_ROUGE){
                                         printf("%s de l'equipe BLEUE a gagne(e) la partie!", playerTab[0].nom);
                                         win = true;
+                                    }else if(animalTab[nb].zone == SANCTUAIRE_BLEU){
+                                        animalTab[nb].x = animal.x;
                                     }
                                 }else{
                                     animalTab[nb].canEat = true;
@@ -325,6 +330,8 @@ do{
                                     }else if(animalTab[nb].zone == SANCTUAIRE_BLEU){
                                         printf("%s de l'equipe ROUGE a gagne(e) la partie!", playerTab[1].nom);
                                         win = true;
+                                    }else if(animalTab[nb].zone == SANCTUAIRE_ROUGE){
+                                        animalTab[nb].x = animal.x;
                                     }
                                 }else{
                                     animalTab[nb].canEat = true;
@@ -351,6 +358,8 @@ do{
                                     }else if(animalTab[nb].zone == SANCTUAIRE_ROUGE){
                                         printf("%s de l'equipe BLEUE a gagne(e) la partie!", playerTab[0].nom);
                                         win = true;
+                                    }else if(animalTab[nb].zone == SANCTUAIRE_BLEU){
+                                        animalTab[nb].y = animal.y;
                                     }
                                 }else{
                                     animalTab[nb].canEat = true;
@@ -367,6 +376,8 @@ do{
                                     }else if(animalTab[nb].zone == SANCTUAIRE_BLEU){
                                         printf("%s de l'equipe ROUGE a gagne(e) la partie!", playerTab[1].nom);
                                         win = true;
+                                    }else if(animalTab[nb].zone == SANCTUAIRE_ROUGE){
+                                        animalTab[nb].y = animal.y;
                                     }
                                 }else{
                                     animalTab[nb].canEat = true;
@@ -393,6 +404,8 @@ do{
                                         }else if(animalTab[nb].zone == SANCTUAIRE_ROUGE){
                                             printf("%s de l'equipe BLEUE a gagne(e) la partie!", playerTab[0].nom);
                                             win = true;
+                                        }else if(animalTab[nb].zone == SANCTUAIRE_BLEU){
+                                            animalTab[nb].y = animal.y;
                                         }
                                     }else{
                                         animalTab[nb].canEat = true;
@@ -409,6 +422,8 @@ do{
                                         }else if(animalTab[nb].zone == SANCTUAIRE_BLEU){
                                             printf("%s de l'equipe ROUGE a gagne(e) la partie!", playerTab[1].nom);
                                             win = true;
+                                        }else if(animalTab[nb].zone == SANCTUAIRE_ROUGE){
+                                            animalTab[nb].y = animal.y;
                                         }
                                     }else{
                                         animalTab[nb].canEat = true;
@@ -431,14 +446,15 @@ do{
 
         if(!win) {
             afficherEchiquier();
-            printf("Voulez-vous continuer? (Oui: Entrer / Non: Echap)");
         }else{
             remove("save.txt");
             getch();
             return;
         }
 
+
     }
+        printf("Voulez-vous continuer? (Oui: Entrer / Non: Echap)");
 
 #ifdef _WIN32
     }while(getch()!=27);
