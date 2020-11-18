@@ -8,6 +8,7 @@
 #include <stdbool.h>
 #include <pthread.h>
 #include "server.h"
+#include "../echiquier.h"
 
 #ifdef WIN32 /*  Windows */
 

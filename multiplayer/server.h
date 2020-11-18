@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <pthread.h>
+#include "../echiquier.h"
 
 #ifdef WIN32 /*  Windows */
 
