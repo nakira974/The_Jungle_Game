@@ -42,6 +42,7 @@ typedef struct in_addr IN_ADDR;
 #define BUF_SIZE 1024
 #define ADD_SIZE 256
 #define MAX_CLIENTS 1
+#define TCP 0
 
 
 static void init(void);

@@ -4,6 +4,7 @@
 
 #ifndef PROJETJUNGLE_CLIENT_H
 #define PROJETJUNGLE_CLIENT_H
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>

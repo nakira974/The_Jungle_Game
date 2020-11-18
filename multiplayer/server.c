@@ -88,7 +88,7 @@ static void remove_client(Client *clients, int to_remove, int *actual)
 static int init_connection(void)
 {
 #ifdef WIN32
-    SOCKET sock = socket(AF_INET, SOCK_STREAM, 0);//tcp
+    SOCKET sock = socket(AF_INET, SOCK_STREAM, TCP);//tcp
     SOCKADDR_IN sin = { 0 };
 
     if(sock == INVALID_SOCKET)
