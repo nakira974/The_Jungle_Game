@@ -230,6 +230,6 @@ static void app_server(void) {
         }
     }
     clear_clients(clients, actual);
-    close_server(sock);
+    close_server((const SOCKET *) sock);
 #endif
 }
