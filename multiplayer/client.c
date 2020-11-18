@@ -144,9 +144,22 @@ static void app_client(const char *srvAdd, const char *playerName)
     while(1)
     {
         FD_ZERO(&rdfs);
+        /*
+         * FD_ZERO() : source : https://www.man7.org/linux/man-pages/man3/FD_SET.3.html
+         *  Cette macro efface (supprime tous les descripteurs de fichiers).
+         *  Il devrait être utilisé comme première étape dans l’initialisation d’un fichier
+         *  descripteur.
+         */
+
 
         /* add STDIN_FILENO */
         FD_SET(STDIN_FILENO, &rdfs);
+        /*
+         * FD_SET() : source : https://www.man7.org/linux/man-pages/man3/FD_SET.3.html
+              Cette macro ajoute le descripteur de fichier fd à définir.  Ajout d’un fichier
+              descripteur qui est déjà présent dans l’ensemble est un no-op, et
+              ne produit pas d’erreur.
+         */
 
         /* add the socket */
         FD_SET(sock, &rdfs);
@@ -159,6 +172,14 @@ static void app_client(const char *srvAdd, const char *playerName)
 
         /* entrée standard : i.e keyboard */
         if(FD_ISSET(STDIN_FILENO, &rdfs))
+            /*
+            * select () modifie le contenu des ensembles en fonction du
+                  règles décrites ci-dessous. Après avoir appelé select (), le FD_ISSET ()
+                  macro peut être utilisée pour tester si un descripteur de fichier est toujours
+                  présent dans un ensemble. FD_ISSET () renvoie une valeur différente de zéro si le fichier
+                  le descripteur fd est présent dans l'ensemble, et zéro s'il ne l'est pas.
+
+            */
         {
             fgets(buffer, BUF_SIZE - 1, stdin);
             {

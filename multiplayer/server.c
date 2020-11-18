@@ -148,22 +148,34 @@ static void write_client(SOCKET sock, const char *buffer)
 
 static void app_server(void) {
 #ifdef WIN32
-    SOCKET sock = init_connection();
-    char buffer[BUF_SIZE];
+    SOCKET sock = init_connection();//Création du socket serveur
+    char buffer[BUF_SIZE];//Création du buffer
     /* index */
     int actual = 0;
     int max = sock;
     /*tableau des clients */
     Client clients[MAX_CLIENTS];
 
-    fd_set rdfs;
+    fd_set rdfs;//fixed buffer size, un sorte de const
 
     while (1) {
         int i = 0;
         FD_ZERO(&rdfs);
+        /*
+         * FD_ZERO() : source : https://www.man7.org/linux/man-pages/man3/FD_SET.3.html
+         *  Cette macro efface (supprime tous les descripteurs de fichiers).
+         *  Il devrait être utilisé comme première étape dans l’initialisation d’un fichier
+         *  descripteur.
+         */
 
         /* on attache notre buffer à STDIN_FILENO */
         FD_SET(STDIN_FILENO, &rdfs);
+        /*
+         * FD_SET() : source : https://www.man7.org/linux/man-pages/man3/FD_SET.3.html
+              Cette macro ajoute le descripteur de fichier fd à définir.  Ajout d’un fichier
+              descripteur qui est déjà présent dans l’ensemble est un no-op, et
+              ne produit pas d’erreur.
+         */
 
         /* ajoute la connexion au socket */
         FD_SET(sock, &rdfs);
@@ -183,6 +195,13 @@ static void app_server(void) {
             /* stop le process lorsque saisi clavier */
             break;
         } else if (FD_ISSET(sock, &rdfs)) {
+
+            /*select () modifie le contenu des ensembles en fonction du
+              règles décrites ci-dessous. Après avoir appelé select (), le FD_ISSET ()
+              macro peut être utilisée pour tester si un descripteur de fichier est toujours
+              présent dans un ensemble. FD_ISSET () renvoie une valeur différente de zéro si le fichier
+              le descripteur fd est présent dans l'ensemble, et zéro s'il ne l'est pas.
+        */
             /* new client */
             SOCKADDR_IN csin = {0};
             size_t sinsize = sizeof csin;
