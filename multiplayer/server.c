@@ -150,10 +150,10 @@ static void app_server(void) {
 #ifdef WIN32
     SOCKET sock = init_connection();
     char buffer[BUF_SIZE];
-    /* the index for the array */
+    /* index */
     int actual = 0;
     int max = sock;
-    /* an array for all clients */
+    /*tableau des clients */
     Client clients[MAX_CLIENTS];
 
     fd_set rdfs;
@@ -162,13 +162,13 @@ static void app_server(void) {
         int i = 0;
         FD_ZERO(&rdfs);
 
-        /* add STDIN_FILENO */
+        /* on attache notre buffer à STDIN_FILENO */
         FD_SET(STDIN_FILENO, &rdfs);
 
-        /* add the connection socket */
+        /* ajoute la connexion au socket */
         FD_SET(sock, &rdfs);
 
-        /* add socket of each client */
+        /* on ajoute tous les sockets clients */
         for (i = 0; i < actual; i++) {
             FD_SET(clients[i].sock, &rdfs);
         }
@@ -192,13 +192,13 @@ static void app_server(void) {
                 continue;
             }
 
-            /* after connecting the client sends its name */
+            /* après sa connexion le client donne son nom */
             if (read_client(csock, buffer) == -1) {
                 /* disconnected */
                 continue;
             }
 
-            /* what is the new maximum fd ? */
+            /* nouveau fd max ? */
             max = csock > max ? csock : max;
 
             FD_SET(csock, &rdfs);
