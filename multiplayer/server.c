@@ -182,7 +182,7 @@ static void app_server(void) {
             break;
         } else if (FD_ISSET(sock, &rdfs)) {
 
-            /*select () modifie le contenu des ensembles en fonction du
+            /*select () modifie le contenu des ensembles en fonction des
               règles décrites ci-dessous. Après avoir appelé select (), le FD_ISSET ()
               macro peut être utilisée pour tester si un descripteur de fichier est toujours
               présent dans un ensemble. FD_ISSET () renvoie une valeur différente de zéro si le fichier

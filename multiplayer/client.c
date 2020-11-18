@@ -158,7 +158,7 @@ static void app_client(const char *srvAdd, const char *playerName) {
         /* entrée standard : i.e keyboard */
         if (FD_ISSET(STDIN_FILENO, &rdfs))
             /*
-            * select () modifie le contenu des ensembles en fonction du
+            * select () modifie le contenu des ensembles en fonction des
                   règles décrites ci-dessous. Après avoir appelé select (), le FD_ISSET ()
                   macro peut être utilisée pour tester si un descripteur de fichier est toujours
                   présent dans un ensemble. FD_ISSET () renvoie une valeur différente de zéro si le fichier
