@@ -8,6 +8,7 @@
 #include <stdbool.h>
 #include <pthread.h>
 #include "client.h"
+
 #ifdef WIN32 /*  Windows */
 
 #include <winsock2.h>
@@ -34,48 +35,41 @@ typedef struct in_addr IN_ADDR;
 
 #endif
 
-static void init(void)
-{
+static void init(void) {
 #ifdef WIN32
     WSADATA wsa;
     int err = WSAStartup(MAKEWORD(2, 2), &wsa);
-    if(err < 0)
-    {
+    if (err < 0) {
         puts("WSAStartup failed !");
         exit(EXIT_FAILURE);
     }
 #endif
 }
 
-static void end(void)
-{
+static void end(void) {
 #ifdef WIN32
     WSACleanup();
 #endif
 }
 
 
-static void close_server(const SOCKET *sock)
-{
+static void close_server(const SOCKET *sock) {
 #ifdef WIN32
     closesocket((SOCKET) &sock);
 #endif
 }
 
-static void clear_clients(Client *clients, int actual)
-{
+static void clear_clients(Client *clients, int actual) {
 #ifdef WIN32
 
     int i = 0;
-    for(i = 0; i < actual; i++)
-    {
+    for (i = 0; i < actual; i++) {
         closesocket(clients[i].sock);
     }
 #endif
 }
 
-static void remove_client(Client *clients, int to_remove, int *actual)
-{
+static void remove_client(Client *clients, int to_remove, int *actual) {
 #ifdef WIN32
     /* On enlève le client du tableau */
     memmove(clients + to_remove, clients + to_remove + 1, (*actual - to_remove - 1) * sizeof(Client));
@@ -85,14 +79,12 @@ static void remove_client(Client *clients, int to_remove, int *actual)
 }
 
 
-static int init_connection(void)
-{
+static int init_connection(void) {
 #ifdef WIN32
     SOCKET sock = socket(AF_INET, SOCK_STREAM, TCP);//tcp
-    SOCKADDR_IN sin = { 0 };
+    SOCKADDR_IN sin = {0};
 
-    if(sock == INVALID_SOCKET)
-    {
+    if (sock == INVALID_SOCKET) {
         perror("socket()");
         exit(errno);
     }
@@ -101,14 +93,12 @@ static int init_connection(void)
     sin.sin_port = htons(PORT);
     sin.sin_family = AF_INET;
 
-    if(bind(sock,(SOCKADDR *) &sin, sizeof sin) == SOCKET_ERROR)
-    {
+    if (bind(sock, (SOCKADDR *) &sin, sizeof sin) == SOCKET_ERROR) {
         perror("bind()");
         exit(errno);
     }
 
-    if(listen(sock, MAX_CLIENTS) == SOCKET_ERROR)
-    {
+    if (listen(sock, MAX_CLIENTS) == SOCKET_ERROR) {
         perror("listen()");
         exit(errno);
     }
@@ -117,13 +107,11 @@ static int init_connection(void)
 #endif
 }
 
-static int read_client(SOCKET sock, char *buffer)
-{
+static int read_client(SOCKET sock, char *buffer) {
 #ifdef WIN32
     int n = 0;
 
-    if((n = recv(sock, buffer, BUF_SIZE - 1, 0)) < 0)
-    {
+    if ((n = recv(sock, buffer, BUF_SIZE - 1, 0)) < 0) {
         perror("recv()");
         /* if recv error we disonnect the client */
         n = 0;
@@ -135,11 +123,9 @@ static int read_client(SOCKET sock, char *buffer)
 #endif
 }
 
-static void write_client(SOCKET sock, const char *buffer)
-{
+static void write_client(SOCKET sock, const char *buffer) {
 #ifdef WIN32
-    if(send(sock, buffer, strlen(buffer), 0) < 0)
-    {
+    if (send(sock, buffer, strlen(buffer), 0) < 0) {
         perror("send()");
         exit(errno);
     }

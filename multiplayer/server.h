@@ -46,15 +46,22 @@ typedef struct in_addr IN_ADDR;
 
 
 static void init(void);
-static void end(void);
-static void close_server(const SOCKET *sock);
-static void write_client(SOCKET sock, const char *buffer);
-static void clear_clients(Client *clients, int actual);
-static void remove_client(Client *clients, int to_remove, int *actual);
-static int init_connection(void);
-static int read_client(SOCKET sock, char *buffer);
-static void app_server(void);
 
+static void end(void);
+
+static void close_server(const SOCKET *sock);
+
+static void write_client(SOCKET sock, const char *buffer);
+
+static void clear_clients(Client *clients, int actual);
+
+static void remove_client(Client *clients, int to_remove, int *actual);
+
+static int init_connection(void);
+
+static int read_client(SOCKET sock, char *buffer);
+
+static void app_server(void);
 
 
 #endif //PROJETJUNGLE_SERVER_H

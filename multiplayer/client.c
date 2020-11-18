@@ -8,6 +8,7 @@
 #include <stdbool.h>
 #include <pthread.h>
 #include "server.h"
+
 #ifdef WIN32 /*  Windows */
 
 #include <winsock2.h>
@@ -35,51 +36,44 @@ typedef struct in_addr IN_ADDR;
 #endif
 
 
-
-static void init(void)
-{
+static void init(void) {
 #ifdef WIN32
     //initialise une DLL permettant d'utiliser les sockets et pour libérer cette même DLL.
     WSADATA wsa;
     int err = WSAStartup(MAKEWORD(2, 2), &wsa);
 
-    if(err < 0)
-    {
+    if (err < 0) {
         puts("WSAStartup failed !");
         exit(EXIT_FAILURE);
     }
 #endif
 }
 
-static void end(void)
-{
+static void end(void) {
 #ifdef WIN32
     WSACleanup();
 #endif
 }
 
-static SOCKET create_client()
-{
+static SOCKET create_client() {
     SOCKET sock = socket(AF_INET, SOCK_STREAM, 0);
-    if(sock == INVALID_SOCKET)
-    {
+    if (sock == INVALID_SOCKET) {
         perror("socket()");
         exit(errno);
     }
     return sock;
 }
 
-static bool connect2_JungleServer(const char srvAdd[ADD_SIZE], const SOCKET *sock)
-{
+static bool connect2_JungleServer(const char srvAdd[ADD_SIZE], const SOCKET *sock) {
 #ifdef WIN32
     struct hostent *hostinfo = NULL;
-    SOCKADDR_IN sin = { 0 }; /* initialise la structure avec des 0 */
-    const char *hostname =  srvAdd;
+    SOCKADDR_IN sin = {0}; /* initialise la structure avec des 0 */
+    const char *hostname = srvAdd;
 
     hostinfo = gethostbyname(hostname); /* on récupère les informations de l'hôte auquel on veut se connecter */
     if (hostinfo == NULL) /* l'hôte n'existe pas */
     {
-        fprintf (stderr, "Unknown host %s.\n", hostname);
+        fprintf(stderr, "Unknown host %s.\n", hostname);
         exit(EXIT_FAILURE);
     }
 
@@ -87,8 +81,7 @@ static bool connect2_JungleServer(const char srvAdd[ADD_SIZE], const SOCKET *soc
     sin.sin_port = htons(PORT); /* on utilise la méthode htons pour le port */
     sin.sin_family = AF_INET;
 
-    if(connect(*sock,(SOCKADDR *) &sin, sizeof(SOCKADDR)) == SOCKET_ERROR)
-    {
+    if (connect(*sock, (SOCKADDR *) &sin, sizeof(SOCKADDR)) == SOCKET_ERROR) {
         perror("connect()");
         exit(errno);
     }
@@ -96,20 +89,17 @@ static bool connect2_JungleServer(const char srvAdd[ADD_SIZE], const SOCKET *soc
 }
 
 
-static void close_client(SOCKET *sock)
-{
+static void close_client(SOCKET *sock) {
 #ifdef WIN32
     closesocket((SOCKET) &sock);
 #endif
 }
 
-static int read_server(SOCKET sock, char *buffer)
-{
+static int read_server(SOCKET sock, char *buffer) {
 #ifdef WIN32
     int n = 0;
 
-    if((n = recv(sock, buffer, BUF_SIZE - 1, 0)) < 0)
-    {
+    if ((n = recv(sock, buffer, BUF_SIZE - 1, 0)) < 0) {
         perror("recv()");
         exit(errno);
     }
@@ -120,29 +110,25 @@ static int read_server(SOCKET sock, char *buffer)
 #endif
 }
 
-static void write_server(SOCKET sock, const char *buffer)
-{
+static void write_server(SOCKET sock, const char *buffer) {
 #ifdef WIN32
 
-    if(send(sock, buffer, strlen(buffer), 0) < 0)
-    {
+    if (send(sock, buffer, strlen(buffer), 0) < 0) {
         perror("send()");
         exit(errno);
     }
 #endif
 }
 
-static void app_client(const char *srvAdd, const char *playerName)
-{
+static void app_client(const char *srvAdd, const char *playerName) {
 #ifdef WIN32
-    SOCKET *sock= (SOCKET *) create_client();
+    SOCKET *sock = (SOCKET *) create_client();
     char buffer[BUF_SIZE];
     fd_set rdfs;// fixed size buffer
     connect2_JungleServer(srvAdd, sock);
     write_server((SOCKET) sock, playerName);
 
-    while(1)
-    {
+    while (1) {
         FD_ZERO(&rdfs);
         /*
          * FD_ZERO() : source : https://www.man7.org/linux/man-pages/man3/FD_SET.3.html
@@ -164,45 +150,37 @@ static void app_client(const char *srvAdd, const char *playerName)
         /* add the socket */
         FD_SET(sock, &rdfs);
 
-        if(select((int) (sock + 1), &rdfs, NULL, NULL, NULL) == -1)
-        {
+        if (select((int) (sock + 1), &rdfs, NULL, NULL, NULL) == -1) {
             perror("select()");
             exit(errno);
         }
 
         /* entrée standard : i.e keyboard */
-        if(FD_ISSET(STDIN_FILENO, &rdfs))
+        if (FD_ISSET(STDIN_FILENO, &rdfs))
             /*
             * select () modifie le contenu des ensembles en fonction du
                   règles décrites ci-dessous. Après avoir appelé select (), le FD_ISSET ()
                   macro peut être utilisée pour tester si un descripteur de fichier est toujours
                   présent dans un ensemble. FD_ISSET () renvoie une valeur différente de zéro si le fichier
                   le descripteur fd est présent dans l'ensemble, et zéro s'il ne l'est pas.
-
             */
         {
             fgets(buffer, BUF_SIZE - 1, stdin);
             {
                 char *p = NULL;
                 p = strstr(buffer, "\n");
-                if(p != NULL)
-                {
+                if (p != NULL) {
                     *p = 0;
-                }
-                else
-                {
+                } else {
                     /* fclean */
                     buffer[BUF_SIZE - 1] = 0;
                 }
             }
             write_server((SOCKET) sock, buffer);
-        }
-        else if(FD_ISSET(sock, &rdfs))
-        {
+        } else if (FD_ISSET(sock, &rdfs)) {
             int n = read_server((SOCKET) sock, buffer);
             /* server down */
-            if(n == 0)
-            {
+            if (n == 0) {
                 printf("Server disconnected !\n");
                 break;
             }

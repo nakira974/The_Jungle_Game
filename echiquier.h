@@ -9,15 +9,22 @@
 struct Animal;
 struct Player;
 struct ZoneMaxime;
-struct Animal* animalTab;
-struct Player* playerTab;
-char* animalType;
+struct Animal *animalTab;
+struct Player *playerTab;
+char *animalType;
+
 void afficherEchiquier();
+
 void color(int t, int f);
+
 bool searchCanEat(struct Animal animal, char direction, bool isEnemy);
+
 bool checkEat(struct Animal *enemy, struct Animal ally);
+
 void GenererEchequier();
+
 enum Zone checkZone(struct Animal animal);
+
 void loadGame();
 
 #endif //PROJETJUNGLE_ECHIQUIER_H
