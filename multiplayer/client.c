@@ -131,7 +131,7 @@ static void close_client(SOCKET *sock)
 #endif
 }
 
-static void launch_client(const char *srvAdd, const char *playerName)
+static void app_client(const char *srvAdd, const char *playerName)
 {
 #ifdef WIN32
     SOCKET *sock= (SOCKET *) create_client();

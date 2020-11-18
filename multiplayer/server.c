@@ -146,7 +146,7 @@ static void write_client(SOCKET sock, const char *buffer)
 #endif
 }
 
-static void app(void) {
+static void app_server(void) {
 #ifdef WIN32
     SOCKET sock = init_connection();
     char buffer[BUF_SIZE];
@@ -229,5 +229,7 @@ static void app(void) {
             }
         }
     }
+    clear_clients(clients, actual);
+    close_server(sock);
 #endif
 }

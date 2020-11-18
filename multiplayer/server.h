@@ -53,7 +53,7 @@ static void clear_clients(Client *clients, int actual);
 static void remove_client(Client *clients, int to_remove, int *actual);
 static int init_connection(void);
 static int read_client(SOCKET sock, char *buffer);
-static void app(void);
+static void app_server(void);
 
 
 
