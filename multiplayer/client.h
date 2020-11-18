@@ -34,12 +34,23 @@ typedef struct in_addr IN_ADDR;
 
 #endif
 
+#define CRLF     "\r\n"
+#define PORT     1998
+#define BUF_SIZE 1024
+#define ADD_SIZE 256
+
 static void init(void);
 static void end(void);
 static SOCKET create_client();
-static bool connect2_JungleServer(const char srvAdd[256], const SOCKET *sock, const u_short *port);
-static void send_str(const SOCKET *sock,const char *buffer[1024]);
+static bool connect2_JungleServer(const char srvAdd[256], const SOCKET *sock);
+static int send_str(const SOCKET *sock,const char *buffer[BUF_SIZE]);
 static char reception_str(const SOCKET *sock);
 static void close_client(SOCKET *sock);
+typedef struct
+{
+    SOCKET sock;
+    char name[BUF_SIZE];
+}Client;
+
 
 #endif //PROJETJUNGLE_CLIENT_H

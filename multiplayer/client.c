@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <pthread.h>
+#include "server.h"
 #ifdef WIN32 /*  Windows */
 
 #include <winsock2.h>
@@ -33,11 +34,15 @@ typedef struct in_addr IN_ADDR;
 
 #endif
 
+
+
 static void init(void)
 {
 #ifdef WIN32
+    //initialise une DLL permettant d'utiliser les sockets et pour libérer cette même DLL.
     WSADATA wsa;
     int err = WSAStartup(MAKEWORD(2, 2), &wsa);
+
     if(err < 0)
     {
         puts("WSAStartup failed !");
@@ -64,7 +69,7 @@ static SOCKET create_client()
     return sock;
 }
 
-static bool connect2_JungleServer(const char srvAdd[256], const SOCKET *sock, const u_short *port)
+static bool connect2_JungleServer(const char srvAdd[ADD_SIZE], const SOCKET *sock)
 {
 #ifdef WIN32
     struct hostent *hostinfo = NULL;
@@ -79,7 +84,7 @@ static bool connect2_JungleServer(const char srvAdd[256], const SOCKET *sock, co
     }
 
     sin.sin_addr = *(IN_ADDR *) hostinfo->h_addr; /* l'add se trouve dans le champ h_addr de la struct hostinfo */
-    sin.sin_port = htons(*port); /* on utilise la méthode htons pour le port */
+    sin.sin_port = htons(PORT); /* on utilise la méthode htons pour le port */
     sin.sin_family = AF_INET;
 
     if(connect(*sock,(SOCKADDR *) &sin, sizeof(SOCKADDR)) == SOCKET_ERROR)
@@ -90,7 +95,7 @@ static bool connect2_JungleServer(const char srvAdd[256], const SOCKET *sock, co
 #endif
 }
 
-static void send_str(const SOCKET *sock,const char *buffer[1024])
+static int send_str(const SOCKET *sock,const char *buffer[BUF_SIZE])
 {
 #ifdef WIN32
     if(send(*sock, *buffer, strlen(*buffer), 0) < 0)
@@ -98,6 +103,7 @@ static void send_str(const SOCKET *sock,const char *buffer[1024])
         perror("send()");
         exit(errno);
     }
+    return 1;
 #endif
 }
 
@@ -122,5 +128,65 @@ static void close_client(SOCKET *sock)
 {
 #ifdef WIN32
     closesocket((SOCKET) &sock);
+#endif
+}
+
+static void launch_client(const char *srvAdd, const char *playerName)
+{
+#ifdef WIN32
+    SOCKET *sock= (SOCKET *) create_client();
+    char buffer[BUF_SIZE];
+    fd_set rdfs;// fixed size buffer
+    connect2_JungleServer(srvAdd, sock);
+    send_str(sock, (const char **) playerName);
+    while(1)
+    {
+        FD_ZERO(&rdfs);
+
+        /* add STDIN_FILENO */
+        FD_SET(STDIN_FILENO, &rdfs);
+
+        /* add the socket */
+        FD_SET(sock, &rdfs);
+
+        if(select((int) (sock + 1), &rdfs, NULL, NULL, NULL) == -1)
+        {
+            perror("select()");
+            exit(errno);
+        }
+
+        /* entrée standard : i.e keyboard */
+        if(FD_ISSET(STDIN_FILENO, &rdfs))
+        {
+            fgets(buffer, BUF_SIZE - 1, stdin);
+            {
+                char *p = NULL;
+                p = strstr(buffer, "\n");
+                if(p != NULL)
+                {
+                    *p = 0;
+                }
+                else
+                {
+                    /* fclean */
+                    buffer[BUF_SIZE - 1] = 0;
+                }
+            }
+            send_str(sock, (const char **) buffer);
+        }
+        else if(FD_ISSET(sock, &rdfs))
+        {
+            int n = send_str(sock, (const char **) buffer);
+            /* server down */
+            if(n == 0)
+            {
+                printf("Server disconnected !\n");
+                break;
+            }
+            puts(buffer);
+        }
+    }
+
+    close_client(sock);
 #endif
 }
