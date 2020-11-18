@@ -95,39 +95,40 @@ static bool connect2_JungleServer(const char srvAdd[ADD_SIZE], const SOCKET *soc
 #endif
 }
 
-static int send_str(const SOCKET *sock,const char *buffer[BUF_SIZE])
-{
-#ifdef WIN32
-    if(send(*sock, *buffer, strlen(*buffer), 0) < 0)
-    {
-        perror("send()");
-        exit(errno);
-    }
-    return 1;
-#endif
-}
-
-static char reception_str(const SOCKET *sock)
-{
-    char buffer[1024];
-    int n = 0;
-
-#ifdef WIN32
-    if((n = recv(*sock, buffer, sizeof buffer - 1, 0)) < 0)
-    {
-        perror("recv()");
-        exit(errno);
-    }
-
-    buffer[n] = '\0';
-    return *buffer;
-#endif
-}
 
 static void close_client(SOCKET *sock)
 {
 #ifdef WIN32
     closesocket((SOCKET) &sock);
+#endif
+}
+
+static int read_server(SOCKET sock, char *buffer)
+{
+#ifdef WIN32
+    int n = 0;
+
+    if((n = recv(sock, buffer, BUF_SIZE - 1, 0)) < 0)
+    {
+        perror("recv()");
+        exit(errno);
+    }
+
+    buffer[n] = 0;
+
+    return n;
+#endif
+}
+
+static void write_server(SOCKET sock, const char *buffer)
+{
+#ifdef WIN32
+
+    if(send(sock, buffer, strlen(buffer), 0) < 0)
+    {
+        perror("send()");
+        exit(errno);
+    }
 #endif
 }
 
@@ -138,7 +139,8 @@ static void app_client(const char *srvAdd, const char *playerName)
     char buffer[BUF_SIZE];
     fd_set rdfs;// fixed size buffer
     connect2_JungleServer(srvAdd, sock);
-    send_str(sock, (const char **) playerName);
+    write_server((SOCKET) sock, playerName);
+
     while(1)
     {
         FD_ZERO(&rdfs);
@@ -172,11 +174,11 @@ static void app_client(const char *srvAdd, const char *playerName)
                     buffer[BUF_SIZE - 1] = 0;
                 }
             }
-            send_str(sock, (const char **) buffer);
+            write_server((SOCKET) sock, buffer);
         }
         else if(FD_ISSET(sock, &rdfs))
         {
-            int n = send_str(sock, (const char **) buffer);
+            int n = read_server((SOCKET) sock, buffer);
             /* server down */
             if(n == 0)
             {
@@ -190,3 +192,4 @@ static void app_client(const char *srvAdd, const char *playerName)
     close_client(sock);
 #endif
 }
+

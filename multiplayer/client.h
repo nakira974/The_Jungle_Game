@@ -47,6 +47,8 @@ static bool connect2_JungleServer(const char srvAdd[256], const SOCKET *sock);
 static int send_str(const SOCKET *sock,const char *buffer[BUF_SIZE]);
 static char reception_str(const SOCKET *sock);
 static void close_client(SOCKET *sock);
+
+
 typedef struct
 {
     SOCKET sock;
