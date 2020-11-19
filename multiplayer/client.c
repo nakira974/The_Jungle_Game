@@ -149,7 +149,7 @@ static void app_client(const char *srvAdd, const char *playerName) {
          */
 
         /* add the socket */
-        FD_SET(sock, &rdfs);
+        FD_SET(*sock, &rdfs);
 
         if (select((int) (sock + 1), &rdfs, NULL, NULL, NULL) == -1) {
             perror("select()");
