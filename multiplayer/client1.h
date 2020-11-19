@@ -5,6 +5,6 @@
 #ifndef PROJETJUNGLE_CLIENT1_H
 #define PROJETJUNGLE_CLIENT1_H
 
-int __cdecl app_client1(char *srvAdd);
+int __cdecl app_client1(char *srvAdd, char *sendbuffer);
 
 #endif //PROJETJUNGLE_CLIENT1_H

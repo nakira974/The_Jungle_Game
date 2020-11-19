@@ -18,17 +18,17 @@
 #pragma comment (lib, "AdvApi32.lib")
 
 
-#define DEFAULT_BUFLEN 512
+#define DEFAULT_BUFLEN 1024
 #define DEFAULT_PORT "8888"
 
-int __cdecl app_client1(char *srvAdd)
+int __cdecl app_client1(char *srvAdd, char *sendbuffer)
 {
     WSADATA wsaData;
     SOCKET ConnectSocket = INVALID_SOCKET;
     struct addrinfo *result = NULL,
             *ptr = NULL,
             hints;
-    const char *sendbuf = "this is a test";
+    const char *sendbuf = sendbuffer;
     char recvbuf[DEFAULT_BUFLEN];
     int iResult;
     int recvbuflen = DEFAULT_BUFLEN;
