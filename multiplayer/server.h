@@ -41,28 +41,16 @@ typedef struct in_addr IN_ADDR;
 #define CRLF     "\r\n"
 #define PORT     1998
 #define BUF_SIZE 1024
-#define ADD_SIZE 256
+#define ADD_SIZE 32
 #define MAX_CLIENTS 1
 #define TCP 0
 
 
-static void init(void);
+void init_server(void);
 
-static void end(void);
+void end_server(void);
 
-static void close_server(const SOCKET *sock);
-
-static void write_client(SOCKET sock, const char *buffer);
-
-static void clear_clients(Client *clients, int actual);
-
-static void remove_client(Client *clients, int to_remove, int *actual);
-
-static int init_connection(void);
-
-static int read_client(SOCKET sock, char *buffer);
-
-static void app_server(void);
+void app_server(void);
 
 
 #endif //PROJETJUNGLE_SERVER_H

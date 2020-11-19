@@ -37,7 +37,7 @@ typedef struct in_addr IN_ADDR;
 #endif
 
 
-static void init(void) {
+void init_client(void) {
 #ifdef WIN32
     //initialise une DLL permettant d'utiliser les sockets et pour libérer cette même DLL.
     WSADATA wsa;
@@ -50,7 +50,7 @@ static void init(void) {
 #endif
 }
 
-static void end(void) {
+void end_client(void) {
 #ifdef WIN32
     WSACleanup();
 #endif
@@ -121,7 +121,7 @@ static void write_server(SOCKET sock, const char *buffer) {
 #endif
 }
 
-static void app_client(const char *srvAdd, const char *playerName) {
+void app_client(const char *srvAdd, const char *playerName) {
 #ifdef WIN32
     SOCKET *sock = (SOCKET *) create_client();
     char buffer[BUF_SIZE];
