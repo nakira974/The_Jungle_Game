@@ -597,9 +597,9 @@ void loadGame() {
 #endif
     }else if(gameType == '2'){
         //afficherEchiquier();
-    //multijoueur
+        //multijoueur
 
-}
+    }
 
 
 }
