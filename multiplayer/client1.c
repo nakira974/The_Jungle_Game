@@ -23,7 +23,16 @@
 
 int iResult;
 
-int sendData(SOCKET *ConnectSocket, char *sendbuf){
+SOCKET ConnectSocket = INVALID_SOCKET;
+
+WSADATA wsaData;
+
+struct addrinfo *result = NULL, *ptr = NULL, hints;
+
+char recvbuf[DEFAULT_BUFLEN];
+int recvbuflen = DEFAULT_BUFLEN;
+
+int sendData(char *sendbuf){
     iResult = send( ConnectSocket, sendbuf, (int)strlen(sendbuf), 0 );
     if (iResult == SOCKET_ERROR) {
         printf("send failed with error: %d\n", WSAGetLastError());
@@ -33,17 +42,22 @@ int sendData(SOCKET *ConnectSocket, char *sendbuf){
     }
 }
 
+int createSocket(){
+    // Create a SOCKET for connecting to server
+    ConnectSocket = socket(ptr->ai_family, ptr->ai_socktype,
+                           ptr->ai_protocol);
+    if (ConnectSocket == INVALID_SOCKET) {
+        printf("socket failed with error: %ld\n", WSAGetLastError());
+        WSACleanup();
+        return 1;
+    }
+}
+
 int __cdecl app_client1(char *srvAdd, char *sendbuffer)
 {
-    WSADATA wsaData;
-    SOCKET ConnectSocket = INVALID_SOCKET;
-    struct addrinfo *result = NULL,
-            *ptr = NULL,
-            hints;
-    const char *sendbuf = sendbuffer;
-    char recvbuf[DEFAULT_BUFLEN];
-    int recvbuflen = DEFAULT_BUFLEN;
 
+
+    const char *sendbuf = sendbuffer;
     // Validate the parameters
 
 
@@ -70,14 +84,7 @@ int __cdecl app_client1(char *srvAdd, char *sendbuffer)
     // Attempt to connect to an address until one succeeds
     for(ptr=result; ptr != NULL ;ptr=ptr->ai_next) {
 
-        // Create a SOCKET for connecting to server
-        ConnectSocket = socket(ptr->ai_family, ptr->ai_socktype,
-                               ptr->ai_protocol);
-        if (ConnectSocket == INVALID_SOCKET) {
-            printf("socket failed with error: %ld\n", WSAGetLastError());
-            WSACleanup();
-            return 1;
-        }
+        createSocket();
 
         // Connect to server.
         iResult = connect( ConnectSocket, ptr->ai_addr, (int)ptr->ai_addrlen);
@@ -108,7 +115,7 @@ int __cdecl app_client1(char *srvAdd, char *sendbuffer)
 
     printf("Bytes Sent: %ld\n", iResult);
 
-    sendData((SOCKET *) ConnectSocket, "Ce qu'on va envoyer avec une boucle While la partie pas finie");
+    sendData("Ce qu'on va envoyer avec une boucle While la partie pas finie");
 
     // shutdown the connection since no more data will be sent
     iResult = shutdown(ConnectSocket, SD_SEND);
