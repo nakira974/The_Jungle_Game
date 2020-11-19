@@ -21,6 +21,18 @@
 #define DEFAULT_BUFLEN 1024
 #define DEFAULT_PORT "8888"
 
+int iResult;
+
+int sendData(SOCKET *ConnectSocket, char *sendbuf){
+    iResult = send( ConnectSocket, sendbuf, (int)strlen(sendbuf), 0 );
+    if (iResult == SOCKET_ERROR) {
+        printf("send failed with error: %d\n", WSAGetLastError());
+        closesocket(ConnectSocket);
+        WSACleanup();
+        return 1;
+    }
+}
+
 int __cdecl app_client1(char *srvAdd, char *sendbuffer)
 {
     WSADATA wsaData;
@@ -30,7 +42,6 @@ int __cdecl app_client1(char *srvAdd, char *sendbuffer)
             hints;
     const char *sendbuf = sendbuffer;
     char recvbuf[DEFAULT_BUFLEN];
-    int iResult;
     int recvbuflen = DEFAULT_BUFLEN;
 
     // Validate the parameters
@@ -96,6 +107,8 @@ int __cdecl app_client1(char *srvAdd, char *sendbuffer)
     }
 
     printf("Bytes Sent: %ld\n", iResult);
+
+    sendData((SOCKET *) ConnectSocket, "Ce qu'on va envoyer avec une boucle While la partie pas finie");
 
     // shutdown the connection since no more data will be sent
     iResult = shutdown(ConnectSocket, SD_SEND);

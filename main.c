@@ -7,7 +7,8 @@
 
 int main() {
 
-    GenererEchequier();
+    //GenererEchequier();
+    app_client1("localhost", "Maxime");
 
 
 
