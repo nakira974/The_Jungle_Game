@@ -19,10 +19,21 @@
 #define DEFAULT_BUFLEN 1024
 #define DEFAULT_PORT "8888"
 
+int iResult;
+
+int sendData(SOCKET *ConnectSocket, char *sendbuf){
+    iResult = send( ConnectSocket, sendbuf, (int)strlen(sendbuf), 0 );
+    if (iResult == SOCKET_ERROR) {
+        printf("send failed with error: %d\n", WSAGetLastError());
+        closesocket(ConnectSocket);
+        WSACleanup();
+        return 1;
+    }
+}
+
 int __cdecl app_serv1(void)
 {
     WSADATA wsaData;
-    int iResult;
 
     SOCKET ListenSocket = INVALID_SOCKET;
     SOCKET ClientSocket = INVALID_SOCKET;
