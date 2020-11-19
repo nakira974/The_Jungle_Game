@@ -5,8 +5,8 @@
 
 int main() {
 
-    //GenererEchequier();
-    init_server();
+    GenererEchequier();
+    //init_server();
 
 
 }

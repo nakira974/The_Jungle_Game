@@ -14,7 +14,7 @@ add_executable(${CMAKE_PROJECT_NAME} main.c echiquier.c echiquier.h ia/model.c i
 
 target_link_libraries(
         ${CMAKE_PROJECT_NAME}
-        ${SDL2_LIBRARY}
+        #${SDL2_LIBRARY}
         #-lmingw32
         #-lSDL2main
         #-lSDL2
