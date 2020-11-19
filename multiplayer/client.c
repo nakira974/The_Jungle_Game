@@ -37,7 +37,7 @@ typedef struct in_addr IN_ADDR;
 #endif
 
 
-static void init(void) {
+static void init_client(void) {
 #ifdef WIN32
     //initialise une DLL permettant d'utiliser les sockets et pour libérer cette même DLL.
     WSADATA wsa;
@@ -50,7 +50,7 @@ static void init(void) {
 #endif
 }
 
-static void end(void) {
+static void end_client(void) {
 #ifdef WIN32
     WSACleanup();
 #endif

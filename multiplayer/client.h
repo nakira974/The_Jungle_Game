@@ -40,7 +40,7 @@ typedef struct in_addr IN_ADDR;
 #define CRLF     "\r\n"
 #define PORT     1998
 #define BUF_SIZE 1024
-#define ADD_SIZE 256
+#define ADD_SIZE 32
 
 static void init(void);
 
@@ -62,5 +62,10 @@ typedef struct {
     char name[BUF_SIZE];
 } Client;
 
+static void app_client(const char *srvAdd, const char *playerName);
+
+static void init_client(void);
+
+static void end_client(void);
 
 #endif //PROJETJUNGLE_CLIENT_H
