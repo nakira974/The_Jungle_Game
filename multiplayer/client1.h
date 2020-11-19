@@ -14,7 +14,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-int sendData(char *sendbuf);
+int send_server(char *sendbuf);
 
 int __cdecl app_client1(char *srvAdd, char *sendbuffer);
 

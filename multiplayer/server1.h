@@ -16,6 +16,6 @@
 
 int __cdecl app_serv1(void);
 
-int sendData(SOCKET *ConnectSocket, char *sendbuf);
+int send_client(char *sendbuf);
 
 #endif //PROJETJUNGLE_SERVER1_H

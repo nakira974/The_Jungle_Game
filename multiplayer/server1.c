@@ -20,32 +20,40 @@
 #define DEFAULT_PORT "8888"
 
 int iResult;
+WSADATA wsaData;
 
-int sendData(SOCKET *ConnectSocket, char *sendbuf){
-    iResult = send( ConnectSocket, sendbuf, (int)strlen(sendbuf), 0 );
+SOCKET ListenSocket = INVALID_SOCKET;
+SOCKET ClientSocket = INVALID_SOCKET;
+
+struct addrinfo *result = NULL;
+struct addrinfo hints;
+
+int iSendResult;
+char recvbuf[DEFAULT_BUFLEN];
+// #pragma comment (lib, "Mswsock.lib")
+int recvbuflen = DEFAULT_BUFLEN;
+
+int send_client( char *sendbuf){
+    iResult = send( ClientSocket, sendbuf, (int)strlen(sendbuf), 0 );
     if (iResult == SOCKET_ERROR) {
         printf("send failed with error: %d\n", WSAGetLastError());
-        closesocket(ConnectSocket);
+        closesocket(ClientSocket);
         WSACleanup();
         return 1;
     }
 }
 
+int create_socket(){
+    ListenSocket = socket(result->ai_family, result->ai_socktype, result->ai_protocol);
+    if (ListenSocket == INVALID_SOCKET) {
+        printf("socket failed with error: %ld\n", WSAGetLastError());
+        freeaddrinfo(result);
+        WSACleanup();
+        return 1;
+    }
+}
 int __cdecl app_serv1(void)
 {
-    WSADATA wsaData;
-
-    SOCKET ListenSocket = INVALID_SOCKET;
-    SOCKET ClientSocket = INVALID_SOCKET;
-
-    struct addrinfo *result = NULL;
-    struct addrinfo hints;
-
-    int iSendResult;
-    char recvbuf[DEFAULT_BUFLEN];
-// #pragma comment (lib, "Mswsock.lib")
-    int recvbuflen = DEFAULT_BUFLEN;
-
     // Initialize Winsock
     iResult = WSAStartup(MAKEWORD(2,2), &wsaData);
     if (iResult != 0) {
@@ -69,13 +77,7 @@ int __cdecl app_serv1(void)
 
     // Create a SOCKET for connecting to server
 
-    ListenSocket = socket(result->ai_family, result->ai_socktype, result->ai_protocol);
-    if (ListenSocket == INVALID_SOCKET) {
-        printf("socket failed with error: %ld\n", WSAGetLastError());
-        freeaddrinfo(result);
-        WSACleanup();
-        return 1;
-    }
+    create_socket();
 
     // Setup the TCP listening socket
     iResult = bind( ListenSocket, result->ai_addr, (int)result->ai_addrlen);
