@@ -36,7 +36,7 @@ typedef struct in_addr IN_ADDR;
 
 #endif
 
-static void ini_server(void) {
+void init_server(void) {
 #ifdef WIN32
     WSADATA wsa;
     int err = WSAStartup(MAKEWORD(2, 2), &wsa);
@@ -47,7 +47,7 @@ static void ini_server(void) {
 #endif
 }
 
-static void end_server(void) {
+void end_server(void) {
 #ifdef WIN32
     WSACleanup();
 #endif
@@ -133,7 +133,7 @@ static void write_client(SOCKET sock, const char *buffer) {
 #endif
 }
 
-static void app_server(void) {
+void app_server(void) {
 #ifdef WIN32
     SOCKET sock = init_connection();//Création du socket serveur
     char buffer[BUF_SIZE];//Création du buffer

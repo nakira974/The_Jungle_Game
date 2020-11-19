@@ -46,11 +46,11 @@ typedef struct in_addr IN_ADDR;
 #define TCP 0
 
 
-static void init_server(void);
+void init_server(void);
 
-static void end_server(void);
+void end_server(void);
 
-static void app_server(void);
+void app_server(void);
 
 
 #endif //PROJETJUNGLE_SERVER_H
