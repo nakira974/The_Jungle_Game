@@ -114,8 +114,7 @@ int __cdecl app_serv1(void) {
         if (iResult > 0) {
             printf("Player information received: %d\n", iResult);
             playerTab[1].name=recvbuf;
-            playerTab[1].isEnemy=true;
-            playerTab[1].score=0;
+
             printf("Ennemy name is : %s\n", playerTab[1].name);
 
 
@@ -124,8 +123,7 @@ int __cdecl app_serv1(void) {
 
             //ON ENVOIE LE NOM DE l'HOTE
             recvbuf = playerTab[0].name;
-            playerTab[0].isEnemy = false;
-            playerTab[0].score = 0;
+
             iSendResult = send(ClientSocket, recvbuf, iResult, 0);
             if (iSendResult > 0) {
                 printf("Host information sent: %d\n", iSendResult);

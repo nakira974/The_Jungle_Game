@@ -96,8 +96,6 @@ int __cdecl app_client1(char *srvAdd) {
     printf("Envoi des informations du joueur à l'hôte de la partie... \n");
     sendbuf= playerTab[0].name;
     //LE CLIENT EST L'ENNEMY
-    playerTab[0].isEnemy = true;
-    playerTab[0].score = 0;
     iResult = send(ConnectSocket, sendbuf, (int) strlen(sendbuf), 0);
 
     if (iResult == SOCKET_ERROR) {
@@ -114,8 +112,6 @@ int __cdecl app_client1(char *srvAdd) {
         printf("Host information received: %d\n", iResult);
         //ON MET LE NOM DE l'HOTE DANS LE TABLEAU DES JOUEURS
         playerTab[1].name = recvbuf;
-        playerTab[1].isEnemy = false;
-        playerTab[1].score = 0;
     }
 
     //LANCEMENT DE LA PARTIE
