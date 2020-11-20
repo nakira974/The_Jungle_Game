@@ -115,6 +115,7 @@ int __cdecl app_serv1(void) {
             printf("Player information received: %d\n", iResult);
 
 
+
             //buffer back to the sender
             //ENVOI DES INFOS DE L'HOTE, LANCEMENT DE LA PARTIE
             iSendResult = send(ClientSocket, recvbuf, iResult, 0);
@@ -135,8 +136,11 @@ int __cdecl app_serv1(void) {
 
             printf("Initialisation de la partie 0/3... %s\n");
             GenererEchequier();
+            printf("Nom du joueur : %s\n", (char *) &recvbuf);
+            currentPlayer.name = (char*) recvbuf;
+            playerTab[0]=currentPlayer;
             //L'INVITE EST l'ENNEMI
-            currentPlayer.isEnemy = false;
+            currentPlayer.isEnemy = true;
 
             //On compte le tableau des animaux, pour vérifier que tout est OK
             printf("Initialisation de la partie 2/3... %s\n");

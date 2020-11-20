@@ -92,10 +92,6 @@ int __cdecl app_client1(char *srvAdd, char *sendbuffer) {
     //Envoi le nom du joueur
     printf("Initialisation de la partie 0/3... %s\n");
 
-    printf("Nom du joueur : %s\n", (char *) &sendbuf);
-    currentPlayer.name = (char*) sendbuf;
-    //L'INVITE EST l'ENNEMI
-    currentPlayer.isEnemy = true;
 
     printf("Envoi des informations du joueur à l'hôte de la partie... %s\n");
     iResult = send(ConnectSocket, sendbuf, (int) strlen(sendbuf), 0);
@@ -121,6 +117,11 @@ int __cdecl app_client1(char *srvAdd, char *sendbuffer) {
 
 
         GenererEchequier();
+        printf("Nom du joueur : %s\n", (char *) &sendbuf);
+        currentPlayer.name = (char*) sendbuf;
+        //L'INVITE EST l'ENNEMI
+        currentPlayer.isEnemy = true;
+        playerTab[0]=currentPlayer;
 
         //On compte le tableau des animaux, pour vérifier que tout est OK
         printf("Initialisation de la partie 2/3... %s\n");
