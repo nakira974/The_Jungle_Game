@@ -134,7 +134,7 @@ int __cdecl app_serv1(void) {
             int i;
             float loadingBar;
 
-            printf("%s\n","Initialisation de la partie 0//3... %s\n");
+            printf("%s\n","Initialisation de la partie 0//3...");
             GenererEchequier();
             printf("Nom du joueur : %s\n", (char *) &recvbuf);
             currentPlayer.name = (char*) recvbuf;
