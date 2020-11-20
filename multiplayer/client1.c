@@ -27,14 +27,14 @@ int close_client(){
     return 1;
 }
 
-int __cdecl app_client1(char *srvAdd, char *sendbuffer) {
+int __cdecl app_client1(char *srvAdd) {
     WSADATA wsaData;
 
     struct addrinfo *result = NULL, *ptr = NULL, hints;
 
     char recvbuf[DEFAULT_BUFLEN];
     int recvbuflen = DEFAULT_BUFLEN;
-    const char *sendbuf = sendbuffer;
+    const char *sendbuf = playerTab[0].name;
     // Validate the parameters
 
 
@@ -83,17 +83,21 @@ int __cdecl app_client1(char *srvAdd, char *sendbuffer) {
     freeaddrinfo(result);
 
     if (ConnectSocket == INVALID_SOCKET) {
-        printf("%s\n","Unable to connect to server!");
+        printf("Unable to connect to server!\n");
         WSACleanup();
         return 1;
     }
 
     // Send an initial buffer
     //Envoi le nom du joueur
-    printf("%s\n","Initialisation de la partie 0//3...");
+    printf("Initialisation de la partie 0/3... \n");
 
 
-    printf("%s\n","Envoi des informations du joueur à l'hôte de la partie...");
+    printf("Envoi des informations du joueur à l'hôte de la partie... \n");
+    sendbuf= playerTab[0].name;
+    //LE CLIENT EST L'ENNEMY
+    playerTab[0].isEnemy = true;
+    playerTab[0].score = 0;
     iResult = send(ConnectSocket, sendbuf, (int) strlen(sendbuf), 0);
 
     if (iResult == SOCKET_ERROR) {
@@ -106,8 +110,13 @@ int __cdecl app_client1(char *srvAdd, char *sendbuffer) {
     printf("Player information sent: %ld\n", iResult);
 
     iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
-    if (iResult > 0)
-        printf("Bytes received: %d\n", iResult);
+    if (iResult > 0) {
+        printf("Host information received: %d\n", iResult);
+        //ON MET LE NOM DE l'HOTE DANS LE TABLEAU DES JOUEURS
+        playerTab[1].name = recvbuf;
+        playerTab[1].isEnemy = false;
+        playerTab[1].score = 0;
+    }
 
     //LANCEMENT DE LA PARTIE
     do {
@@ -115,23 +124,20 @@ int __cdecl app_client1(char *srvAdd, char *sendbuffer) {
         int i;
         float loadingBar;
 
-
-        GenererEchequier();
         printf("Nom du joueur : %s\n", (char *) &sendbuf);
         currentPlayer.name = (char*) sendbuf;
         //L'INVITE EST l'ENNEMI
         currentPlayer.isEnemy = true;
-        playerTab[0]=currentPlayer;
 
         //On compte le tableau des animaux, pour vérifier que tout est OK
-        printf("%s\n","Initialisation de la partie 2//3...");
+        printf("Initialisation de la partie 2/3... %s\n");
         for (i = 0; i <15 ; ++i) {
             loadingBar+MULTIPLAYER_LOADING_BAR;
             currentAnimal = animalTab[i];
             printf("chargement... %d", loadingBar," %");
             if (animalTab[15].type == currentAnimal.type){
-                printf("%s\n","Initialisation de la partie 3//3...");
-                printf("%s\n","Début de la partie ! ");
+                printf("Initialisation de la partie 3/3... %s\n");
+                printf("Début de la partie ! ");
             } else{
                 close_client();
             }

@@ -3,6 +3,8 @@
 //
 
 #include "echiquier.h"
+#include "multiplayer/server1.h"
+#include "multiplayer/client1.h"
 
 
 typedef struct Animal Animal;
@@ -134,6 +136,29 @@ void loadGame() {
     } while (strlen(&gameType) == 0);
 
     //viderBuffer();
+
+    if(gameType =='2'){
+        printf("Voulez-vous héberger une partie(1) ou se connecter à un serveur ?(2) ?:\n");
+        scanf("%c", &gameType);
+
+        if(gameType == '1'){
+            char *playerName;
+            printf("Nom du joueur : \n");
+            scanf("%c", playerName );
+            playerTab[0].name = playerName;
+            app_serv1();
+
+        } else if (gameType == '2'){
+            char *srvAdd;
+            char *playerName;
+            printf("Adresse du serveur : \n");
+            scanf("%c", srvAdd);
+            printf("Nom du joueur : \n");
+            scanf("%c", playerName );
+            playerTab[0].name = playerName;
+            app_client1(srvAdd);
+        }
+    }
 
 
     if (gameType == '1') {

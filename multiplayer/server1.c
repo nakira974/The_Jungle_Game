@@ -17,7 +17,7 @@ struct Animal currentAnimal;
 struct Player currentPlayer;
 
 int iSendResult;
-char recvbuf[DEFAULT_BUFLEN];
+char *recvbuf;
 // #pragma comment (lib, "Mswsock.lib")
 int recvbuflen = DEFAULT_BUFLEN;
 
@@ -113,11 +113,19 @@ int __cdecl app_serv1(void) {
         iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
         if (iResult > 0) {
             printf("Player information received: %d\n", iResult);
-
+            playerTab[1].name=recvbuf;
+            playerTab[1].isEnemy=true;
+            playerTab[1].score=0;
+            printf("Ennemy name is : %s\n", playerTab[1].name);
 
 
             //buffer back to the sender
             //ENVOI DES INFOS DE L'HOTE, LANCEMENT DE LA PARTIE
+
+            //ON ENVOIE LE NOM DE l'HOTE
+            recvbuf = playerTab[0].name;
+            playerTab[0].isEnemy = false;
+            playerTab[0].score = 0;
             iSendResult = send(ClientSocket, recvbuf, iResult, 0);
             if (iSendResult > 0) {
                 printf("Host information sent: %d\n", iSendResult);
@@ -134,23 +142,21 @@ int __cdecl app_serv1(void) {
             int i;
             float loadingBar;
 
-            printf("%s\n","Initialisation de la partie 0//3...");
+            printf("Initialisation de la partie 0/3... %s\n");
             GenererEchequier();
             printf("Nom du joueur : %s\n", (char *) &recvbuf);
-            currentPlayer.name = (char*) recvbuf;
-            playerTab[0]=currentPlayer;
             //L'INVITE EST l'ENNEMI
             currentPlayer.isEnemy = true;
 
             //On compte le tableau des animaux, pour vérifier que tout est OK
-            printf("%s\n","Initialisation de la partie 2//3...");
+            printf("Initialisation de la partie 2/3... %s\n");
             for (i = 0; i <15 ; ++i) {
                 loadingBar+MULTIPLAYER_LOADING_BAR;
                 currentAnimal = animalTab[i];
                 printf("chargement... %d", loadingBar," %");
                 if (animalTab[15].type == currentAnimal.type){
-                    printf("%s\n","Initialisation de la partie 3//3...");
-                    printf("%s\n","Début de la partie ! ");
+                    printf("Initialisation de la partie 3/3... %s\n");
+                    printf("Début de la partie ! ");
                 } else{
                     close_server();
                 }

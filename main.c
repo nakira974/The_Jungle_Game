@@ -7,8 +7,7 @@
 
 int main() {
 
-    //GenererEchequier();
-    app_serv1();
+    GenererEchequier();
 
 
 
