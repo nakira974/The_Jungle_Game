@@ -1,38 +1,22 @@
 //
 // Created by maxime on 07/10/2020.
 //
-#ifdef _WIN32
-#include <windows.h>
-#include <io.h>
-#include <conio.h>
-#else
-#include <memory.h>
-#endif
 
 #include "echiquier.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <locale.h>
 
-#define Color_Blue "\33[0:34m" // Color Start
-#define Color_Red "\33[0:31m" // Color Start
-#define Color_Yellow "\33[0:32m"
-#define Color_End "\33[0m" // To flush out prev settings
-#define Color_Purple "\33[0:95m" // To flush out prev settings
 
 typedef struct Animal Animal;
 typedef struct Player Player;
-Animal* animalTab=NULL;
-char* animalType=NULL;
-Player* playerTab=NULL;
+Animal *animalTab = NULL;
+char *animalType = NULL;
+Player *playerTab = NULL;
 int player_Count = 2;
 int animal_Count = 16;
 char coord[9][7];
 FILE *fichier;
 bool win = false;
 
-struct Player{
+struct Player {
 
     char nom[150];
     bool isEnemy;
@@ -64,7 +48,7 @@ enum Zone {
 
 };
 
-struct Animal{
+struct Animal {
 
     char type;
     int x;
@@ -77,9 +61,9 @@ struct Animal{
 
 };
 
-bool readSave(){
+bool readSave() {
 
-    fichier = fopen ("save.txt", "rb");
+    fichier = fopen("save.txt", "rb");
 
     if (!fichier) {
         return false;
@@ -100,18 +84,20 @@ bool readSave(){
     fseek(fichier, 1, SEEK_CUR);
     for (m = 0; m < animal_Count; m++) {
         //on récupère les infos des animaux
-        fscanf(fichier, "type=%c: x=%i, y=%i, enemy=%d, alive=%d, eat=%d, index=%i, zone=%i", &animalTab[m].type, &animalTab[m].x, &animalTab[m].y, &animalTab[m].isEnemy, &animalTab[m].isAlive, &animalTab[m].canEat, &animalTab[m].index, &animalTab[m].zone);
+        fscanf(fichier, "type=%c: x=%i, y=%i, enemy=%d, alive=%d, eat=%d, index=%i, zone=%i", &animalTab[m].type,
+               &animalTab[m].x, &animalTab[m].y, &animalTab[m].isEnemy, &animalTab[m].isAlive, &animalTab[m].canEat,
+               &animalTab[m].index, &animalTab[m].zone);
         //on saute chaque ligne
         fseek(fichier, 1, SEEK_CUR);
     }
-    fclose (fichier);
+    fclose(fichier);
     return true;
 }
 
-bool writeSave(Animal* animalT){
+bool writeSave(Animal *animalT) {
 
     //remove("save.txt");
-    fichier = fopen ("save.txt", "wb");
+    fichier = fopen("save.txt", "wb");
     if (!fichier) {
         return false;
     }
@@ -136,47 +122,39 @@ bool writeSave(Animal* animalT){
         fprintf(fichier, "zone=%i\n", animalT[m].zone);
         //on saute une ligne à la fin pour passer à l'animal suivant
     }
-    fclose (fichier);
+    fclose(fichier);
     return true;
 }
 
 #ifdef _WIN32
-void color(int t,int f)
-{
+
+void color(int t, int f) {
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    SetConsoleTextAttribute(hConsole,f*16+t);
+    SetConsoleTextAttribute(hConsole, f * 16 + t);
 
 }
+
 #endif
 
-void viderBuffer()
-{
+void viderBuffer() {
     int c = 0;
-    while (c != '\n' && c != EOF)
-    {
+    while (c != '\n' && c != EOF) {
         c = getchar();
     }
 }
 
-int lire(char *chaine, int longueur)
-{
+int lire(char *chaine, int longueur) {
     char *positionEntree = NULL;
 
-    if (fgets(chaine, longueur, stdin) != NULL)
-    {
+    if (fgets(chaine, longueur, stdin) != NULL) {
         positionEntree = strchr(chaine, '\n');
-        if (positionEntree != NULL)
-        {
+        if (positionEntree != NULL) {
             *positionEntree = '\0';
-        }
-        else
-        {
+        } else {
             viderBuffer();
         }
         return 1;
-    }
-    else
-    {
+    } else {
         viderBuffer();
         return 0;
     }
@@ -191,17 +169,17 @@ void loadGame() {
     char gameType;
 
 
-    do{
+    do {
 
         printf("Voulez-vous jouer en solo(1) ou en multijoueur(2) ?:\n");
         scanf("%c", &gameType);
 
-    }while(strlen(&gameType)==0);
+    } while (strlen(&gameType) == 0);
 
     //viderBuffer();
 
 
-    if(gameType == '1') {
+    if (gameType == '1') {
         afficherEchiquier();
         //solo
 
@@ -595,7 +573,7 @@ void loadGame() {
 #else
         }while(getc(stdin)!=27);
 #endif
-    }else if(gameType == '2'){
+    } else if (gameType == '2') {
         //afficherEchiquier();
         //multijoueur
 
@@ -604,7 +582,7 @@ void loadGame() {
 
 }
 
-bool hasRat(Animal animal, char direction){
+bool hasRat(Animal animal, char direction) {
 
     int m, i, j, k, l;
     for (i = 0; i < 9; i++) {
@@ -614,19 +592,19 @@ bool hasRat(Animal animal, char direction){
                     if (animalTab[m].x == i && animalTab[m].y == j) {
 
                         if (animalTab[m].type == 'R' && animalTab[m].isAlive && animalTab[m].zone == LAC) {
-                            switch(direction) {
+                            switch (direction) {
 
                                 case 'D':
                                     k = animal.x;
-                                    if(!animal.isEnemy) {
+                                    if (!animal.isEnemy) {
                                         for (l = animal.y; l > animal.y - 3; l--) {
                                             if (animalTab[m].x == k && animalTab[m].y == l) {
                                                 return true;
 
                                             }
                                         }
-                                    }else{
-                                        for (l = animal.y; l < animal.y+3; l++) {
+                                    } else {
+                                        for (l = animal.y; l < animal.y + 3; l++) {
                                             if (animalTab[m].x == k && animalTab[m].y == l) {
                                                 return true;
 
@@ -635,14 +613,14 @@ bool hasRat(Animal animal, char direction){
                                     }
                                 case 'G':
                                     k = animal.x;
-                                    if(!animal.isEnemy) {
+                                    if (!animal.isEnemy) {
                                         for (l = animal.y; l < animal.y + 3; l++) {
                                             if (animalTab[m].x == k && animalTab[m].y == l) {
                                                 return true;
 
                                             }
                                         }
-                                    }else{
+                                    } else {
                                         for (l = animal.y; l > animal.y - 3; l--) {
                                             if (animalTab[m].x == k && animalTab[m].y == l) {
                                                 return true;
@@ -652,15 +630,15 @@ bool hasRat(Animal animal, char direction){
                                     }
                                 case 'A':
                                     l = animal.y;
-                                    if(!animal.isEnemy) {
+                                    if (!animal.isEnemy) {
                                         for (k = animal.x; k < animal.x + 4; k++) {
                                             if (animalTab[m].x == k && animalTab[m].y == l) {
                                                 return true;
 
                                             }
                                         }
-                                    }else{
-                                        for (k = animal.x; k > animal.x-4; k--) {
+                                    } else {
+                                        for (k = animal.x; k > animal.x - 4; k--) {
                                             if (animalTab[m].x == k && animalTab[m].y == l) {
                                                 return true;
 
@@ -669,14 +647,14 @@ bool hasRat(Animal animal, char direction){
                                     }
                                 case 'R':
                                     l = animal.y;
-                                    if(!animal.isEnemy) {
+                                    if (!animal.isEnemy) {
                                         for (k = animal.x; k > animal.x - 4; k--) {
                                             if (animalTab[m].x == k && animalTab[m].y == l) {
                                                 return true;
 
                                             }
                                         }
-                                    }else{
+                                    } else {
                                         for (k = animal.x; k < animal.x + 4; k++) {
                                             if (animalTab[m].x == k && animalTab[m].y == l) {
                                                 return true;
@@ -684,7 +662,6 @@ bool hasRat(Animal animal, char direction){
                                             }
                                         }
                                     }
-
 
 
                             }
@@ -697,11 +674,11 @@ bool hasRat(Animal animal, char direction){
     return false;
 }
 
-void setCoord(){
+void setCoord() {
     int m;
 
-    for(m=0;m<animal_Count;m++){
-        if(!animalTab[m].isEnemy) {
+    for (m = 0; m < animal_Count; m++) {
+        if (!animalTab[m].isEnemy) {
             if (animalTab[m].type == ELEPHANT) {
                 animalTab[m].x = 2;
                 animalTab[m].y = 6;
@@ -735,7 +712,7 @@ void setCoord(){
                 animalTab[m].y = 0;
             }
 
-        }else{
+        } else {
             if (animalTab[m].type == ELEPHANT) {
                 animalTab[m].x = 6;
                 animalTab[m].y = 0;
@@ -775,7 +752,7 @@ void setCoord(){
 
 }
 
-enum Zone checkZone(Animal animal){
+enum Zone checkZone(Animal animal) {
 
 
     int i, j;
@@ -783,37 +760,39 @@ enum Zone checkZone(Animal animal){
     for (i = 0; i < 9; i++) {
         for (j = 0; j < 7; j++) {
 
-            if (animal.x == 3 && animal.y == 1 || animal.x == 3 && animal.y == 2 || animal.x == 4 && animal.y == 1 || animal.x == 4 && animal.y == 2 ||
-                animal.x == 5 && animal.y == 1 || animal.x == 5 && animal.y == 2 || animal.x == 3 && animal.y == 4 || animal.x == 3 && animal.y == 5 ||
-                animal.x == 4 && animal.y == 4 || animal.x == 4 && animal.y == 5 || animal.x == 5 && animal.y == 4 || animal.x == 5 && animal.y == 5) {
+            if (animal.x == 3 && animal.y == 1 || animal.x == 3 && animal.y == 2 || animal.x == 4 && animal.y == 1 ||
+                animal.x == 4 && animal.y == 2 ||
+                animal.x == 5 && animal.y == 1 || animal.x == 5 && animal.y == 2 || animal.x == 3 && animal.y == 4 ||
+                animal.x == 3 && animal.y == 5 ||
+                animal.x == 4 && animal.y == 4 || animal.x == 4 && animal.y == 5 || animal.x == 5 && animal.y == 4 ||
+                animal.x == 5 && animal.y == 5) {
                 //zone lac
                 return LAC;
-            } else if (animal.x == 0 && animal.y == 2 || animal.x == 0 && animal.y == 3 || animal.x == 0 && animal.y == 4 || animal.x == 1 && animal.y == 3) {
-                if(animal.x == 0 && animal.y == 3){
+            } else if (animal.x == 0 && animal.y == 2 || animal.x == 0 && animal.y == 3 ||
+                       animal.x == 0 && animal.y == 4 || animal.x == 1 && animal.y == 3) {
+                if (animal.x == 0 && animal.y == 3) {
                     //zone sanctuaire rouge
                     return SANCTUAIRE_ROUGE;
-                }else {
+                } else {
                     //zone piege rouge
                     return PIEGE_ROUGE;
                 }
-            } else if (animal.x == 8 && animal.y == 2 || animal.x == 8 && animal.y == 3 || animal.x == 8 && animal.y == 4 || animal.x == 7 && animal.y == 3) {
-                if(animal.x == 8 && animal.y == 3){
+            } else if (animal.x == 8 && animal.y == 2 || animal.x == 8 && animal.y == 3 ||
+                       animal.x == 8 && animal.y == 4 || animal.x == 7 && animal.y == 3) {
+                if (animal.x == 8 && animal.y == 3) {
                     //zone sanctuaire bleu
                     return SANCTUAIRE_BLEU;
-                }else {
+                } else {
                     //zone piege bleu
                     return PIEGE_BLEU;
                 }
-            }else {
+            } else {
                 return AUCUNE;
             }
 
 
-
-
         }
     }
-
 
 
 }
@@ -856,26 +835,26 @@ void afficherEchiquier() {
                     printf("   ");
                     SetConsoleTextAttribute(hConsole, saved_attributes);
                 } else if (i == 0 && j == 2 || i == 0 && j == 3 || i == 0 && j == 4 || i == 1 && j == 3) {
-                    if(i == 0 && j == 3){
+                    if (i == 0 && j == 3) {
                         color(15, 4);
                         printf("   ");
                         SetConsoleTextAttribute(hConsole, saved_attributes);
-                    }else {
+                    } else {
                         color(15, 6);
                         printf("   ");
                         SetConsoleTextAttribute(hConsole, saved_attributes);
                     }
                 } else if (i == 8 && j == 2 || i == 8 && j == 3 || i == 8 && j == 4 || i == 7 && j == 3) {
-                    if(i == 8 && j == 3){
+                    if (i == 8 && j == 3) {
                         color(15, 1);
                         printf("   ");
                         SetConsoleTextAttribute(hConsole, saved_attributes);
-                    }else {
+                    } else {
                         color(15, 6);
                         printf("   ");
                         SetConsoleTextAttribute(hConsole, saved_attributes);
                     }
-                }else {
+                } else {
                     printf("   |");
                     continue;
                 }
@@ -884,27 +863,27 @@ void afficherEchiquier() {
                 for (m = 0; m < animal_Count; m++) {
                     if (animalTab[m].x == i && animalTab[m].y == j) {
                         //Enemy = Blue Team
-                        if (animalTab[m].isAlive){
+                        if (animalTab[m].isAlive) {
                             if (animalTab[m].isEnemy) {
-                                if(animalTab[m].zone == LAC) {
+                                if (animalTab[m].zone == LAC) {
                                     color(1, 2);
-                                }else if(animalTab[m].zone == PIEGE_ROUGE || animalTab[m].zone == PIEGE_BLEU){
+                                } else if (animalTab[m].zone == PIEGE_ROUGE || animalTab[m].zone == PIEGE_BLEU) {
                                     color(1, 6);
-                                }else if(animalTab[m].zone == SANCTUAIRE_ROUGE){
+                                } else if (animalTab[m].zone == SANCTUAIRE_ROUGE) {
                                     color(1, 4);
-                                }else {
+                                } else {
                                     color(1, 0);
                                 }
                                 printf(" %c ", coord[i][j]);
                                 SetConsoleTextAttribute(hConsole, saved_attributes);
                             } else {
-                                if(animalTab[m].zone == LAC) {
+                                if (animalTab[m].zone == LAC) {
                                     color(4, 2);
-                                }else if(animalTab[m].zone == PIEGE_ROUGE || animalTab[m].zone == PIEGE_BLEU){
+                                } else if (animalTab[m].zone == PIEGE_ROUGE || animalTab[m].zone == PIEGE_BLEU) {
                                     color(4, 6);
-                                }else if(animalTab[m].zone == SANCTUAIRE_BLEU){
+                                } else if (animalTab[m].zone == SANCTUAIRE_BLEU) {
                                     color(4, 1);
-                                }else {
+                                } else {
                                     color(4, 0);
                                 }
                                 printf(" %c ", coord[i][j]);
@@ -972,9 +951,9 @@ void afficherEchiquier() {
     printf("\r \n");
 }
 
-bool checkEat(Animal *enemy, Animal ally, Player* playerTab){
+bool checkEat(Animal *enemy, Animal ally, Player *playerTab) {
 
-    if(enemy->isEnemy != ally.isEnemy) {
+    if (enemy->isEnemy != ally.isEnemy) {
 
 
         if (enemy->index >= ally.index && enemy->zone != LAC) {
@@ -991,24 +970,24 @@ bool checkEat(Animal *enemy, Animal ally, Player* playerTab){
             playerTab->score++;
             return true;
 
-        } else{
+        } else {
 
             return false;
         }
 
-    }else{
+    } else {
         return false;
     }
 
 }
 
-bool searchCanEat(Animal animal, bool isEnemy, Player* playerTab){
+bool searchCanEat(Animal animal, bool isEnemy, Player *playerTab) {
 
     int b;
 
-    if(isEnemy){
+    if (isEnemy) {
         for (b = 0; b < animal_Count; b++) {
-            if(animalTab[b].x == animal.x && animalTab[b].y == animal.y && animalTab[b].isAlive) {
+            if (animalTab[b].x == animal.x && animalTab[b].y == animal.y && animalTab[b].isAlive) {
                 if (animal.canEat) {
                     if (!animalTab[b].isEnemy) {
                         if (checkEat(&animalTab[b], animal, playerTab)) {
@@ -1026,7 +1005,7 @@ bool searchCanEat(Animal animal, bool isEnemy, Player* playerTab){
             }
         }
 
-    }else {
+    } else {
         for (b = 0; b < animal_Count; b++) {
             if (animalTab[b].x == animal.x && animalTab[b].y == animal.y && animalTab[b].isAlive) {
                 if (animal.canEat) {
@@ -1087,7 +1066,7 @@ void GenererEchequier() {
                 //second joueur
                 animal.isEnemy = true;
                 animal.isAlive = true;
-                animal.index = l-8;
+                animal.index = l - 8;
                 animal.type = animalType[l - 8];
                 animal.zone = AUCUNE;
                 animal.canEat = true;
@@ -1100,7 +1079,7 @@ void GenererEchequier() {
 
     //afficherEchiquier();
     loadGame();
-    if(!win) {
+    if (!win) {
         writeSave(animalTab);
     }
 

@@ -4,28 +4,9 @@
 
 #include "client1.h"
 
-#define WIN32_LEAN_AND_MEAN
-
-#include <windows.h>
-#include <winsock2.h>
-#include <ws2tcpip.h>
-#include <stdlib.h>
-#include <stdio.h>
-
-
-// Need to link with Ws2_32.lib, Mswsock.lib, and Advapi32.lib
-#pragma comment (lib, "Ws2_32.lib")
-#pragma comment (lib, "Mswsock.lib")
-#pragma comment (lib, "AdvApi32.lib")
-
-
-#define DEFAULT_BUFLEN 1024
-#define DEFAULT_PORT "8888"
-
 int iResult;
 
 SOCKET ConnectSocket = INVALID_SOCKET;
-
 
 
 int send_server(char *sendbuf) {
@@ -101,6 +82,7 @@ int __cdecl app_client1(char *srvAdd, char *sendbuffer) {
     }
 
     // Send an initial buffer
+    //Envoi le nom du joueur
     iResult = send(ConnectSocket, sendbuf, (int) strlen(sendbuf), 0);
     if (iResult == SOCKET_ERROR) {
         printf("send failed with error: %d\n", WSAGetLastError());
@@ -109,9 +91,15 @@ int __cdecl app_client1(char *srvAdd, char *sendbuffer) {
         return 1;
     }
 
-    printf("Bytes Sent: %ld\n", iResult);
+    printf("Player information sent: %ld\n", iResult);
 
-    send_server("Ce qu'on va envoyer avec une boucle While la partie pas finie");
+    //LANCEMENT DE LA PARTIE
+    do {
+        send_server("Ce qu'on va envoyer avec une boucle While la partie pas finie");
+
+    } while ()
+
+
 
     // shutdown the connection since no more data will be sent
     iResult = shutdown(ConnectSocket, SD_SEND);
