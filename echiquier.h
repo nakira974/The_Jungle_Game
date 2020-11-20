@@ -29,6 +29,7 @@
 #define Color_End "\33[0m" // To flush out prev settings
 #define Color_Purple "\33[0:95m" // To flush out prev settings
 #define MULTIPLAYER_EXIT "exit"
+#define MULTIPLAYER_LOADING_BAR 6,666666666666667
 
 struct Animal;
 struct Player;

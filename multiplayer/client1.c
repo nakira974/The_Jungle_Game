@@ -6,6 +6,7 @@
 
 int iResult;
 struct Animal currentAnimal;
+struct Player currentPlayer;
 
 SOCKET ConnectSocket = INVALID_SOCKET;
 
@@ -20,6 +21,11 @@ int send_server(char *sendbuf) {
     }
 }
 
+int close_connection(){
+    closesocket(ConnectSocket);
+    WSACleanup();
+    return 1;
+}
 
 int __cdecl app_client1(char *srvAdd, char *sendbuffer) {
     WSADATA wsaData;
@@ -94,14 +100,33 @@ int __cdecl app_client1(char *srvAdd, char *sendbuffer) {
 
     printf("Player information sent: %ld\n", iResult);
 
+    iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
+    if (iResult > 0)
+        printf("Bytes received: %d\n", iResult);
+
     //LANCEMENT DE LA PARTIE
     do {
 
         int i;
+        float loadingBar;
+
+        printf("Initialisation de la partie 0/3... %s\n");
         GenererEchequier();
+        //L'INVITE EST l'ENNEMI
+        currentPlayer.isEnemy = true;
+
         //On compte le tableau des animaux, pour vérifier que tout est OK
+        printf("Initialisation de la partie 2/3... %s\n");
         for (i = 0; i <15 ; ++i) {
+            loadingBar+MULTIPLAYER_LOADING_BAR;
             currentAnimal = animalTab[i];
+            printf("chargement... %d", loadingBar," %");
+            if (animalTab[15].type == currentAnimal.type){
+                printf("Initialisation de la partie 3/3... %s\n");
+                printf("Début de la partie ! ");
+            } else{
+                close_connection();
+            }
         }
         send_server("Ce qu'on va envoyer avec une boucle While la partie pas finie");
 

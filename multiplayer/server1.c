@@ -13,11 +13,19 @@ SOCKET ClientSocket = INVALID_SOCKET;
 
 struct addrinfo *result = NULL;
 struct addrinfo hints;
+struct Animal currentAnimal;
+struct Player currentPlayer;
 
 int iSendResult;
 char recvbuf[DEFAULT_BUFLEN];
 // #pragma comment (lib, "Mswsock.lib")
 int recvbuflen = DEFAULT_BUFLEN;
+
+int close_connection(){
+    closesocket(ListenSocket);
+    WSACleanup();
+    return 1;
+}
 
 int send_client(char *sendbuf) {
     iResult = send(ClientSocket, sendbuf, (int) strlen(sendbuf), 0);
@@ -106,6 +114,7 @@ int __cdecl app_serv1(void) {
         if (iResult > 0) {
             printf("Player information received: %d\n", iResult);
 
+
             //buffer back to the sender
             //ENVOI DES INFOS DE L'HOTE, LANCEMENT DE LA PARTIE
             iSendResult = send(ClientSocket, recvbuf, iResult, 0);
@@ -121,7 +130,29 @@ int __cdecl app_serv1(void) {
                 WSACleanup();
                 return 1;
             }
-            printf("Bytes sent: %d\n", iSendResult);
+            int i;
+            float loadingBar;
+
+            printf("Initialisation de la partie 0/3... %s\n");
+            GenererEchequier();
+            //L'INVITE EST l'ENNEMI
+            currentPlayer.isEnemy = false;
+
+            //On compte le tableau des animaux, pour vérifier que tout est OK
+            printf("Initialisation de la partie 2/3... %s\n");
+            for (i = 0; i <15 ; ++i) {
+                loadingBar+MULTIPLAYER_LOADING_BAR;
+                currentAnimal = animalTab[i];
+                printf("chargement... %d", loadingBar," %");
+                if (animalTab[15].type == currentAnimal.type){
+                    printf("Initialisation de la partie 3/3... %s\n");
+                    printf("Début de la partie ! ");
+                } else{
+                    close_connection();
+                }
+            }
+
+
         } else if (iResult == 0)
             printf("Connection closing...\n");
         else {
@@ -131,7 +162,7 @@ int __cdecl app_serv1(void) {
             return 1;
         }
 
-    } while (iResult > 0);
+    } while (recvbuf != MULTIPLAYER_EXIT);
 
     // shutdown the connection since we're done
     iResult = shutdown(ClientSocket, SD_SEND);
