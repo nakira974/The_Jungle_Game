@@ -28,12 +28,58 @@
 #define Color_Yellow "\33[0:32m"
 #define Color_End "\33[0m" // To flush out prev settings
 #define Color_Purple "\33[0:95m" // To flush out prev settings
+#define MULTIPLAYER_EXIT "exit"
 
 struct Animal;
 struct Player;
 struct Animal *animalTab;
 struct Player *playerTab;
 char *animalType;
+
+struct Player {
+
+    char nom[150];
+    bool isEnemy;
+    int score;
+
+};
+
+enum Type {
+
+    ELEPHANT = 'E',
+    LION = 'L',
+    TIGRE = 'T',
+    PANTHERE = 'P',
+    CHIEN = 'C',
+    LOUP = 'O',
+    CHAT = 'H',
+    RAT = 'R'
+
+};
+
+enum Zone {
+
+    PIEGE_BLEU,
+    PIEGE_ROUGE,
+    SANCTUAIRE_BLEU,
+    SANCTUAIRE_ROUGE,
+    LAC,
+    AUCUNE
+
+};
+
+struct Animal {
+
+    char type;
+    int x;
+    int y;
+    bool isEnemy;
+    bool isAlive;
+    bool canEat;
+    int index;
+    enum Zone zone;
+
+};
 
 void afficherEchiquier();
 

@@ -5,6 +5,7 @@
 #include "client1.h"
 
 int iResult;
+struct Animal currentAnimal;
 
 SOCKET ConnectSocket = INVALID_SOCKET;
 
@@ -95,9 +96,16 @@ int __cdecl app_client1(char *srvAdd, char *sendbuffer) {
 
     //LANCEMENT DE LA PARTIE
     do {
+
+        int i;
+        GenererEchequier();
+        //On compte le tableau des animaux, pour vérifier que tout est OK
+        for (i = 0; i <15 ; ++i) {
+            currentAnimal = animalTab[i];
+        }
         send_server("Ce qu'on va envoyer avec une boucle While la partie pas finie");
 
-    } while ()
+    } while (sendbuf != MULTIPLAYER_EXIT);
 
 
 

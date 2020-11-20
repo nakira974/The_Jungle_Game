@@ -16,50 +16,7 @@ char coord[9][7];
 FILE *fichier;
 bool win = false;
 
-struct Player {
 
-    char nom[150];
-    bool isEnemy;
-    int score;
-
-};
-
-enum Type {
-
-    ELEPHANT = 'E',
-    LION = 'L',
-    TIGRE = 'T',
-    PANTHERE = 'P',
-    CHIEN = 'C',
-    LOUP = 'O',
-    CHAT = 'H',
-    RAT = 'R'
-
-};
-
-enum Zone {
-
-    PIEGE_BLEU,
-    PIEGE_ROUGE,
-    SANCTUAIRE_BLEU,
-    SANCTUAIRE_ROUGE,
-    LAC,
-    AUCUNE
-
-};
-
-struct Animal {
-
-    char type;
-    int x;
-    int y;
-    bool isEnemy;
-    bool isAlive;
-    bool canEat;
-    int index;
-    enum Zone zone;
-
-};
 
 bool readSave() {
 
