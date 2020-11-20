@@ -8,7 +8,7 @@
 int main() {
 
     //GenererEchequier();
-    app_client1("localhost", "Maxime");
+    app_serv1();
 
 
 

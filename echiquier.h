@@ -19,8 +19,8 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <locale.h>
-#include <windows.h>
 #include <winsock2.h>
+#include <windows.h>
 #include <ws2tcpip.h>
 
 #define Color_Blue "\33[0:34m" // Color Start

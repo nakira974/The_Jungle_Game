@@ -21,7 +21,7 @@ int send_server(char *sendbuf) {
     }
 }
 
-int close_connection(){
+int close_client(){
     closesocket(ConnectSocket);
     WSACleanup();
     return 1;
@@ -90,7 +90,7 @@ int __cdecl app_client1(char *srvAdd, char *sendbuffer) {
 
     // Send an initial buffer
     //Envoi le nom du joueur
-    printf("Initialisation de la partie 0/3... %s\n");
+    printf("Initialisation de la partie 0//3... %s\n");
 
 
     printf("Envoi des informations du joueur à l'hôte de la partie... %s\n");
@@ -124,16 +124,16 @@ int __cdecl app_client1(char *srvAdd, char *sendbuffer) {
         playerTab[0]=currentPlayer;
 
         //On compte le tableau des animaux, pour vérifier que tout est OK
-        printf("Initialisation de la partie 2/3... %s\n");
+        printf("Initialisation de la partie 2//3... %s\n");
         for (i = 0; i <15 ; ++i) {
             loadingBar+MULTIPLAYER_LOADING_BAR;
             currentAnimal = animalTab[i];
             printf("chargement... %d", loadingBar," %");
             if (animalTab[15].type == currentAnimal.type){
-                printf("Initialisation de la partie 3/3... %s\n");
+                printf("Initialisation de la partie 3//3... %s\n");
                 printf("Début de la partie ! ");
             } else{
-                close_connection();
+                close_client();
             }
         }
         send_server("Ce qu'on va envoyer avec une boucle While la partie pas finie");
