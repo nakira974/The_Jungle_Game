@@ -147,6 +147,7 @@ void loadGame() {
             scanf("%c", playerName );
             playerTab[0].name = playerName;
             app_serv1();
+            afficherEchiquier();
 
         } else if (gameType == '2'){
             char *srvAdd;
@@ -157,6 +158,7 @@ void loadGame() {
             scanf("%c", playerName );
             playerTab[0].name = playerName;
             app_client1(srvAdd);
+            afficherEchiquier();
         }
     }
 
