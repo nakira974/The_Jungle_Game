@@ -27,13 +27,13 @@ bool readSave() {
     }
     int m;
     playerTab = malloc(2 * sizeof(Player));//nos types d'animaux
-    fscanf(fichier, "Joueur 1: name=%s", playerTab[0].nom);
+    fscanf(fichier, "Joueur 1: name=%s", playerTab[0].name);
     fseek(fichier, 1, SEEK_CUR);
     fscanf(fichier, "enemy=%i", &playerTab[0].isEnemy);
     fseek(fichier, 1, SEEK_CUR);
     fscanf(fichier, "score=%i", &playerTab[0].score);
     fseek(fichier, 1, SEEK_CUR);
-    fscanf(fichier, "Joueur 2: name=%s", playerTab[1].nom);
+    fscanf(fichier, "Joueur 2: name=%s", playerTab[1].name);
     fseek(fichier, 1, SEEK_CUR);
     fscanf(fichier, "enemy=%i", &playerTab[1].isEnemy);
     fseek(fichier, 1, SEEK_CUR);
@@ -60,10 +60,10 @@ bool writeSave(Animal *animalT) {
     }
 
     int m;
-    fprintf(fichier, "Joueur 1: name=%s\n", playerTab[0].nom);
+    fprintf(fichier, "Joueur 1: name=%s\n", playerTab[0].name);
     fprintf(fichier, "enemy=%i\n", playerTab[0].isEnemy);
     fprintf(fichier, "score=%i\n", playerTab[0].score);
-    fprintf(fichier, "Joueur 2: name=%s\n", playerTab[1].nom);
+    fprintf(fichier, "Joueur 2: name=%s\n", playerTab[1].name);
     fprintf(fichier, "enemy=%i\n", playerTab[1].isEnemy);
     fprintf(fichier, "score=%i\n", playerTab[1].score);
     for (m = 0; m < animal_Count; m++) {
@@ -145,15 +145,15 @@ void loadGame() {
             playerTab = malloc(2 * sizeof(Player));//nos types d'animaux
 
             printf("Entrez le nom du premier joueur:\n");
-            lire(playerTab[0].nom, 150);
+            lire(playerTab[0].name, 150);
             playerTab[0].score = 0;
             playerTab[0].isEnemy = true;
-            printf("Nom du premier joueur: %s\n", playerTab[0].nom);
+            printf("Nom du premier joueur: %s\n", playerTab[0].name);
             printf("Entrez le nom du second joueur:\n");
-            lire(playerTab[1].nom, 150);
+            lire(playerTab[1].name, 150);
             playerTab[1].score = 0;
             playerTab[1].isEnemy = false;
-            printf("Nom du second joueur: %s\n", playerTab[1].nom);
+            printf("Nom du second joueur: %s\n", playerTab[1].name);
 
 
         }
@@ -164,11 +164,11 @@ void loadGame() {
             for (int turn = 0; turn < player_Count; ++turn) {
 
                 for (int q = 0; q < 150; q++) {
-                    player.nom[q] = playerTab[turn].nom[q];
+                    player.name[q] =  playerTab[turn].name[q];
                 }
                 player.isEnemy = playerTab[turn].isEnemy;
 
-                printf("\nC'est au tour de %s avec un score de %i:\n", player.nom, playerTab[turn].score);
+                printf("\nC'est au tour de %s avec un score de %i:\n", player.name, playerTab[turn].score);
 
                 do {
                     printf("Choisissez votre pion: ");
@@ -510,10 +510,10 @@ void loadGame() {
                 } else {
                     afficherEchiquier();
                     if (playerTab[turn].isEnemy) {
-                        printf("%s de l'equipe BLEUE a gagne(e) la partie avec %i point(s)!", player.nom,
+                        printf("%s de l'equipe BLEUE a gagne(e) la partie avec %i point(s)!", player.name,
                                playerTab[turn].score);
                     } else {
-                        printf("%s de l'equipe ROUGE a gagne(e) la partie avec %i point(s)!", player.nom,
+                        printf("%s de l'equipe ROUGE a gagne(e) la partie avec %i point(s)!", player.name,
                                playerTab[turn].score);
                     }
                     remove("save.txt");

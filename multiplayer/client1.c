@@ -90,7 +90,16 @@ int __cdecl app_client1(char *srvAdd, char *sendbuffer) {
 
     // Send an initial buffer
     //Envoi le nom du joueur
+    printf("Initialisation de la partie 0/3... %s\n");
+
+    printf("Nom du joueur : %s\n", (char *) &sendbuf);
+    currentPlayer.name = (char*) sendbuf;
+    //L'INVITE EST l'ENNEMI
+    currentPlayer.isEnemy = true;
+
+    printf("Envoi des informations du joueur à l'hôte de la partie... %s\n");
     iResult = send(ConnectSocket, sendbuf, (int) strlen(sendbuf), 0);
+
     if (iResult == SOCKET_ERROR) {
         printf("send failed with error: %d\n", WSAGetLastError());
         closesocket(ConnectSocket);
@@ -110,10 +119,8 @@ int __cdecl app_client1(char *srvAdd, char *sendbuffer) {
         int i;
         float loadingBar;
 
-        printf("Initialisation de la partie 0/3... %s\n");
+
         GenererEchequier();
-        //L'INVITE EST l'ENNEMI
-        currentPlayer.isEnemy = true;
 
         //On compte le tableau des animaux, pour vérifier que tout est OK
         printf("Initialisation de la partie 2/3... %s\n");

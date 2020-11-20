@@ -30,6 +30,10 @@
 #define Color_Purple "\33[0:95m" // To flush out prev settings
 #define MULTIPLAYER_EXIT "exit"
 #define MULTIPLAYER_LOADING_BAR 6,666666666666667
+#define DEFAULT_BUFLEN 1024
+#define DEFAULT_PORT "8888"
+
+
 
 struct Animal;
 struct Player;
@@ -39,7 +43,7 @@ char *animalType;
 
 struct Player {
 
-    char nom[150];
+    char *name;
     bool isEnemy;
     int score;
 

@@ -9,8 +9,6 @@
 
 #define WIN32_LEAN_AND_MEAN
 #define BUFFER_SIZE 1024
-#define DEFAULT_BUFLEN 1024
-#define DEFAULT_PORT "8888"
 
 #include "../echiquier.h"
 
