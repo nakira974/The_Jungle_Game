@@ -83,17 +83,17 @@ int __cdecl app_client1(char *srvAdd, char *sendbuffer) {
     freeaddrinfo(result);
 
     if (ConnectSocket == INVALID_SOCKET) {
-        printf("Unable to connect to server!\n");
+        printf("%s\n","Unable to connect to server!");
         WSACleanup();
         return 1;
     }
 
     // Send an initial buffer
     //Envoi le nom du joueur
-    printf("Initialisation de la partie 0//3... %s\n");
+    printf("%s\n","Initialisation de la partie 0//3...");
 
 
-    printf("Envoi des informations du joueur à l'hôte de la partie... %s\n");
+    printf("%s\n","Envoi des informations du joueur à l'hôte de la partie...");
     iResult = send(ConnectSocket, sendbuf, (int) strlen(sendbuf), 0);
 
     if (iResult == SOCKET_ERROR) {
@@ -124,14 +124,14 @@ int __cdecl app_client1(char *srvAdd, char *sendbuffer) {
         playerTab[0]=currentPlayer;
 
         //On compte le tableau des animaux, pour vérifier que tout est OK
-        printf("Initialisation de la partie 2//3... %s\n");
+        printf("%s\n","Initialisation de la partie 2//3...");
         for (i = 0; i <15 ; ++i) {
             loadingBar+MULTIPLAYER_LOADING_BAR;
             currentAnimal = animalTab[i];
             printf("chargement... %d", loadingBar," %");
             if (animalTab[15].type == currentAnimal.type){
-                printf("Initialisation de la partie 3//3... %s\n");
-                printf("Début de la partie ! ");
+                printf("%s\n","Initialisation de la partie 3//3...");
+                printf("%s\n","Début de la partie ! ");
             } else{
                 close_client();
             }
