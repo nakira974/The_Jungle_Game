@@ -21,7 +21,7 @@ char *recvbuf;
 // #pragma comment (lib, "Mswsock.lib")
 int recvbuflen = DEFAULT_BUFLEN;
 
-int close_server(){
+int close_server() {
     closesocket(ListenSocket);
     WSACleanup();
     return 1;
@@ -113,7 +113,7 @@ int __cdecl app_serv1(void) {
         iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
         if (iResult > 0) {
             printf("Player information received: %d\n", iResult);
-            playerTab[1].name=recvbuf;
+            playerTab[1].name = recvbuf;
 
             printf("Ennemy name is : %s\n", playerTab[1].name);
 
@@ -147,14 +147,14 @@ int __cdecl app_serv1(void) {
 
             //On compte le tableau des animaux, pour vérifier que tout est OK
             printf("Initialisation de la partie 2/3... \n");
-            for (i = 0; i <15 ; ++i) {
-                loadingBar+MULTIPLAYER_LOADING_BAR;
+            for (i = 0; i < 15; ++i) {
+                loadingBar + MULTIPLAYER_LOADING_BAR;
                 currentAnimal = animalTab[i];
-                printf("chargement... %d", loadingBar," %");
-                if (animalTab[15].type == currentAnimal.type){
+                printf("chargement... %d", loadingBar, " %");
+                if (animalTab[15].type == currentAnimal.type) {
                     printf("Initialisation de la partie 3/3... \n");
                     printf("Début de la partie ! ");
-                } else{
+                } else {
                     close_server();
                 }
             }

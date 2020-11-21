@@ -21,7 +21,7 @@ int send_server(char *sendbuf) {
     }
 }
 
-int close_client(){
+int close_client() {
     closesocket(ConnectSocket);
     WSACleanup();
     return 1;
@@ -94,7 +94,7 @@ int __cdecl app_client1(char *srvAdd) {
 
 
     printf("Envoi des informations du joueur à l'hôte de la partie... \n");
-    sendbuf= playerTab[0].name;
+    sendbuf = playerTab[0].name;
     //LE CLIENT EST L'ENNEMY
     iResult = send(ConnectSocket, sendbuf, (int) strlen(sendbuf), 0);
 
@@ -122,20 +122,20 @@ int __cdecl app_client1(char *srvAdd) {
         float loadingBar;
 
         printf("Nom du joueur : %s\n", (char *) &sendbuf);
-        currentPlayer.name = (char*) sendbuf;
+        currentPlayer.name = (char *) sendbuf;
         //L'INVITE EST l'ENNEMI
         currentPlayer.isEnemy = true;
 
         //On compte le tableau des animaux, pour vérifier que tout est OK
         printf("Initialisation de la partie 2/3... %s\n");
-        for (i = 0; i <15 ; ++i) {
-            loadingBar+MULTIPLAYER_LOADING_BAR;
+        for (i = 0; i < 15; ++i) {
+            loadingBar + MULTIPLAYER_LOADING_BAR;
             currentAnimal = animalTab[i];
-            printf("chargement... %d", loadingBar," %");
-            if (animalTab[15].type == currentAnimal.type){
+            printf("chargement... %d", loadingBar, " %");
+            if (animalTab[15].type == currentAnimal.type) {
                 printf("Initialisation de la partie 3/3... %s\n");
                 printf("Début de la partie ! ");
-            } else{
+            } else {
                 close_client();
             }
         }

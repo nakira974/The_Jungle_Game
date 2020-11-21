@@ -19,7 +19,6 @@ FILE *fichier;
 bool win = false;
 
 
-
 bool readSave() {
 
     // Remplacé le 21/11/2020 pour test
@@ -143,47 +142,6 @@ void loadGame() {
 
     //viderBuffer();
 
-    if(gameType =='2'){
-        do {
-            printf("Voulez-vous héberger une partie(1) ou se connecter à un serveur ?(2) ?:\n");
-            scanf("%c", &modeChoise);
-        }while(strlen(&modeChoise) == 0 );
-
-
-
-        if(modeChoise == '1'){
-            do{
-                printf("Nom du joueur : \n");
-                scanf("%c", playerName );
-                playerTab[0].name = playerName;
-            }while (strlen(playerName) == 0 );
-
-            do{
-                signal = (int *) app_serv1();
-
-            }while ((int) &signal != 1);
-
-        } else if (modeChoise == '2'){
-            do{
-                printf("Adresse du serveur : \n");
-                scanf("%c", srvAdd);
-                printf("Nom du joueur : \n");
-                scanf("%c", playerName );
-                playerTab[0].name = playerName;
-
-            }while (strlen(playerName) && strlen(srvAdd) == 0);
-
-            do {
-                signal = (int *) app_client1(srvAdd);
-            }while ((int) &signal != 1);
-
-
-
-
-        }
-    }
-
-
     if (gameType == '1') {
         afficherEchiquier();
         //solo
@@ -212,7 +170,7 @@ void loadGame() {
             for (int turn = 0; turn < player_Count; ++turn) {
 
                 for (int q = 0; q < 150; q++) {
-                    player.name[q] =  playerTab[turn].name[q];
+                    player.name[q] = playerTab[turn].name[q];
                 }
                 player.isEnemy = playerTab[turn].isEnemy;
 
@@ -579,12 +537,38 @@ void loadGame() {
         }while(getc(stdin)!=27);
 #endif
     } else if (gameType == '2') {
-        //afficherEchiquier();
-        //multijoueur
+        do {
+            printf_s("Voulez-vous héberger une partie(1) ou se connecter à un serveur ?(2) ?:\n");
+            scanf("%c", &modeChoise);
+        } while (strlen(&modeChoise) == 0);
 
+        if (modeChoise == '1') {
+            do {
+                printf("Nom du joueur : \n");
+                scanf("%c", playerName);
+                playerTab[0].name = playerName;
+            } while (strlen(playerName) == 0);
+
+            do {
+                signal = (int *) app_serv1();
+
+            } while ((int) &signal != 1);
+
+        } else if (modeChoise == '2') {
+            do {
+                printf("Adresse du serveur : \n");
+                scanf("%c", srvAdd);
+                printf("Nom du joueur : \n");
+                scanf("%c", playerName);
+                playerTab[0].name = playerName;
+
+            } while (strlen(playerName) && strlen(srvAdd) == 0);
+
+            do {
+                signal = (int *) app_client1(srvAdd);
+            } while ((int) &signal != 1);
+        }
     }
-
-
 }
 
 bool hasRat(Animal animal, char direction) {

@@ -16,7 +16,6 @@
 #pragma comment (lib, "AdvApi32.lib")
 
 
-
 int send_server(char *sendbuf);
 
 int __cdecl app_client1(char *srvAdd);

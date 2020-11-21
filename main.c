@@ -4,11 +4,9 @@
 #include <pthread.h>
 
 
-
 int main() {
 
     GenererEchequier();
-
 
 
 }

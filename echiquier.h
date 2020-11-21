@@ -34,7 +34,6 @@
 #define DEFAULT_PORT "8888"
 
 
-
 struct Animal;
 struct Player;
 struct Animal *animalTab;
