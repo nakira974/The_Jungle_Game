@@ -139,7 +139,7 @@ int __cdecl app_client1(char *srvAdd) {
                 close_client();
             }
         }
-        send_server("Ce qu'on va envoyer avec une boucle While la partie pas finie");
+        send_server(MULTIPLAYER_EXIT);
 
     } while (sendbuf != MULTIPLAYER_EXIT);
 
