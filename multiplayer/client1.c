@@ -117,6 +117,7 @@ int __cdecl app_client1(char *srvAdd) {
     //LANCEMENT DE LA PARTIE
     do {
 
+        afficherEchiquier();
         int i;
         float loadingBar;
 

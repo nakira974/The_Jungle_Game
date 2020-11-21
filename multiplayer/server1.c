@@ -140,20 +140,19 @@ int __cdecl app_serv1(void) {
             int i;
             float loadingBar;
 
-            printf("Initialisation de la partie 0/3... %s\n");
-            GenererEchequier();
+            printf("Initialisation de la partie 0/3... \n");
             printf("Nom du joueur : %s\n", (char *) &recvbuf);
             //L'INVITE EST l'ENNEMI
-            currentPlayer.isEnemy = true;
+            afficherEchiquier();
 
             //On compte le tableau des animaux, pour vérifier que tout est OK
-            printf("Initialisation de la partie 2/3... %s\n");
+            printf("Initialisation de la partie 2/3... \n");
             for (i = 0; i <15 ; ++i) {
                 loadingBar+MULTIPLAYER_LOADING_BAR;
                 currentAnimal = animalTab[i];
                 printf("chargement... %d", loadingBar," %");
                 if (animalTab[15].type == currentAnimal.type){
-                    printf("Initialisation de la partie 3/3... %s\n");
+                    printf("Initialisation de la partie 3/3... \n");
                     printf("Début de la partie ! ");
                 } else{
                     close_server();
