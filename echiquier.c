@@ -18,6 +18,48 @@ char coord[9][7];
 FILE *fichier;
 bool win = false;
 
+static bool lauch_multiplayer(){
+    char modeChoise;
+    char *playerName;
+    char *srvAdd;
+    int *signal;
+    do {
+        printf_s("Voulez-vous héberger une partie(1) ou se connecter à un serveur ?(2) ?:\n");
+        scanf("%c", &modeChoise);
+    } while (strlen(&modeChoise) == 0);
+
+    if (modeChoise == '1') {
+        do {
+            printf("Nom du joueur : \n");
+            scanf("%c", playerName);
+            playerTab[0].name = playerName;
+        } while (strlen(playerName) == 0);
+
+        do {
+            signal = (int *) app_serv1();
+
+        } while ((int) &signal != 1);
+
+        return true;
+
+    } else if (modeChoise == '2') {
+        do {
+            printf("Adresse du serveur : \n");
+            scanf("%c", srvAdd);
+            printf("Nom du joueur : \n");
+            scanf("%c", playerName);
+            playerTab[0].name = playerName;
+
+        } while (strlen(playerName) && strlen(srvAdd) == 0);
+
+        do {
+            signal = (int *) app_client1(srvAdd);
+        } while ((int) &signal != 1);
+
+        return true ;
+    }
+}
+
 
 bool readSave() {
 
@@ -127,10 +169,7 @@ void loadGame() {
     char type;
     char direction;
     char gameType;
-    char modeChoise;
-    char *playerName;
-    char *srvAdd;
-    int *signal;
+
 
 
     do {
@@ -536,38 +575,9 @@ void loadGame() {
 #else
         }while(getc(stdin)!=27);
 #endif
-    } else if (gameType == '2') {
-        do {
-            printf_s("Voulez-vous héberger une partie(1) ou se connecter à un serveur ?(2) ?:\n");
-            scanf("%c", &modeChoise);
-        } while (strlen(&modeChoise) == 0);
-
-        if (modeChoise == '1') {
-            do {
-                printf("Nom du joueur : \n");
-                scanf("%c", playerName);
-                playerTab[0].name = playerName;
-            } while (strlen(playerName) == 0);
-
-            do {
-                signal = (int *) app_serv1();
-
-            } while ((int) &signal != 1);
-
-        } else if (modeChoise == '2') {
-            do {
-                printf("Adresse du serveur : \n");
-                scanf("%c", srvAdd);
-                printf("Nom du joueur : \n");
-                scanf("%c", playerName);
-                playerTab[0].name = playerName;
-
-            } while (strlen(playerName) && strlen(srvAdd) == 0);
-
-            do {
-                signal = (int *) app_client1(srvAdd);
-            } while ((int) &signal != 1);
-        }
+    }
+    else if (gameType == '2') {
+        lauch_multiplayer();
     }
 }
 
@@ -1073,3 +1083,4 @@ void GenererEchequier() {
     }
 
 }
+
