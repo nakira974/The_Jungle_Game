@@ -22,7 +22,9 @@ bool win = false;
 
 bool readSave() {
 
-    fichier = fopen("save.txt", "rb");
+    // Remplacé le 21/11/2020 pour test
+    //fichier = fopen("save.txt", "rb");
+    fichier = fdopen("save.txt", "rb");
 
     if (!fichier) {
         return false;
@@ -126,6 +128,10 @@ void loadGame() {
     char type;
     char direction;
     char gameType;
+    char modeChoise;
+    char *playerName;
+    char *srvAdd;
+    int *signal;
 
 
     do {
@@ -138,26 +144,41 @@ void loadGame() {
     //viderBuffer();
 
     if(gameType =='2'){
-        printf("Voulez-vous héberger une partie(1) ou se connecter à un serveur ?(2) ?:\n");
-        scanf("%c", &gameType);
-
-        if(gameType == '1'){
-            char *playerName;
-            printf("Nom du joueur : \n");
-            scanf("%c", playerName );
-            playerTab[0].name = playerName;
-            app_serv1();
+        do {
+            printf("Voulez-vous héberger une partie(1) ou se connecter à un serveur ?(2) ?:\n");
+            scanf("%c", &modeChoise);
+        }while(strlen(&modeChoise) == 0 );
 
 
-        } else if (gameType == '2'){
-            char *srvAdd;
-            char *playerName;
-            printf("Adresse du serveur : \n");
-            scanf("%c", srvAdd);
-            printf("Nom du joueur : \n");
-            scanf("%c", playerName );
-            playerTab[0].name = playerName;
-            app_client1(srvAdd);
+
+        if(modeChoise == '1'){
+            do{
+                printf("Nom du joueur : \n");
+                scanf("%c", playerName );
+                playerTab[0].name = playerName;
+            }while (strlen(playerName) == 0 );
+
+            do{
+                signal = (int *) app_serv1();
+
+            }while ((int) &signal != 1);
+
+        } else if (modeChoise == '2'){
+            do{
+                printf("Adresse du serveur : \n");
+                scanf("%c", srvAdd);
+                printf("Nom du joueur : \n");
+                scanf("%c", playerName );
+                playerTab[0].name = playerName;
+
+            }while (strlen(playerName) && strlen(srvAdd) == 0);
+
+            do {
+                signal = (int *) app_client1(srvAdd);
+            }while ((int) &signal != 1);
+
+
+
 
         }
     }
