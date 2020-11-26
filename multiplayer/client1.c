@@ -10,20 +10,19 @@ struct Player currentPlayer;
 
 SOCKET ConnectSocket = INVALID_SOCKET;
 
-const char *get_clientAddress_4(struct addrinfo *sa)
-{
-    struct sockaddr_in* pV4Addr = (struct sockaddr_in*)&ConnectSocket;
+const char *get_clientAddress_4(struct addrinfo *sa) {
+    struct sockaddr_in *pV4Addr = (struct sockaddr_in *) &ConnectSocket;
     struct in_addr ipAddr = pV4Addr->sin_addr;
     char *str;
-    str =(char *) inet_ntoa( ipAddr);
+    str = (char *) inet_ntoa(ipAddr);
     return (const char *) str;
 }
 
-const char *get_clientAddress_6(struct addrinfo *sa){
-    struct sockaddr_in6* pV6Addr = (struct sockaddr_in6*)&ConnectSocket;
+const char *get_clientAddress_6(struct addrinfo *sa) {
+    struct sockaddr_in6 *pV6Addr = (struct sockaddr_in6 *) &ConnectSocket;
     struct in6_addr *ipAddr = &pV6Addr->sin6_addr;
     char *str;
-    str =(char *) ipAddr;
+    str = (char *) ipAddr;
     return (const char *) str;
 }
 
@@ -68,7 +67,7 @@ int __cdecl app_client1(const char *srvAdd) {
     hints.ai_protocol = IPPROTO_TCP;
 
     struct addrinfo *pa = &hints;
-    printf("Adresse du client : %s\n", (const char*)get_clientAddress_4(pa));
+    printf("Adresse du client : %s\n", (const char *) get_clientAddress_4(pa));
 
     // Resolve the server address and port
     iResult = getaddrinfo((const char *) &srvAdd, DEFAULT_PORT, &hints, &result);
