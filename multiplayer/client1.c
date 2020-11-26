@@ -10,7 +10,7 @@ struct Player currentPlayer;
 
 SOCKET ConnectSocket = INVALID_SOCKET;
 
-const char *get_clientAddress(struct addrinfo *sa)
+const char *get_clientAddress_4(struct addrinfo *sa)
 {
     struct sockaddr_in* pV4Addr = (struct sockaddr_in*)&ConnectSocket;
     struct in_addr ipAddr = pV4Addr->sin_addr;
@@ -19,9 +19,16 @@ const char *get_clientAddress(struct addrinfo *sa)
     return (const char *) str;
 }
 
+const char *get_clientAddress_6(struct addrinfo *sa){
+    struct sockaddr_in6* pV6Addr = (struct sockaddr_in6*)&ConnectSocket;
+    struct in6_addr *ipAddr = &pV6Addr->sin6_addr;
+    char *str;
+    str =(char *) ipAddr;
+    return (const char *) str;
+}
 
 
-int send_server(char *sendbuf) {
+int send_server(const char *sendbuf) {
     iResult = send(ConnectSocket, sendbuf, (int) strlen(sendbuf), 0);
     if (iResult == SOCKET_ERROR) {
         printf("send failed with error: %d\n", WSAGetLastError());
@@ -37,7 +44,7 @@ int close_client() {
     return 1;
 }
 
-int __cdecl app_client1(char *srvAdd) {
+int __cdecl app_client1(const char *srvAdd) {
     WSADATA wsaData;
 
     struct addrinfo *result = NULL, *ptr = NULL, hints;
@@ -56,12 +63,12 @@ int __cdecl app_client1(char *srvAdd) {
     }
 
     ZeroMemory(&hints, sizeof(hints));
-    hints.ai_family = AF_INET;
+    hints.ai_family = AF_UNSPEC;
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_protocol = IPPROTO_TCP;
 
     struct addrinfo *pa = &hints;
-    printf("Adresse du client : %s\n", (const char*)get_clientAddress(pa));
+    printf("Adresse du client : %s\n", (const char*)get_clientAddress_4(pa));
 
     // Resolve the server address and port
     iResult = getaddrinfo((const char *) &srvAdd, DEFAULT_PORT, &hints, &result);
@@ -70,6 +77,9 @@ int __cdecl app_client1(char *srvAdd) {
         WSACleanup();
         return 1;
     }
+
+    printf("Host information has been completed... \n");
+    printf("Listening on %s,: %s\n", srvAdd, DEFAULT_PORT);
 
     // Attempt to connect to an address until one succeeds
     for (ptr = result; ptr != NULL; ptr = ptr->ai_next) {

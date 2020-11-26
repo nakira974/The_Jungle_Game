@@ -23,7 +23,7 @@ int recvbuflen = DEFAULT_BUFLEN;
 
 const char *get_serverAddress(struct addrinfo *sa)
 {
-    struct sockaddr_in* pV4Addr = (struct sockaddr_in*)&ClientSocket;
+    struct sockaddr_in* pV4Addr = (struct sockaddr_in*)&ListenSocket;
     struct in_addr ipAddr = pV4Addr->sin_addr;
     char *str;
     str =(char *) inet_ntoa( ipAddr);
@@ -37,7 +37,7 @@ int close_server() {
     return 1;
 }
 
-int send_client(char *sendbuf) {
+int send_client(const char *sendbuf) {
     iResult = send(ClientSocket, sendbuf, (int) strlen(sendbuf), 0);
     if (iResult == SOCKET_ERROR) {
         printf("send failed with error: %d\n", WSAGetLastError());
