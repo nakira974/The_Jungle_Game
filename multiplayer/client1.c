@@ -51,7 +51,7 @@ int __cdecl app_client1(char *srvAdd) {
     hints.ai_protocol = IPPROTO_TCP;
 
     // Resolve the server address and port
-    iResult = getaddrinfo(srvAdd, DEFAULT_PORT, &hints, &result);
+    iResult = getaddrinfo((const char *) &srvAdd, DEFAULT_PORT, &hints, &result);
     if (iResult != 0) {
         printf("getaddrinfo failed with error: %d\n", iResult);
         WSACleanup();

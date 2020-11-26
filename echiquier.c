@@ -37,17 +37,15 @@ static bool lauch_multiplayer(){
            // playerTab[0].name = playerName;
         } while (strlen(playerName) == 0);
 
-        do {
-            signal = (int *) app_serv1();
+        app_serv1();
 
-        } while ((int) &signal != 1);
 
         return true;
 
     } else if (modeChoise == '2') {
         do {
             printf("Adresse du serveur : \n");
-            scanf("%s", srvAdd);
+            scanf("%s", &srvAdd);
             printf("Nom du joueur : \n");
             scanf("%s", playerName);
             for (int q = 0; q < 150; q++) {
@@ -76,7 +74,7 @@ bool readSave() {
         return false;
     }
     int m;
-    playerTab = malloc(2 * sizeof(Player));//nos types d'animaux
+    playerTab = malloc(2 * sizeof(Player));
     fscanf(fichier, "Joueur 1: name=%s", playerTab[0].name);
     fseek(fichier, 1, SEEK_CUR);
     fscanf(fichier, "enemy=%i", &playerTab[0].isEnemy);
