@@ -56,12 +56,12 @@ int __cdecl app_client1(char *srvAdd) {
     }
 
     ZeroMemory(&hints, sizeof(hints));
-    hints.ai_family = AF_UNSPEC;
+    hints.ai_family = AF_INET;
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_protocol = IPPROTO_TCP;
 
     struct addrinfo *pa = &hints;
-    printf("Adresse du serveur : %s\n", (const char*)get_clientAddress(pa));
+    printf("Adresse du client : %s\n", (const char*)get_clientAddress(pa));
 
     // Resolve the server address and port
     iResult = getaddrinfo((const char *) &srvAdd, DEFAULT_PORT, &hints, &result);
