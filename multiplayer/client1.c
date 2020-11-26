@@ -111,7 +111,10 @@ int __cdecl app_client1(char *srvAdd) {
     if (iResult > 0) {
         printf("Host information received: %d\n", iResult);
         //ON MET LE NOM DE l'HOTE DANS LE TABLEAU DES JOUEURS
-        playerTab[1].name = recvbuf;
+        for (int q = 0; q < 150; q++) {
+            playerTab[1].name[q] = recvbuf[q];
+        }
+        //playerTab[1].name = recvbuf;
     }
 
     //LANCEMENT DE LA PARTIE
@@ -121,8 +124,11 @@ int __cdecl app_client1(char *srvAdd) {
         int i;
         float loadingBar;
 
-        printf("Nom du joueur : %s\n", (char *) &sendbuf);
-        currentPlayer.name = (char *) sendbuf;
+        printf("Nom du joueur : %s\n", sendbuf);
+        for (int q = 0; q < 150; q++) {
+            currentPlayer.name[q] = sendbuf[q];
+        }
+        //currentPlayer.name = sendbuf;
         //L'INVITE EST l'ENNEMI
         currentPlayer.isEnemy = true;
 

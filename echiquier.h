@@ -3,10 +3,12 @@
 //
 #ifndef PROJETJUNGLE_ECHIQUIER_H
 #define PROJETJUNGLE_ECHIQUIER_H
-
+#define MULTIPLAYER_EXIT "exit"
+#define MULTIPLAYER_LOADING_BAR 6,666666666666667
+#define DEFAULT_BUFLEN 1024
+#define DEFAULT_PORT "8888"
 #ifdef _WIN32
 
-#include <windows.h>
 #include <io.h>
 #include <conio.h>
 
@@ -14,25 +16,20 @@
 #include <memory.h>
 #endif
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include <locale.h>
 #include <winsock2.h>
-#include <windows.h>
 #include <ws2tcpip.h>
+#include <windows.h>
+#include <locale.h>
+
 
 #define Color_Blue "\33[0:34m" // Color Start
 #define Color_Red "\33[0:31m" // Color Start
 #define Color_Yellow "\33[0:32m"
 #define Color_End "\33[0m" // To flush out prev settings
 #define Color_Purple "\33[0:95m" // To flush out prev settings
-#define MULTIPLAYER_EXIT "exit"
-#define MULTIPLAYER_LOADING_BAR 6,666666666666667
-#define DEFAULT_BUFLEN 1024
-#define DEFAULT_PORT "8888"
-
 
 struct Animal;
 struct Player;
@@ -42,7 +39,7 @@ char *animalType;
 
 struct Player {
 
-    char *name;
+    char name[150];
     bool isEnemy;
     int score;
 
@@ -100,5 +97,7 @@ void GenererEchequier();
 enum Zone checkZone(struct Animal animal);
 
 void loadGame();
+
+int lire(char *chaine, int longueur);
 
 #endif //PROJETJUNGLE_ECHIQUIER_H

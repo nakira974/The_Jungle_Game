@@ -113,7 +113,10 @@ int __cdecl app_serv1(void) {
         iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
         if (iResult > 0) {
             printf("Player information received: %d\n", iResult);
-            playerTab[1].name = recvbuf;
+            for (int q = 0; q < 150; q++) {
+                playerTab[1].name[q] = recvbuf[q];
+            }
+            //playerTab[1].name = recvbuf;
 
             printf("Ennemy name is : %s\n", playerTab[1].name);
 

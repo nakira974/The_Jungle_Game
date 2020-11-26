@@ -6,7 +6,6 @@
 #include "multiplayer/server1.h"
 #include "multiplayer/client1.h"
 
-
 typedef struct Animal Animal;
 typedef struct Player Player;
 Animal *animalTab = NULL;
@@ -20,7 +19,7 @@ bool win = false;
 
 static bool lauch_multiplayer(){
     char modeChoise;
-    char *playerName;
+    char playerName[150];
     char *srvAdd;
     int *signal;
     do {
@@ -31,8 +30,11 @@ static bool lauch_multiplayer(){
     if (modeChoise == '1') {
         do {
             printf("Nom du joueur : \n");
-            scanf("%c", playerName);
-            playerTab[0].name = playerName;
+            scanf("%s", playerName);
+            for (int q = 0; q < 150; q++) {
+                playerTab[q].name[q] = playerName[q];
+            }
+           // playerTab[0].name = playerName;
         } while (strlen(playerName) == 0);
 
         do {
@@ -48,7 +50,10 @@ static bool lauch_multiplayer(){
             scanf("%c", srvAdd);
             printf("Nom du joueur : \n");
             scanf("%c", playerName);
-            playerTab[0].name = playerName;
+            for (int q = 0; q < 150; q++) {
+                playerTab[q].name[q] = playerName[q];
+            }
+           // playerTab[0].name = playerName;
 
         } while (strlen(playerName) && strlen(srvAdd) == 0);
 
@@ -64,8 +69,8 @@ static bool lauch_multiplayer(){
 bool readSave() {
 
     // Remplacé le 21/11/2020 pour test
-    //fichier = fopen("save.txt", "rb");
-    fichier = fdopen("save.txt", "rb");
+    fichier = fopen("save.txt", "rb");
+    //fichier = fdopen("save.txt", "rb");
 
     if (!fichier) {
         return false;
@@ -179,7 +184,7 @@ void loadGame() {
 
     } while (strlen(&gameType) == 0);
 
-    //viderBuffer();
+    viderBuffer();
 
     if (gameType == '1') {
         afficherEchiquier();
