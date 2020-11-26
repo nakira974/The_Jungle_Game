@@ -32,7 +32,7 @@ static bool lauch_multiplayer(){
             printf("Nom du joueur : \n");
             scanf("%s", playerName);
             for (int q = 0; q < 150; q++) {
-                playerTab[q].name[q] = playerName[q];
+                playerTab[0].name[q] = playerName[q];
             }
            // playerTab[0].name = playerName;
         } while (strlen(playerName) == 0);
@@ -47,15 +47,15 @@ static bool lauch_multiplayer(){
     } else if (modeChoise == '2') {
         do {
             printf("Adresse du serveur : \n");
-            scanf("%c", srvAdd);
+            scanf("%s", srvAdd);
             printf("Nom du joueur : \n");
-            scanf("%c", playerName);
+            scanf("%s", playerName);
             for (int q = 0; q < 150; q++) {
-                playerTab[q].name[q] = playerName[q];
+                playerTab[0].name[q] = playerName[q];
             }
            // playerTab[0].name = playerName;
 
-        } while (strlen(playerName) && strlen(srvAdd) == 0);
+        } while (strlen(playerName) == 0 && strlen(srvAdd) == 0);
 
         do {
             signal = (int *) app_client1(srvAdd);
