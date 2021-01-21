@@ -176,10 +176,35 @@ void loadGame() {
     char gameType;
 
 
-
     do {
 
-        printf("Voulez-vous jouer en solo(1) ou en multijoueur(2) ?:\n");
+        //printf("Voulez-vous jouer en solo(1) ou en multijoueur(2) ?:\n");
+        printf("\n");
+        printf("\n");
+        printf("\n");
+        printf("\n");
+        printf("\n");
+        printf("\n");
+        printf("   ////   //   //    ///    //  //////   //      //// ");
+        printf("   ///   //    //   // // //  //        //     //     ");
+        printf("   ///   //   //  //  // //  //   ///  //      //     ");
+        printf("/////     /////   //   ///   //////    //////  /////  ");
+        printf("\n");
+        printf("\n");
+        printf("             //////     //     //   ///    ////       ");
+        printf("           //         // //   //// ////  //           ");
+        printf("          //   ///    /////   // //  //  //           ");
+        printf("          //////     //  //  //      //  /////        ");
+        printf("\n");
+        printf("\n");
+        printf("                      [1] s0l0 g4m3                   ");
+        printf("\n");
+        printf("                      [2] mult1p14y3r g4m3            ");
+        printf("\n");
+        printf("\n");
+        printf("\n");
+        printf("\n");
+        printf("\n");
         scanf("%c", &gameType);
 
     } while (strlen(&gameType) == 0);
