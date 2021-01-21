@@ -22,8 +22,9 @@ static bool lauch_multiplayer() {
     char playerName[150];
     char *srvAdd;
     int *signal;
+    system("cls");
     do {
-        printf_s("Voulez-vous héberger une partie(1) ou se connecter à un serveur ?(2) ?:\n");
+        printf_s("Voulez-vous heberger une partie(1) ou vous connecter a un serveur(2) ?:\n");
         scanf("%c", &modeChoise);
     } while (strlen(&modeChoise) == 0);
 
@@ -195,9 +196,9 @@ void loadGame() {
         printf("          //////     //  //  //      //  /////        ");
         printf("\n");
         printf("\n");
-        printf("                      [1] s0l0 g4m3                   ");
+        printf("                      [1] Solo Game                   ");
         printf("\n");
-        printf("                      [2] mult1p14y3r g4m3            ");
+        printf("                      [2] Multiplayer Game            ");
         printf("\n");
         printf("\n");
         printf("\n");
