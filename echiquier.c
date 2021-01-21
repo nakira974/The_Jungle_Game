@@ -17,7 +17,7 @@ char coord[9][7];
 FILE *fichier;
 bool win = false;
 
-static bool lauch_multiplayer(){
+static bool lauch_multiplayer() {
     char modeChoise;
     char playerName[150];
     char *srvAdd;
@@ -34,26 +34,24 @@ static bool lauch_multiplayer(){
             for (int q = 0; q < 150; q++) {
                 playerTab[0].name[q] = playerName[q];
             }
-           // playerTab[0].name = playerName;
+            // playerTab[0].name = playerName;
         } while (strlen(playerName) == 0);
 
-        do {
-            signal = (int *) app_serv1();
+        app_serv1();
 
-        } while ((int) &signal != 1);
 
         return true;
 
     } else if (modeChoise == '2') {
         do {
             printf("Adresse du serveur : \n");
-            scanf("%s", srvAdd);
+            scanf("%s", &srvAdd);
             printf("Nom du joueur : \n");
             scanf("%s", playerName);
             for (int q = 0; q < 150; q++) {
                 playerTab[0].name[q] = playerName[q];
             }
-           // playerTab[0].name = playerName;
+            // playerTab[0].name = playerName;
 
         } while (strlen(playerName) == 0 && strlen(srvAdd) == 0);
 
@@ -61,7 +59,7 @@ static bool lauch_multiplayer(){
             signal = (int *) app_client1(srvAdd);
         } while ((int) &signal != 1);
 
-        return true ;
+        return true;
     }
 }
 
@@ -76,7 +74,7 @@ bool readSave() {
         return false;
     }
     int m;
-    playerTab = malloc(2 * sizeof(Player));//nos types d'animaux
+    playerTab = malloc(2 * sizeof(Player));
     fscanf(fichier, "Joueur 1: name=%s", playerTab[0].name);
     fseek(fichier, 1, SEEK_CUR);
     fscanf(fichier, "enemy=%i", &playerTab[0].isEnemy);
@@ -605,8 +603,7 @@ void loadGame() {
 #else
         }while(getc(stdin)!=27);
 #endif
-    }
-    else if (gameType == '2') {
+    } else if (gameType == '2') {
         lauch_multiplayer();
     }
 }

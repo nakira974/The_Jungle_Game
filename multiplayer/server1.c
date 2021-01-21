@@ -21,13 +21,22 @@ char *recvbuf;
 // #pragma comment (lib, "Mswsock.lib")
 int recvbuflen = DEFAULT_BUFLEN;
 
+const char *get_serverAddress(struct addrinfo *sa) {
+    struct sockaddr_in *pV4Addr = (struct sockaddr_in *) &ListenSocket;
+    struct in_addr ipAddr = pV4Addr->sin_addr;
+    char *str;
+    str = (char *) inet_ntoa(ipAddr);
+    return (const char *) str;
+}
+
+
 int close_server() {
     closesocket(ListenSocket);
     WSACleanup();
     return 1;
 }
 
-int send_client(char *sendbuf) {
+int send_client(const char *sendbuf) {
     iResult = send(ClientSocket, sendbuf, (int) strlen(sendbuf), 0);
     if (iResult == SOCKET_ERROR) {
         printf("send failed with error: %d\n", WSAGetLastError());
@@ -60,6 +69,10 @@ int __cdecl app_serv1(void) {
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_protocol = IPPROTO_TCP;
     hints.ai_flags = AI_PASSIVE;
+
+    struct addrinfo *pa = &hints;
+
+    printf("Adresse du serveur : %s\n", (const char *) get_serverAddress(pa));
 
     // Resolve the server address and port
     iResult = getaddrinfo(NULL, DEFAULT_PORT, &hints, &result);
