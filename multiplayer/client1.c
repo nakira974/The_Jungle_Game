@@ -43,7 +43,7 @@ int close_client() {
     return 1;
 }
 
-int __cdecl app_client1(const char *srvAdd) {
+int __cdecl app_client1() {
     WSADATA wsaData;
 
     struct addrinfo *result = NULL, *ptr = NULL, hints;
@@ -70,15 +70,17 @@ int __cdecl app_client1(const char *srvAdd) {
     printf("Adresse du client : %s\n", (const char *) get_clientAddress_4(pa));
 
     // Resolve the server address and port
-    iResult = getaddrinfo((const char *) &srvAdd, DEFAULT_PORT, &hints, &result);
+    iResult = getaddrinfo((const char *) "127.0.0.1", DEFAULT_PORT, &hints, &result);
     if (iResult != 0) {
         printf("getaddrinfo failed with error: %d\n", iResult);
         WSACleanup();
         return 1;
     }
 
+
     printf("Host information has been completed... \n");
-    printf("Listening on %s,: %s\n", srvAdd, DEFAULT_PORT);
+    printf("Listening on %s,: %s\n", "127.0.0.1", DEFAULT_PORT);
+
 
     // Attempt to connect to an address until one succeeds
     for (ptr = result; ptr != NULL; ptr = ptr->ai_next) {
@@ -120,7 +122,7 @@ int __cdecl app_client1(const char *srvAdd) {
     printf("Envoi des informations du joueur à l'hôte de la partie... \n");
     sendbuf = playerTab[0].name;
     //LE CLIENT EST L'ENNEMY
-    iResult = send(ConnectSocket, sendbuf, (int) strlen(sendbuf), 0);
+    iResult = send(ConnectSocket, &sendbuf, (int) strlen(sendbuf), 0);
 
     if (iResult == SOCKET_ERROR) {
         printf("send failed with error: %d\n", WSAGetLastError());

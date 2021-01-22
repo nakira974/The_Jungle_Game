@@ -6,7 +6,7 @@
 #define MULTIPLAYER_EXIT "exit"
 #define MULTIPLAYER_LOADING_BAR 6,666666666666667
 #define DEFAULT_BUFLEN 1024
-#define DEFAULT_PORT "8888"
+#define DEFAULT_PORT "32555"
 #ifdef _WIN32
 
 #include <io.h>
