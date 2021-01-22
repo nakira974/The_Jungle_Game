@@ -81,7 +81,6 @@ int __cdecl app_client1() {
     printf("Host information has been completed... \n");
     printf("Listening on %s,: %s\n", "127.0.0.1", DEFAULT_PORT);
 
-
     // Attempt to connect to an address until one succeeds
     for (ptr = result; ptr != NULL; ptr = ptr->ai_next) {
 
@@ -130,6 +129,7 @@ int __cdecl app_client1() {
         WSACleanup();
         return 1;
     }
+
 
     printf("Player information sent: %ld\n", iResult);
 
