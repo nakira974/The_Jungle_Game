@@ -109,15 +109,15 @@ int __cdecl app_serv1(void) {
     // Accept a client socket
     printf("%s\n", "Accepting client request...");
     ClientSocket = accept(ListenSocket, NULL, NULL);
-    if (ClientSocket == INVALID_SOCKET) {
+    /*if (ClientSocket == INVALID_SOCKET) {
         printf("accept failed with error: %d\n", WSAGetLastError());
         closesocket(ListenSocket);
         WSACleanup();
         return 1;
-    }
+    }*/
 
     // No longer need server socket
-    closesocket(ListenSocket);
+    //closesocket(ListenSocket);
 
     // Recevoir jusqu’à ce que le pair arrête la connexion
     do {

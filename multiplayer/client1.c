@@ -77,6 +77,7 @@ int __cdecl app_client1() {
         return 1;
     }
 
+
     printf("Host information has been completed... \n");
     printf("Listening on %s,: %s\n", "127.0.0.1", DEFAULT_PORT);
 
@@ -120,7 +121,7 @@ int __cdecl app_client1() {
     printf("Envoi des informations du joueur à l'hôte de la partie... \n");
     sendbuf = playerTab[0].name;
     //LE CLIENT EST L'ENNEMY
-    iResult = send(ConnectSocket, sendbuf, (int) strlen(sendbuf), 0);
+    iResult = send(ConnectSocket, &sendbuf, (int) strlen(sendbuf), 0);
 
     if (iResult == SOCKET_ERROR) {
         printf("send failed with error: %d\n", WSAGetLastError());
