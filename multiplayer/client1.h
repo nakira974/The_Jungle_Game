@@ -18,6 +18,6 @@
 
 int send_server(const char *sendbuf);
 
-int __cdecl app_client1(const char *srvAdd);
+int __cdecl app_client1();
 
 #endif //PROJETJUNGLE_CLIENT1_H

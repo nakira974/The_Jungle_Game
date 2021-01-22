@@ -45,8 +45,8 @@ static bool lauch_multiplayer() {
 
     } else if (modeChoise == '2') {
         do {
-            printf("Adresse du serveur : \n");
-            scanf("%s", &srvAdd);
+            //printf("Adresse du serveur : \n");
+            //scanf("%s", &srvAdd);
             printf("Nom du joueur : \n");
             scanf("%s", playerName);
             for (int q = 0; q < 150; q++) {
@@ -57,7 +57,7 @@ static bool lauch_multiplayer() {
         } while (strlen(playerName) == 0 && strlen(srvAdd) == 0);
 
         do {
-            signal = (int *) app_client1(srvAdd);
+            signal = (int *) app_client1();
         } while ((int) &signal != 1);
 
         return true;
