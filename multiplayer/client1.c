@@ -129,6 +129,7 @@ int __cdecl app_client1() {
         return 1;
     }
 
+
     printf("Player information sent: %ld\n", iResult);
 
     iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
