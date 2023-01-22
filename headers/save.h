@@ -26,6 +26,7 @@ int createGameSaveTable(sqlite3 *db);
 
 void insertOrUpdateSave(struct Player *players, struct Animal *animals, int nPlayers, int nAnimals);
 
-void selectSavedEntities(struct Player *players, struct Animal *animals);
+_Noreturn void selectSavedEntities(struct Player *players, struct Animal *animals);
+
 
 #endif //JUNGLEGAME_SAVE_H

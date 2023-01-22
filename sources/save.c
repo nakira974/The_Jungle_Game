@@ -5,6 +5,98 @@
 #include "../headers/exception.h"
 
 
+char* concat(char *s1, char *s2)
+{
+    char *result = malloc(strlen(s1)+strlen(s2)+1);//+1 for the zero-terminator
+    //in real code you would check for errors in malloc here
+    strcpy(result, s1);
+    strcat(result, s2);
+    return result;
+}
+
+void swap(char* a, char* b)
+{
+    char t = *a;
+    *a = *b;
+    *b = t;
+}
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wint-to-pointer-cast"
+void reverse(char str[], int length)
+{
+    int start = 0;
+    int end = length -1;
+    while (start < end)
+    {
+        swap((char *) *(str + start), (char *) *(str + end));
+        start++;
+        end--;
+    }
+}
+#pragma clang diagnostic pop
+
+
+
+char* intToString(int num)
+{
+    int i = 0;
+    int isNegative = 0;
+    char *str;
+    /* Handle 0 explicitely, otherwise empty string is printed for 0 */
+    if (num == 0)
+    {
+        str = (char*)malloc(2);
+        str[0] = '0';
+        str[1] = '\0';
+        return str;
+    }
+
+    // In standard itoa(), negative numbers are handled only with
+    // base 10. Otherwise numbers are considered unsigned.
+    if (num < 0 && num > -10)
+    {
+        isNegative = 1;
+        num = -num;
+    }
+
+    // Process individual digits
+    while (num != 0)
+    {
+        int rem = num % 10;
+        str[i++] = (rem > 9)? (rem-10) + 'a' : rem + '0';
+        num = num/10;
+    }
+
+    // If number is negative, append '-'
+    if (isNegative)
+        str[i++] = '-';
+
+    str[i] = '\0'; // Append string terminator
+
+    // Reverse the string
+    reverse(str, i);
+
+    return str;
+}
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wformat"
+#pragma clang diagnostic ignored "-Wpointer-sign"
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wpointer-to-int-cast"
+char sqlite3_text_column_to_char(const unsigned char* text)
+{
+    return (char )text;
+}
+#pragma clang diagnostic pop
+
+void sqlite3_text_column_to_string(const unsigned char* column_value, char *string)
+{
+    strcpy(string, column_value);
+}
+
+
 sqlite3 *getDbContext() {
     sqlite3 *db;
     int rc;
@@ -44,7 +136,7 @@ void insertOrUpdateSave(struct Player *players, struct Animal *animals, int nPla
 
     for (int i = 0; i < nPlayers; i++) {
 
-        sqlite3_bind_text(pStmt, 1, players[i].name, -1, SQLITE_STATIC);
+        sqlite3_bind_text(pStmt, 1, (const char *) players[i].name, -1, SQLITE_STATIC);
         sqlite3_bind_int(pStmt, 2, players[i].isEnemy);
         sqlite3_bind_int(pStmt, 3, players[i].score);
 
@@ -68,7 +160,7 @@ void insertOrUpdateSave(struct Player *players, struct Animal *animals, int nPla
         sqlite3_bind_int(pStmt, 5, animals[i].isAlive);
         sqlite3_bind_int(pStmt, 6, animals[i].canEat);
         sqlite3_bind_int(pStmt, 7, animals[i].index);
-        sqlite3_bind_text(pStmt, 8, &animals[i].zone, 1, SQLITE_STATIC);
+        sqlite3_bind_text(pStmt, 8, (const char *) &animals[i].zone, 1, SQLITE_STATIC);
         sqlite3_bind_int(pStmt, 9, animals[i].index);
 
         sqlite3_step(pStmt);
@@ -100,7 +192,7 @@ int createGameSaveTable(sqlite3 *db) {
                 "    isAlive BOOLEAN NOT NULL CHECK (isAlive IN (0, 1)),\n"
                 "    canEat BOOLEAN NOT NULL CHECK (canEat IN (0, 1)),\n"
                 "    table_index INTEGER NOT NULL,\n"
-                "    zone TEXT NOT NULL,\n"
+                "    zone INTEGER NOT NULL,\n"
                 "    playerId INTEGER NOT NULL,\n"
                 "    FOREIGN KEY(playerId) REFERENCES Player(id)\n"
                 ");"
@@ -139,50 +231,61 @@ int createGameSaveTable(sqlite3 *db) {
     return 0;
 }
 
-void selectSavedEntities(struct Player *players, struct Animal *animals) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wincompatible-pointer-types-discards-qualifiers"
+
+_Noreturn void selectSavedEntities(struct Player *players, struct Animal *animals) {
 
     sqlite3 *db = getDbContext();
-    char *sql = "SELECT * FROM Player;";
+    char *sql = "SELECT * FROM Player LIMIT 2;";
 
     sqlite3_stmt *pStmt;
     sqlite3_prepare_v2(db, sql, -1, &pStmt, 0);
 
     int i = 0;
 
+    //TODO Throw exceptions here when null entries
     while (sqlite3_step(pStmt) == SQLITE_ROW) {
-
-        players[i].name = sqlite3_column_text(pStmt, 1);
+        players[i].id = sqlite3_column_int(pStmt, 0);
+        sqlite3_text_column_to_string(sqlite3_column_text(pStmt, 1), (char *) players[i].name);
         players[i].isEnemy = sqlite3_column_int(pStmt, 2);
         players[i].score = sqlite3_column_int(pStmt, 3);
-
+        fprintf(stdout, "USER %s %d %d HAS BEEN SELECTED\n",players[i].name, players[i].isEnemy, players[i].score );
         i++;
-
     }
 
     sqlite3_finalize(pStmt);
 
-    sql = "SELECT * FROM Animal;";
+    for(int player=0; player < 2; player++){
 
-    sqlite3_prepare_v2(db, sql, -1, &pStmt, 0);
+        char* playerId = intToString(players[player].id);
+        sql = "SELECT * FROM Animal WHERE playerId=";
+        sql =concat(sql, playerId);
+        sql = concat(sql, ";");
+        //TODO Fixer l'exception d'accès concurrent à la db ???
+        sqlite3_prepare_v2(db, sql, -1, &pStmt, 0);
+        i = 0;
+        //TODO Throw exceptions here when null entries
+        while (sqlite3_step(pStmt) == SQLITE_ROW) {
 
-    i = 0;
+            animals[i].type = sqlite3_text_column_to_char(sqlite3_column_text(pStmt, 1));
+            animals[i].x = sqlite3_column_int(pStmt, 2);
+            animals[i].y = sqlite3_column_int(pStmt, 3);
+            animals[i].isEnemy = sqlite3_column_int(pStmt, 4);
+            animals[i].isAlive = sqlite3_column_int(pStmt, 5);
+            animals[i].canEat = sqlite3_column_int(pStmt, 6);
+            animals[i].index = sqlite3_column_int(pStmt, 7);
+            animals[i].zone = sqlite3_column_int(pStmt, 8);
 
-    while (sqlite3_step(pStmt) == SQLITE_ROW) {
+            i++;
 
-        animals[i].type = sqlite3_column_text(pStmt, 1);
-        animals[i].x = sqlite3_column_int(pStmt, 2);
-        animals[i].y = sqlite3_column_int(pStmt, 3);
-        animals[i].isEnemy = sqlite3_column_int(pStmt, 4);
-        animals[i].isAlive = sqlite3_column_int(pStmt, 5);
-        animals[i].canEat = sqlite3_column_int(pStmt, 6);
-        animals[i].index = sqlite3_column_int(pStmt, 7);
-        animals[i].zone = sqlite3_column_text(pStmt, 8);
+        }
+        sqlite3_finalize(pStmt);
 
-        i++;
-
+        sqlite3_close(db);
     }
 
-    sqlite3_finalize(pStmt);
-
-    sqlite3_close(db);
 }
+#pragma clang diagnostic pop
+
+#pragma clang diagnostic pop

@@ -14,6 +14,8 @@ typedef struct Player Player;
 
 struct Animal *animals = NULL;
 struct Player *players = NULL;
+const int PLAYERS_COUNT = 2;
+const int ANIMALS_COUNT = 16;
 char *animalType = NULL;
 char coordinates[9][7];
 bool isWinner = false;
