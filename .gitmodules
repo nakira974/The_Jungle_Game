@@ -1,6 +1,0 @@
-[submodule "deps/sqlite"]
-	path = deps/sqlite
-	url = https://github.com/sqlite/sqlite
-[submodule "deps/sqlite3-cmake"]
-	path = deps/sqlite3-cmake
-	url = https://github.com/alex85k/sqlite3-cmake.git
