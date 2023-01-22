@@ -2,7 +2,7 @@
 // Created by maxime on 07/10/2020.
 //
 
-#include "echiquier.h"
+#include "../headers/echiquier.h"
 
 
 typedef struct Animal Animal;
