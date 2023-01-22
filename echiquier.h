@@ -33,9 +33,7 @@
 
 struct Animal;
 struct Player;
-struct Animal *animalTab;
-struct Player *playerTab;
-char *animalType;
+
 
 struct Player {
 

@@ -3,67 +3,20 @@
 //
 
 #include "echiquier.h"
-#include "multiplayer/server1.h"
-#include "multiplayer/client1.h"
+
 
 typedef struct Animal Animal;
 typedef struct Player Player;
-Animal *animalTab = NULL;
+
+struct Animal *animalTab = NULL;
+struct Player *playerTab = NULL ;
 char *animalType = NULL;
-Player *playerTab = NULL;
+
 int player_Count = 2;
 int animal_Count = 16;
 char coord[9][7];
 FILE *fichier;
 bool win = false;
-
-static bool lauch_multiplayer() {
-    char modeChoise;
-    char playerName[150];
-    char *srvAdd;
-    int *signal;
-    system("cls");
-    do {
-        printf_s("Voulez-vous heberger une partie(1) ou vous connecter a un serveur(2) ?:\n");
-        scanf("%c", &modeChoise);
-    } while (strlen(&modeChoise) == 0);
-
-    if (modeChoise == '1') {
-        do {
-            printf("Nom du joueur : \n");
-            scanf("%s", playerName);
-            for (int q = 0; q < 150; q++) {
-                playerTab[0].name[q] = playerName[q];
-            }
-            // playerTab[0].name = playerName;
-        } while (strlen(playerName) == 0);
-
-        app_serv1();
-
-
-        return true;
-
-    } else if (modeChoise == '2') {
-        do {
-            //printf("Adresse du serveur : \n");
-            //scanf("%s", &srvAdd);
-            printf("Nom du joueur : \n");
-            scanf("%s", playerName);
-            for (int q = 0; q < 150; q++) {
-                playerTab[0].name[q] = playerName[q];
-            }
-            // playerTab[0].name = playerName;
-
-        } while (strlen(playerName) == 0 && strlen(srvAdd) == 0);
-
-        do {
-            signal = (int *) app_client1();
-        } while ((int) &signal != 1);
-
-        return true;
-    }
-}
-
 
 bool readSave() {
 
@@ -604,8 +557,6 @@ void loadGame() {
 #else
         }while(getc(stdin)!=27);
 #endif
-    } else if (gameType == '2') {
-        lauch_multiplayer();
     }
 }
 
