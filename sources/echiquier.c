@@ -27,7 +27,6 @@ bool readSave() {
         players = malloc(PLAYERS_COUNT * sizeof(Player));
         animals = malloc(ANIMALS_COUNT * sizeof(Animal));
         selectSavedEntities(players, animals);
-        THROW;
     }
     CATCH{
         printf("Can't load save from sqlite3\r\n");
