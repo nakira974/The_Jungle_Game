@@ -4,6 +4,7 @@
 
 #include "../headers/echiquier.h"
 #include "save.h"
+#include "exception.h"
 
 
 typedef struct Animal Animal;
@@ -19,10 +20,21 @@ char coordinates[9][7];
 FILE *save_rolling_file;
 bool isWinner = false;
 
-void readSave() {
-    players = malloc(2 * sizeof(Player));
-    animals = malloc(16 * sizeof(Animal));
-    selectSavedEntities(players, animals);
+bool readSave() {
+
+    TRY
+    {
+        players = malloc(2 * sizeof(Player));
+        animals = malloc(16 * sizeof(Animal));
+        selectSavedEntities(players, animals);
+        THROW;
+    }
+    CATCH{
+        printf("Can't load save from sqlite3\r\n");
+    }
+
+    END_TRY;
+    return true;
 }
 
 void writeSave(Animal *animalT) {
