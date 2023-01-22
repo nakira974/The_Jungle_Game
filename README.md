@@ -1,4 +1,5 @@
 # The_Jungle_Game
+
 Realization of a board game in C (windows only), on the chess models. In collaboration with @Weefle. 
 
 We propose to realize the "jungle game" between two humans playing in turn
@@ -50,5 +51,8 @@ move.
 -Coins cannot enter their own sanctuary. 
 
 The project consists more specifically in modeling the game in text mode. The pawns will be letters.
-Moving parts will be done here only by entering coordinates 
+Moving parts will be done here only by entering coordinates.
+
+<h4><u><b>Set your Cmake WORKING_DIRECTORY variable at the root of the project<b><u> :<h4>
+>WORKING_DIRECTORY=%USER%/your_folder/The_Jungle_Game/
 
