@@ -7,25 +7,23 @@
 #include "exception.h"
 
 
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "OCDFAInspection"
 typedef struct Animal Animal;
 typedef struct Player Player;
 
 struct Animal *animals = NULL;
 struct Player *players = NULL;
 char *animalType = NULL;
-
-int player_Count = 2;
-int animal_Count = 16;
 char coordinates[9][7];
-FILE *save_rolling_file;
 bool isWinner = false;
 
 bool readSave() {
 
     TRY
     {
-        players = malloc(2 * sizeof(Player));
-        animals = malloc(16 * sizeof(Animal));
+        players = malloc(PLAYERS_COUNT * sizeof(Player));
+        animals = malloc(ANIMALS_COUNT * sizeof(Animal));
         selectSavedEntities(players, animals);
         THROW;
     }
@@ -40,7 +38,7 @@ bool readSave() {
 }
 
 void writeSave(Animal *animalT) {
-    insertOrUpdateSave(players, animalT, player_Count, animal_Count);
+    insertOrUpdateSave(players, animalT, PLAYERS_COUNT, ANIMALS_COUNT);
 }
 
 #ifdef _WIN32
@@ -146,7 +144,7 @@ void loadGame() {
 
         do {
 
-            for (int turn = 0; turn < player_Count; ++turn) {
+            for (int turn = 0; turn < PLAYERS_COUNT; ++turn) {
 
                 for (int q = 0; q < 150; q++) {
                     player.name[q] = players[turn].name[q];
@@ -166,7 +164,7 @@ void loadGame() {
                     animal.type = type;
                     animal.isEnemy = true;
                     animal.isAlive = true;
-                    for (nbb = 0; nbb < animal_Count; nbb++) {
+                    for (nbb = 0; nbb < ANIMALS_COUNT; nbb++) {
                         if (animals[nbb].isEnemy == true && animals[nbb].type == type &&
                             animals[nbb].isAlive == true) {
                             animal.index = animals[nbb].index;
@@ -181,7 +179,7 @@ void loadGame() {
                     animal.type = type;
                     animal.isEnemy = false;
                     animal.isAlive = true;
-                    for (nbb = 0; nbb < animal_Count; nbb++) {
+                    for (nbb = 0; nbb < ANIMALS_COUNT; nbb++) {
                         if (animals[nbb].isEnemy == false && animals[nbb].type == type &&
                             animals[nbb].isAlive == true) {
                             animal.index = animals[nbb].index;
@@ -204,7 +202,7 @@ void loadGame() {
 
                     case 'A':
                         //printf("Avancer\n");
-                        for (nb = 0; nb < animal_Count; nb++) {
+                        for (nb = 0; nb < ANIMALS_COUNT; nb++) {
                             if (animals[nb].x == animal.x && animals[nb].y == animal.y &&
                                 animals[nb].isAlive == true && animals[nb].type == type) {
                                 if (animals[nb].isEnemy == true) {
@@ -274,7 +272,7 @@ void loadGame() {
                         break;
                     case 'R':
                         //printf("Reculer\n");
-                        for (nb = 0; nb < animal_Count; nb++) {
+                        for (nb = 0; nb < ANIMALS_COUNT; nb++) {
                             if (animals[nb].x == animal.x && animals[nb].y == animal.y &&
                                 animals[nb].isAlive == true && animals[nb].type == type) {
                                 if (animals[nb].isEnemy == true) {
@@ -344,7 +342,7 @@ void loadGame() {
                         break;
                     case 'D':
                         //printf("Droite\n");
-                        for (nb = 0; nb < animal_Count; nb++) {
+                        for (nb = 0; nb < ANIMALS_COUNT; nb++) {
                             if (animals[nb].x == animal.x && animals[nb].y == animal.y &&
                                 animals[nb].isAlive == true && animals[nb].type == type) {
                                 if (animals[nb].isEnemy == true) {
@@ -414,7 +412,7 @@ void loadGame() {
                         break;
                     case 'G':
                         //printf("Gauche\n");
-                        for (nb = 0; nb < animal_Count; nb++) {
+                        for (nb = 0; nb < ANIMALS_COUNT; nb++) {
                             if (animals[nb].x == animal.x && animals[nb].y == animal.y &&
                                 animals[nb].isAlive == true && animals[nb].type == type) {
                                 if (animals[nb].isEnemy == true) {
@@ -525,7 +523,7 @@ bool hasRat(Animal animal, char direction) {
     for (i = 0; i < 9; i++) {
         for (j = 0; j < 7; j++) {
             if (coordinates[i][j] != 0) {
-                for (m = 0; m < animal_Count; m++) {
+                for (m = 0; m < ANIMALS_COUNT; m++) {
                     if (animals[m].x == i && animals[m].y == j) {
 
                         if (animals[m].type == 'R' && animals[m].isAlive && animals[m].zone == LAKE) {
@@ -614,7 +612,7 @@ bool hasRat(Animal animal, char direction) {
 void setCoord() {
     int m;
 
-    for (m = 0; m < animal_Count; m++) {
+    for (m = 0; m < ANIMALS_COUNT; m++) {
         if (!animals[m].isEnemy) {
             if (animals[m].type == ELEPHANT) {
                 animals[m].x = 2;
@@ -739,7 +737,7 @@ void printChessTable() {
     int i, j, m, b, x, y;
 
     //utiliser le meme prototype que ci-dessous pour les déplacement
-    for (b = 0; b < animal_Count; b++) {
+    for (b = 0; b < ANIMALS_COUNT; b++) {
         if (animals[b].isAlive) {
             x = animals[b].x;
             y = animals[b].y;
@@ -797,7 +795,7 @@ void printChessTable() {
                 }
             } else {
                 //utiliser le meme prototype que ci-dessous pour l'affichage des pions
-                for (m = 0; m < animal_Count; m++) {
+                for (m = 0; m < ANIMALS_COUNT; m++) {
                     if (animals[m].x == i && animals[m].y == j) {
                         //Enemy = Blue Team
                         if (animals[m].isAlive) {
@@ -861,7 +859,7 @@ void printChessTable() {
              } else {
 
                 //utiliser le meme prototype que ci-dessous pour l'affichage des pions
-                for (m = 0; m < animal_Count; m++) {
+                for (m = 0; m < ANIMALS_COUNT; m++) {
 
                     if (animalTab[m].x == i && animalTab[m].y == j) {
                         //Enemy = Blue Team
@@ -923,7 +921,7 @@ bool searchIfCanEat(struct Animal animal, bool isEnemy, struct Player *playerTab
     int b;
 
     if (isEnemy) {
-        for (b = 0; b < animal_Count; b++) {
+        for (b = 0; b < ANIMALS_COUNT; b++) {
             if (animals[b].x == animal.x && animals[b].y == animal.y && animals[b].isAlive) {
                 if (animal.canEat) {
                     if (!animals[b].isEnemy) {
@@ -943,7 +941,7 @@ bool searchIfCanEat(struct Animal animal, bool isEnemy, struct Player *playerTab
         }
 
     } else {
-        for (b = 0; b < animal_Count; b++) {
+        for (b = 0; b < ANIMALS_COUNT; b++) {
             if (animals[b].x == animal.x && animals[b].y == animal.y && animals[b].isAlive) {
                 if (animal.canEat) {
                     if (animals[b].isEnemy) {
@@ -1022,3 +1020,5 @@ void generateChessSet() {
 
 }
 
+
+#pragma clang diagnostic pop

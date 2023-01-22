@@ -34,6 +34,9 @@
 struct Animal;
 struct Player;
 
+const int PLAYERS_COUNT = 2;
+const int ANIMALS_COUNT = 16;
+
 
 struct Player {
 
