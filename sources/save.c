@@ -5,28 +5,26 @@
 #include "../headers/exception.h"
 
 
-sqlite3 * getDbContext() {
+sqlite3 *getDbContext() {
     sqlite3 *db;
     int rc;
 
     TRY
-    {
-        rc = sqlite3_open("./data/save.dat", &db);
-        if (rc)
-        {
-            fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
-            sqlite3_close(db);
-            THROW;
-        }
-        else{
-            printf((const char *) stdout, "[SQL] GAME DATABASE INSTANCE HAS BEEN CREATED");
-        }
-    }
-    CATCH
-        {
-        printf("SqlException has been thrown\r\n");
-        return NULL;
-        }
+            {
+                rc = sqlite3_open("./data/save.dat", &db);
+                if (rc) {
+                    fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
+                    sqlite3_close(db);
+                    THROW;
+                } else {
+                    printf((const char *) stdout, "[SQL] GAME DATABASE INSTANCE HAS BEEN CREATED");
+                }
+            }
+        CATCH
+            {
+                printf("SqlException has been thrown\r\n");
+                return NULL;
+            }
 
     END_TRY;
 
@@ -120,23 +118,21 @@ int createGameSaveTable(sqlite3 *db) {
     TRY
             {
                 rc = sqlite3_exec(db, sql, 0, 0, &err_msg);
-                if (rc != SQLITE_OK)
-                {
+                if (rc != SQLITE_OK) {
                     fprintf(stderr, "SQL error: %s\n", err_msg);
                     sqlite3_free(err_msg);
                     THROW;
-                }
-                else{
+                } else {
                     printf((const char *) stdout, "[SQL] GAME TABLE HAS BEEN CREATED");
                 }
             }
 
 
-            CATCH
-                {
-                    printf("SqlException has been thrown\r\n");
-                    return 1;
-                }
+        CATCH
+            {
+                printf("SqlException has been thrown\r\n");
+                return 1;
+            }
 
     END_TRY;
 

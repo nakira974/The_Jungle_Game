@@ -10,7 +10,7 @@ typedef struct Animal Animal;
 typedef struct Player Player;
 
 struct Animal *animals = NULL;
-struct Player *players = NULL ;
+struct Player *players = NULL;
 char *animalType = NULL;
 
 int player_Count = 2;
@@ -44,7 +44,8 @@ bool readSave() {
     fseek(save_rolling_file, 1, SEEK_CUR);
     for (m = 0; m < animal_Count; m++) {
         //on récupère les infos des animaux
-        fscanf(save_rolling_file, "type=%c: x=%i, y=%i, enemy=%d, alive=%d, eat=%d, index=%i, zone=%i", &animals[m].type,
+        fscanf(save_rolling_file, "type=%c: x=%i, y=%i, enemy=%d, alive=%d, eat=%d, index=%i, zone=%i",
+               &animals[m].type,
                &animals[m].x, &animals[m].y, &animals[m].isEnemy, &animals[m].isAlive, &animals[m].canEat,
                &animals[m].index, &animals[m].zone);
         //on saute chaque ligne

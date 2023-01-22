@@ -20,9 +20,9 @@ static int callback(void *NotUsed, int argc, char **argv, char **azColName) {
     return 0;
 }
 
-sqlite3 * getDbContext();
+sqlite3 *getDbContext();
 
-int createGameSaveTable(sqlite3*db);
+int createGameSaveTable(sqlite3 *db);
 
 void insertOrUpdateSave(struct Player *players, struct Animal *animals, int nPlayers, int nAnimals);
 

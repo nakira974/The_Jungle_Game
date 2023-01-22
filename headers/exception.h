@@ -4,6 +4,7 @@
 
 #ifndef JUNGLEGAME_EXCEPTION_H
 #define JUNGLEGAME_EXCEPTION_H
+
 #include <stdio.h>
 #include <setjmp.h>
 
