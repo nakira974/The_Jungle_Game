@@ -3,7 +3,7 @@
 //
 #include "database/save.h"
 #include "tools/exception.h"
-
+#include "tools/utilities.h"
 
 
 sqlite3 *getDbContext() {
@@ -143,12 +143,14 @@ int createGameSaveTable(sqlite3 *db) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wincompatible-pointer-types-discards-qualifiers"
 
+#pragma clang diagnostic ignored "-Wformat"
 _Noreturn void selectSavedEntities(struct Player *players, struct Animal *animals) {
 
     for(int player=0; player < 2; player++) {
         players[player].id = 0;
     }
-        sqlite3 *db = getDbContext();
+
+    sqlite3 *db = getDbContext();
     char *sql = "SELECT * FROM Player LIMIT 2;";
 
     sqlite3_stmt *pStmt;
@@ -173,11 +175,11 @@ _Noreturn void selectSavedEntities(struct Player *players, struct Animal *animal
     for(int player=0; player < 2; player++){
         if(players[player].id != 0){
             sqlite3_stmt *pCurrentStatement;
-            char* playerId = intToString(players[player].id);
+            char* playerId = toString(players[player].id);
             sql = "SELECT * FROM Animal WHERE playerId=";
-            sql =concat(sql, playerId);
+            sql = concat(sql, playerId);
             sql = concat(sql, ";");
-            //TODO Fixer l'exception d'accès concurrent à la db ???fix
+
             sqlite3_prepare_v2(db, sql, -1, &pCurrentStatement, 0);
             i = 0;
             //TODO Throw exceptions here when null entries
@@ -191,7 +193,7 @@ _Noreturn void selectSavedEntities(struct Player *players, struct Animal *animal
                 animals[i].canEat = sqlite3_column_int(pCurrentStatement, 6);
                 animals[i].index = sqlite3_column_int(pCurrentStatement, 7);
                 animals[i].zone = sqlite3_column_int(pCurrentStatement, 8);
-
+                fprintf(stdout, "ANIMAL ID: %s HAS BEEN SELECTED\n", animals[i].zone = sqlite3_column_int(pCurrentStatement, 0));
                 i++;
 
             }

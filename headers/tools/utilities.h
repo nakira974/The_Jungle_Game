@@ -4,7 +4,7 @@
 
 #ifndef JUNGLEGAME_UTILITIES_H
 #define JUNGLEGAME_UTILITIES_H
-
+char* toString(int nb);
 char* concat(char *s1, char *s2);
 void swap(char* a, char* b);
 void reverse(const char str[], int length);

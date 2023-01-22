@@ -38,6 +38,55 @@ void reverse(const char str[], int length)
 }
 #pragma clang diagnostic pop
 
+
+char *toString(int num)
+{
+    int i = 0, j = 0, temp = 0, len = 0;
+    char *str = NULL;
+
+    temp = num;
+    if (num < 0)
+    {
+        num = -num;
+        len++;
+    }
+    while (temp)
+    {
+        len++;
+        temp /= 10;
+    }
+    str = (char *)malloc(sizeof(char) * (len + 1));
+    if (str == NULL)
+    {
+        printf("Memory allocation failed\n");
+        return NULL;
+    }
+    if (num == 0)
+    {
+        str[i++] = '0';
+    }
+    while (num)
+    {
+        str[i++] = (num % 10) + '0';
+        num /= 10;
+    }
+    if (temp < 0)
+    {
+        str[i++] = '-';
+    }
+    str[i] = '\0';
+    i--;
+    while (j < i)
+    {
+        temp = str[j];
+        str[j] = str[i];
+        str[i] = temp;
+        j++;
+        i--;
+    }
+    return str;
+}
+
 char* intToString(int num)
 {
     int i = 0;
