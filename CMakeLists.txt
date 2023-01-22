@@ -17,13 +17,6 @@ SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 
 add_executable(${CMAKE_PROJECT_NAME} main.c ${SOURCES_FILES} ${HEADERS_FILES})
 
-find_package (SQLite3)
-if (SQLITE3_FOUND)
-    include_directories(${SQLITE3_INCLUDE_DIRS})
-    target_link_libraries (tutorial ${SQLITE3_LIBRARIES})
-    MESSAGE("SQLITE3 HAS BEEN FOUND")
-else ()
-    MESSAGE("SQLITE3 HAS NOT BEEN FOUND")
-endif (SQLITE3_FOUND)
+
 
 target_link_libraries(${CMAKE_PROJECT_NAME} -lws2_32)

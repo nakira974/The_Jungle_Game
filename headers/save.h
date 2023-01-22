@@ -8,8 +8,13 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include "echiquier.h"
+#include "sqlite3.h"
 
-__attribute__((aligned(16))) char* sqlite_statement;
+char* sqlite_statement;
+sqlite3 *database;
+char *zErrMsg;
+int db_instance;
+char *save_statement;
 
 static int callback(void *NotUsed, int argc, char **argv, char **azColName) {
     int i;
