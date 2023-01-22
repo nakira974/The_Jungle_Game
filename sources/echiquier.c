@@ -3,8 +3,8 @@
 //
 
 #include "../headers/echiquier.h"
-#include "save.h"
-#include "exception.h"
+#include "database/save.h"
+#include "tools/exception.h"
 
 
 #pragma clang diagnostic push
