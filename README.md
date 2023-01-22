@@ -53,6 +53,6 @@ move.
 The project consists more specifically in modeling the game in text mode. The pawns will be letters.
 Moving parts will be done here only by entering coordinates.
 
-<h4><u><b>Set your Cmake WORKING_DIRECTORY variable at the root of the project<b><u> :<h4>
+<h4><u><b>Set your Cmake WORKING_DIRECTORY variable at the root of the project</b></u> :</h4>
 >WORKING_DIRECTORY=%USER%/your_folder/The_Jungle_Game/
 
