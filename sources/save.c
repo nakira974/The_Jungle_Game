@@ -236,7 +236,10 @@ int createGameSaveTable(sqlite3 *db) {
 
 _Noreturn void selectSavedEntities(struct Player *players, struct Animal *animals) {
 
-    sqlite3 *db = getDbContext();
+    for(int player=0; player < 2; player++) {
+        players[player].id = 0;
+    }
+        sqlite3 *db = getDbContext();
     char *sql = "SELECT * FROM Player LIMIT 2;";
 
     sqlite3_stmt *pStmt;
@@ -246,43 +249,48 @@ _Noreturn void selectSavedEntities(struct Player *players, struct Animal *animal
 
     //TODO Throw exceptions here when null entries
     while (sqlite3_step(pStmt) == SQLITE_ROW) {
-        players[i].id = sqlite3_column_int(pStmt, 0);
-        sqlite3_text_column_to_string(sqlite3_column_text(pStmt, 1), (char *) players[i].name);
-        players[i].isEnemy = sqlite3_column_int(pStmt, 2);
-        players[i].score = sqlite3_column_int(pStmt, 3);
-        fprintf(stdout, "USER %s %d %d HAS BEEN SELECTED\n",players[i].name, players[i].isEnemy, players[i].score );
-        i++;
+        if(sqlite3_column_int(pStmt, 0) != 0){
+            players[i].id = sqlite3_column_int(pStmt, 0);
+            sqlite3_text_column_to_string(sqlite3_column_text(pStmt, 1), (char *) players[i].name);
+            players[i].isEnemy = sqlite3_column_int(pStmt, 2);
+            players[i].score = sqlite3_column_int(pStmt, 3);
+            fprintf(stdout, "USER %s %d %d HAS BEEN SELECTED\n",players[i].name, players[i].isEnemy, players[i].score );
+            i++;
+        }
     }
 
     sqlite3_finalize(pStmt);
 
     for(int player=0; player < 2; player++){
+        if(players[player].id != 0){
+            sqlite3_stmt *pCurrentStatement;
+            char* playerId = intToString(players[player].id);
+            sql = "SELECT * FROM Animal WHERE playerId=";
+            sql =concat(sql, playerId);
+            sql = concat(sql, ";");
+            //TODO Fixer l'exception d'accès concurrent à la db ???fix
+            sqlite3_prepare_v2(db, sql, -1, &pCurrentStatement, 0);
+            i = 0;
+            //TODO Throw exceptions here when null entries
+            while (sqlite3_step(pCurrentStatement) == SQLITE_ROW) {
 
-        char* playerId = intToString(players[player].id);
-        sql = "SELECT * FROM Animal WHERE playerId=";
-        sql =concat(sql, playerId);
-        sql = concat(sql, ";");
-        //TODO Fixer l'exception d'accès concurrent à la db ???
-        sqlite3_prepare_v2(db, sql, -1, &pStmt, 0);
-        i = 0;
-        //TODO Throw exceptions here when null entries
-        while (sqlite3_step(pStmt) == SQLITE_ROW) {
+                animals[i].type = sqlite3_text_column_to_char(sqlite3_column_text(pCurrentStatement, 1));
+                animals[i].x = sqlite3_column_int(pCurrentStatement, 2);
+                animals[i].y = sqlite3_column_int(pCurrentStatement, 3);
+                animals[i].isEnemy = sqlite3_column_int(pCurrentStatement, 4);
+                animals[i].isAlive = sqlite3_column_int(pCurrentStatement, 5);
+                animals[i].canEat = sqlite3_column_int(pCurrentStatement, 6);
+                animals[i].index = sqlite3_column_int(pCurrentStatement, 7);
+                animals[i].zone = sqlite3_column_int(pCurrentStatement, 8);
 
-            animals[i].type = sqlite3_text_column_to_char(sqlite3_column_text(pStmt, 1));
-            animals[i].x = sqlite3_column_int(pStmt, 2);
-            animals[i].y = sqlite3_column_int(pStmt, 3);
-            animals[i].isEnemy = sqlite3_column_int(pStmt, 4);
-            animals[i].isAlive = sqlite3_column_int(pStmt, 5);
-            animals[i].canEat = sqlite3_column_int(pStmt, 6);
-            animals[i].index = sqlite3_column_int(pStmt, 7);
-            animals[i].zone = sqlite3_column_int(pStmt, 8);
+                i++;
 
-            i++;
+            }
+            sqlite3_finalize(pStmt);
 
+            sqlite3_close(db);
         }
-        sqlite3_finalize(pStmt);
 
-        sqlite3_close(db);
     }
 
 }
