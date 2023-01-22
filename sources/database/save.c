@@ -32,7 +32,6 @@ sqlite3 *getDbContext() {
     return db;
 }
 
-
 void insertOrUpdateSave(struct Player *players, struct Animal *animals, int nPlayers, int nAnimals) {
 
     sqlite3 *dbContext = getDbContext();
@@ -70,7 +69,8 @@ void insertOrUpdateSave(struct Player *players, struct Animal *animals, int nPla
         sqlite3_bind_int(pStmt, 6, animals[i].canEat);
         sqlite3_bind_int(pStmt, 7, animals[i].index);
         sqlite3_bind_text(pStmt, 8, (const char *) &animals[i].zone, 1, SQLITE_STATIC);
-        sqlite3_bind_int(pStmt, 9, animals[i].index);
+        //TODO Need to be fixed
+        sqlite3_bind_int(pStmt, 9, animals[i].isEnemy ? players[0].id : players[1].id);
 
         sqlite3_step(pStmt);
         sqlite3_reset(pStmt);
@@ -88,7 +88,7 @@ int createGameSaveTable(sqlite3 *db) {
 
     char *sql = "CREATE TABLE IF NOT EXISTS  Player (\n"
                 "    id INTEGER PRIMARY KEY AUTOINCREMENT,\n"
-                "    name TEXT NOT NULL,\n"
+                "    name TEXT NOT NULL ,\n"
                 "    isEnemy BOOLEAN NOT NULL CHECK (isEnemy IN (0, 1)),\n"
                 "    score INTEGER NOT NULL\n"
                 ");"
@@ -115,7 +115,9 @@ int createGameSaveTable(sqlite3 *db) {
                 "WHEN NEW.isAlive = 1\n"
                 "BEGIN\n"
                 "    DELETE FROM Animal WHERE id = NEW.id;\n"
-                "END;";
+                "END;"
+                "CREATE UNIQUE INDEX idx_player_name ON Player (name);\n"
+                "CREATE UNIQUE INDEX idx_animal_type ON Animal (isEnemy, type);";
     TRY
             {
                 rc = sqlite3_exec(db, sql, 0, 0, &err_msg);
