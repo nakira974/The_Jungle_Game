@@ -523,6 +523,7 @@ void loadGame() {
 
 
             }
+            writeSave(animals);
             printf("Voulez-vous continuer? (Oui: Entrer / Non: Echap)");
 
 #ifdef _WIN32

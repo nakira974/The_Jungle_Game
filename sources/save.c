@@ -57,7 +57,7 @@ void insertOrUpdateSave(struct Player *players, struct Animal *animals, int nPla
 
     sqlite3_finalize(pStmt);
 
-    sql = "INSERT OR REPLACE INTO Animal(type, x, y, isEnemy, isAlive, canEat, index, zone, playerId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
+    sql = "INSERT OR REPLACE INTO Animal(type, x, y, isEnemy, isAlive, canEat, table_index, zone, playerId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
     sqlite3_prepare_v2(dbContext, sql, -1, &pStmt, 0);
 
@@ -101,7 +101,7 @@ int createGameSaveTable(sqlite3 *db) {
                 "    isEnemy BOOLEAN NOT NULL CHECK (isEnemy IN (0, 1)),\n"
                 "    isAlive BOOLEAN NOT NULL CHECK (isAlive IN (0, 1)),\n"
                 "    canEat BOOLEAN NOT NULL CHECK (canEat IN (0, 1)),\n"
-                "    index INTEGER NOT NULL,\n"
+                "    table_index INTEGER NOT NULL,\n"
                 "    zone TEXT NOT NULL,\n"
                 "    playerId INTEGER NOT NULL,\n"
                 "    FOREIGN KEY(playerId) REFERENCES Player(id)\n"
