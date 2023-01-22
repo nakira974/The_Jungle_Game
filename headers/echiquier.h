@@ -33,9 +33,7 @@
 
 struct Animal;
 struct Player;
-struct Animal *animalTab;
-struct Player *playerTab;
-char *animalType;
+
 
 struct Player {
 
@@ -49,23 +47,23 @@ enum Type {
 
     ELEPHANT = 'E',
     LION = 'L',
-    TIGRE = 'T',
-    PANTHERE = 'P',
-    CHIEN = 'C',
-    LOUP = 'O',
-    CHAT = 'H',
+    TIGER = 'T',
+    PANTHER = 'P',
+    DOG = 'C',
+    WOLF = 'O',
+    CAT = 'H',
     RAT = 'R'
 
 };
 
 enum Zone {
 
-    PIEGE_BLEU,
-    PIEGE_ROUGE,
-    SANCTUAIRE_BLEU,
-    SANCTUAIRE_ROUGE,
-    LAC,
-    AUCUNE
+    BLUE_TRAP,
+    RED_TRAP,
+    BLUE_SANCTUARY,
+    RED_SANCTUARY,
+    LAKE,
+    NONE
 
 };
 
@@ -82,22 +80,22 @@ struct Animal {
 
 };
 
-void afficherEchiquier();
+void printChessTable();
 
 void color(int t, int f);
 
-bool searchCanEat(struct Animal animal, bool isEnemy, struct Player *playerTab);
+bool searchIfCanEat(struct Animal animal, bool isEnemy, struct Player *playerTab);
 
 bool hasRat(struct Animal, char direction);
 
-bool checkEat(struct Animal *enemy, struct Animal ally, struct Player *playerTab);
+bool canEat(struct Animal *enemy, struct Animal ally, struct Player *playerTab);
 
-void GenererEchequier();
+void generateChessSet();
 
-enum Zone checkZone(struct Animal animal);
+enum Zone movingCheck(struct Animal animal);
 
 void loadGame();
 
-int lire(char *chaine, int longueur);
+int readString(char *chaine, int longueur);
 
 #endif //PROJETJUNGLE_ECHIQUIER_H
