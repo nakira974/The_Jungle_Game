@@ -31,9 +31,11 @@ bool readSave() {
     }
     CATCH{
         printf("Can't load save from sqlite3\r\n");
+        return false;
     }
 
     END_TRY;
+    printf("Save has been loaded from sqlite3\r\n");
     return true;
 }
 
