@@ -19,40 +19,10 @@ char coordinates[9][7];
 FILE *save_rolling_file;
 bool isWinner = false;
 
-bool readSave() {
-
-    // Remplacé le 21/11/2020 pour test
-    save_rolling_file = fopen("save.txt", "rb");
-    //save_rolling_file = fdopen("save.txt", "rb");
-
-    if (!save_rolling_file) {
-        return false;
-    }
-    int m;
+void readSave() {
     players = malloc(2 * sizeof(Player));
-    fscanf(save_rolling_file, "Joueur 1: name=%s", players[0].name);
-    fseek(save_rolling_file, 1, SEEK_CUR);
-    fscanf(save_rolling_file, "enemy=%i", &players[0].isEnemy);
-    fseek(save_rolling_file, 1, SEEK_CUR);
-    fscanf(save_rolling_file, "score=%i", &players[0].score);
-    fseek(save_rolling_file, 1, SEEK_CUR);
-    fscanf(save_rolling_file, "Joueur 2: name=%s", players[1].name);
-    fseek(save_rolling_file, 1, SEEK_CUR);
-    fscanf(save_rolling_file, "enemy=%i", &players[1].isEnemy);
-    fseek(save_rolling_file, 1, SEEK_CUR);
-    fscanf(save_rolling_file, "score=%i", &players[1].score);
-    fseek(save_rolling_file, 1, SEEK_CUR);
-    for (m = 0; m < animal_Count; m++) {
-        //on récupère les infos des animaux
-        fscanf(save_rolling_file, "type=%c: x=%i, y=%i, enemy=%d, alive=%d, eat=%d, index=%i, zone=%i",
-               &animals[m].type,
-               &animals[m].x, &animals[m].y, &animals[m].isEnemy, &animals[m].isAlive, &animals[m].canEat,
-               &animals[m].index, &animals[m].zone);
-        //on saute chaque ligne
-        fseek(save_rolling_file, 1, SEEK_CUR);
-    }
-    fclose(save_rolling_file);
-    return true;
+    animals = malloc(16 * sizeof(Animal));
+    selectSavedEntities(players, animals);
 }
 
 void writeSave(Animal *animalT) {

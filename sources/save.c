@@ -138,3 +138,51 @@ int createGameSaveTable(sqlite3 *db) {
 
     return 0;
 }
+
+void selectSavedEntities(struct Player *players, struct Animal *animals) {
+
+    sqlite3 *db = getDbContext();
+    char *sql = "SELECT * FROM Player;";
+
+    sqlite3_stmt *pStmt;
+    sqlite3_prepare_v2(db, sql, -1, &pStmt, 0);
+
+    int i = 0;
+
+    while (sqlite3_step(pStmt) == SQLITE_ROW) {
+
+        players[i].name = sqlite3_column_text(pStmt, 1);
+        players[i].isEnemy = sqlite3_column_int(pStmt, 2);
+        players[i].score = sqlite3_column_int(pStmt, 3);
+
+        i++;
+
+    }
+
+    sqlite3_finalize(pStmt);
+
+    sql = "SELECT * FROM Animal;";
+
+    sqlite3_prepare_v2(db, sql, -1, &pStmt, 0);
+
+    i = 0;
+
+    while (sqlite3_step(pStmt) == SQLITE_ROW) {
+
+        animals[i].type = sqlite3_column_text(pStmt, 1);
+        animals[i].x = sqlite3_column_int(pStmt, 2);
+        animals[i].y = sqlite3_column_int(pStmt, 3);
+        animals[i].isEnemy = sqlite3_column_int(pStmt, 4);
+        animals[i].isAlive = sqlite3_column_int(pStmt, 5);
+        animals[i].canEat = sqlite3_column_int(pStmt, 6);
+        animals[i].index = sqlite3_column_int(pStmt, 7);
+        animals[i].zone = sqlite3_column_text(pStmt, 8);
+
+        i++;
+
+    }
+
+    sqlite3_finalize(pStmt);
+
+    sqlite3_close(db);
+}
