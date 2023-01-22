@@ -3,6 +3,7 @@
 //
 
 #include "../headers/echiquier.h"
+#include "save.h"
 
 
 typedef struct Animal Animal;
@@ -53,36 +54,8 @@ bool readSave() {
     return true;
 }
 
-bool writeSave(Animal *animalT) {
-
-    //remove("save.txt");
-    save_rolling_file = fopen("save.txt", "wb");
-    if (!save_rolling_file) {
-        return false;
-    }
-
-    int m;
-    fprintf(save_rolling_file, "Joueur 1: name=%s\n", players[0].name);
-    fprintf(save_rolling_file, "enemy=%i\n", players[0].isEnemy);
-    fprintf(save_rolling_file, "score=%i\n", players[0].score);
-    fprintf(save_rolling_file, "Joueur 2: name=%s\n", players[1].name);
-    fprintf(save_rolling_file, "enemy=%i\n", players[1].isEnemy);
-    fprintf(save_rolling_file, "score=%i\n", players[1].score);
-    for (m = 0; m < animal_Count; m++) {
-
-        //on sauvegarde les infos de nos animaux
-        fprintf(save_rolling_file, "type=%c: ", animalT[m].type);
-        fprintf(save_rolling_file, "x=%i, ", animalT[m].x);
-        fprintf(save_rolling_file, "y=%i, ", animalT[m].y);
-        fprintf(save_rolling_file, "enemy=%d, ", animalT[m].isEnemy);
-        fprintf(save_rolling_file, "alive=%d, ", animalT[m].isAlive);
-        fprintf(save_rolling_file, "eat=%d, ", animalT[m].canEat);
-        fprintf(save_rolling_file, "index=%i, ", animalT[m].index);
-        fprintf(save_rolling_file, "zone=%i\n", animalT[m].zone);
-        //on saute une ligne à la fin pour passer à l'animal suivant
-    }
-    fclose(save_rolling_file);
-    return true;
+void writeSave(Animal *animalT) {
+    insertOrUpdateSave(players, animalT, player_Count, animal_Count);
 }
 
 #ifdef _WIN32

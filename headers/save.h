@@ -10,11 +10,6 @@
 #include "echiquier.h"
 #include "sqlite3.h"
 
-char* sqlite_statement;
-sqlite3 *database;
-char *zErrMsg;
-int db_instance;
-char *save_statement;
 
 static int callback(void *NotUsed, int argc, char **argv, char **azColName) {
     int i;
@@ -25,14 +20,10 @@ static int callback(void *NotUsed, int argc, char **argv, char **azColName) {
     return 0;
 }
 
-int getDbContext();
+sqlite3 * getDbContext();
 
-bool checkIfTableExists(char *tableName);
+int createGameSaveTable(sqlite3*db);
 
-bool checkIfDatabaseExists(char *databaseName);
-
-void createGameSaveStatement(struct Player *players, struct Animal *animals);
-
-int executeGameSaveStatement();
+void insertOrUpdateSave(struct Player *players, struct Animal *animals, int nPlayers, int nAnimals);
 
 #endif //JUNGLEGAME_SAVE_H
