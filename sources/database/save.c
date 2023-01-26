@@ -5,6 +5,8 @@
 #include "tools/exception.h"
 #include "tools/utilities.h"
 
+int insertOrUpdatePlayers(struct Player *players, int nPlayers, sqlite3 *dbContext, sqlite3_stmt *pStmt);
+int insertOrUpdateAnimals(struct Animal *animals, int nAnimals, struct Player *players, sqlite3 *dbContext, sqlite3_stmt *pStmt);
 
 sqlite3 *getDbContext() {
     sqlite3 *db;
@@ -32,53 +34,42 @@ sqlite3 *getDbContext() {
     return db;
 }
 
+int selectPlayerId(struct Player player, sqlite3 *dbContext){
+    int result = 0;
+    char *sql = "SELECT id FROM Player WHERE name= ? ;";
+    sqlite3_stmt *pStmt;
+
+    TRY{
+        sqlite3_prepare_v2(dbContext, sql, -1, &pStmt, 0);
+        sqlite3_bind_text(pStmt, 1, (const char *) player.name, -1, SQLITE_STATIC);
+        const char *finalRequest = sqlite3_sql(pStmt);
+        fprintf(stdout, "%s", finalRequest);
+        while (sqlite3_step(pStmt) == SQLITE_ROW) {
+            if(sqlite3_column_int(pStmt, 0) != 0){
+                result = sqlite3_column_int(pStmt, 0);
+            }
+        }
+
+        sqlite3_finalize(pStmt);
+        return result;
+        THROW;
+            //TODO Handle sqlite_bind_text exceptions/error codes
+    }CATCH{
+                fprintf(stdout, "Error while selecting player:%s id", player.name);
+                return -1;
+    };
+    END_TRY;
+
+}
+
 void insertOrUpdateSave(struct Player *players, struct Animal *animals, int nPlayers, int nAnimals) {
 
     sqlite3 *dbContext = getDbContext();
+    sqlite3_stmt *pt_statement;
     createGameSaveTable(dbContext);
 
-    char *sql = "INSERT OR REPLACE INTO Player(name, isEnemy, score) VALUES (?, ?, ?);";
-
-    sqlite3_stmt *pStmt;
-    sqlite3_prepare_v2(dbContext, sql, -1, &pStmt, 0);
-
-    for (int i = 0; i < nPlayers; i++) {
-
-        sqlite3_bind_text(pStmt, 1, (const char *) players[i].name, -1, SQLITE_STATIC);
-        sqlite3_bind_int(pStmt, 2, players[i].isEnemy);
-        sqlite3_bind_int(pStmt, 3, players[i].score);
-
-        sqlite3_step(pStmt);
-        sqlite3_reset(pStmt);
-
-    }
-
-    sqlite3_finalize(pStmt);
-
-    sql = "INSERT OR REPLACE INTO Animal(type, x, y, isEnemy, isAlive, canEat, table_index, zone, playerId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
-
-    sqlite3_prepare_v2(dbContext, sql, -1, &pStmt, 0);
-
-    for (int i = 0; i < nAnimals; i++) {
-
-        sqlite3_bind_text(pStmt, 1, &animals[i].type, 1, SQLITE_STATIC);
-        sqlite3_bind_int(pStmt, 2, animals[i].x);
-        sqlite3_bind_int(pStmt, 3, animals[i].y);
-        sqlite3_bind_int(pStmt, 4, animals[i].isEnemy);
-        sqlite3_bind_int(pStmt, 5, animals[i].isAlive);
-        sqlite3_bind_int(pStmt, 6, animals[i].canEat);
-        sqlite3_bind_int(pStmt, 7, animals[i].index);
-        sqlite3_bind_text(pStmt, 8, (const char *) &animals[i].zone, 1, SQLITE_STATIC);
-        //TODO Need to be fixed
-        sqlite3_bind_int(pStmt, 9, animals[i].isEnemy ? players[0].id : players[1].id);
-
-        sqlite3_step(pStmt);
-        sqlite3_reset(pStmt);
-
-    }
-
-    sqlite3_finalize(pStmt);
-
+    insertOrUpdatePlayers(players, nPlayers, dbContext, pt_statement);
+    insertOrUpdateAnimals(animals, nAnimals, players, dbContext, pt_statement);
     sqlite3_close(dbContext);
 }
 
@@ -126,11 +117,9 @@ int createGameSaveTable(sqlite3 *db) {
                     sqlite3_free(err_msg);
                     THROW;
                 } else {
-                    printf((const char *) stdout, "[SQL] GAME TABLE HAS BEEN CREATED");
+                    printf((const char *) stdout, "[SQL] GAME TABLES HAS BEEN CREATED");
                 }
             }
-
-
         CATCH
             {
                 printf("SqlException has been thrown\r\n");
@@ -142,6 +131,62 @@ int createGameSaveTable(sqlite3 *db) {
     return 0;
 }
 
+int insertOrUpdateAnimals(struct Animal *animals, int nAnimals, struct Player *players, sqlite3 *dbContext, sqlite3_stmt *pStmt){
+    int result = 0;
+    char *sql = "INSERT OR REPLACE INTO Animal(type, x, y, isEnemy, isAlive, canEat, table_index, zone, playerId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
+
+    sqlite3_prepare_v2(dbContext, sql, -1, &pStmt, 0);
+
+    for (int i = 0; i < nAnimals; i++) {
+
+        sqlite3_bind_text(pStmt, 1, &animals[i].type, 1, SQLITE_STATIC);
+        sqlite3_bind_int(pStmt, 2, animals[i].x);
+        sqlite3_bind_int(pStmt, 3, animals[i].y);
+        sqlite3_bind_int(pStmt, 4, animals[i].isEnemy);
+        sqlite3_bind_int(pStmt, 5, animals[i].isAlive);
+        sqlite3_bind_int(pStmt, 6, animals[i].canEat);
+        sqlite3_bind_int(pStmt, 7, animals[i].index);
+        sqlite3_bind_text(pStmt, 8, (const char *) &animals[i].zone, 1, SQLITE_STATIC);
+        //TODO Need to be fixed
+        sqlite3_bind_int(pStmt, 9, animals[i].isEnemy ? players[0].id : players[1].id);
+
+        sqlite3_step(pStmt);
+        sqlite3_reset(pStmt);
+
+    }
+
+    sqlite3_finalize(pStmt);
+
+    return result;
+}
+
+int insertOrUpdatePlayers(struct Player *players, int nPlayers, sqlite3 *dbContext, sqlite3_stmt *pStmt){
+    int result = 0;
+    char *sql = "INSERT OR REPLACE INTO Player(name, isEnemy, score) VALUES (?, ?, ?);";
+
+    TRY{
+        sqlite3_prepare_v2(dbContext, sql, -1, &pStmt, 0);
+                for (int i = 0; i < nPlayers; i++) {
+
+                    sqlite3_bind_text(pStmt, 1, (const char *) players[i].name, -1, SQLITE_STATIC);
+                    sqlite3_bind_int(pStmt, 2, players[i].isEnemy);
+                    sqlite3_bind_int(pStmt, 3, players[i].score);
+                    sqlite3_step(pStmt);
+                    sqlite3_reset(pStmt);
+                }
+                result = sqlite3_finalize(pStmt);
+                for(int i = 0; i < nPlayers; i++){
+                    players[i].id = selectPlayerId(players[i], dbContext);
+                }
+                return result;
+                THROW;
+            }CATCH{
+                fprintf(stderr,"Error while insertion or updating of players");
+                return result;
+    }
+    END_TRY;
+
+}
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wincompatible-pointer-types-discards-qualifiers"
 
