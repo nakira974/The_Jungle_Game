@@ -28,7 +28,8 @@ bool readSave() {
     {
         players = malloc(PLAYERS_COUNT * sizeof(Player));
         animals = malloc(ANIMALS_COUNT * sizeof(Animal));
-        errorCode = selectSavedEntities(players, animals);
+        errorCode= selectSavedEntities(players, animals);
+
         if(errorCode != 0)
             THROW;
         else{
@@ -1021,6 +1022,7 @@ void generateChessSet() {
 
     //printChessTable();
     loadGame();
+
     if (!isWinner) {
         writeSave(animals);
     }
