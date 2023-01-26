@@ -37,7 +37,8 @@ struct Player;
 
 struct Player {
 
-    char name[150];
+    int id;
+    char* name[150];
     bool isEnemy;
     int score;
 
