@@ -93,34 +93,7 @@ void loadGame() {
 
 
     do {
-
-        //printf("Voulez-vous jouer en solo(1) ou en multijoueur(2) ?:\n");
-        printf("\n");
-        printf("\n");
-        printf("\n");
-        printf("\n");
-        printf("\n");
-        printf("\n");
-        printf("   ////   //   //    ///    //  //////   //      //// ");
-        printf("   ///   //    //   // // //  //        //     //     ");
-        printf("   ///   //   //  //  // //  //   ///  //      //     ");
-        printf("/////     /////   //   ///   //////    //////  /////  ");
-        printf("\n");
-        printf("\n");
-        printf("             //////     //     //   ///    ////       ");
-        printf("           //         // //   //// ////  //           ");
-        printf("          //   ///    /////   // //  //  //           ");
-        printf("          //////     //  //  //      //  /////        ");
-        printf("\n");
-        printf("\n");
-        printf("                      [1] Solo Game                   ");
-        printf("\n");
-        printf("                      [2] Multiplayer Game            ");
-        printf("\n");
-        printf("\n");
-        printf("\n");
-        printf("\n");
-        printf("\n");
+        printGameLogo();
         scanf("%c", &gameType);
 
     } while (strlen(&gameType) == 0);
@@ -1027,6 +1000,37 @@ void generateChessSet() {
         writeSave(animals);
     }
 
+}
+
+void printGameLogo() {
+    //printf("Voulez-vous jouer en solo(1) ou en multijoueur(2) ?:\n");
+    printf("\n");
+    printf("\n");
+    printf("\n");
+    printf("\n");
+    printf("\n");
+    printf("\n");
+    printf("   ////   //   //    ///    //  //////   //      //// \n");
+    printf("   ///   //    //   // // //  //        //     //     \n");
+    printf("   ///   //   //  //  // //  //   ///  //      //     \n");
+    printf("/////     /////   //   ///   //////    //////  /////  \n");
+    printf("\n");
+    printf("\n");
+    printf("             //////     //     //   ///    ////       \n");
+    printf("           //         // //   //// ////  //           \n");
+    printf("          //   ///    /////   // //  //  //           \n");
+    printf("          //////     //  //  //      //  /////        \n");
+    printf("\n");
+    printf("\n");
+    printf("                      [1] Solo Game                   ");
+    printf("\n");
+    printf("                      [2] Multiplayer Game            ");
+    printf("\n");
+    printf("\n");
+    printf("\n");
+    printf("\n");
+    printf("\n");
+    fprintf(stdout, "USER@>");
 }
 
 

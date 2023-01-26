@@ -228,7 +228,7 @@ int selectSavedEntities(struct Player *players, struct Animal *animals) {
             result = sqlite3_bind_int(pStmt, 1, players[player].id);
             if(result)
                 return result;
-            i = 0;
+            i = players[player].isEnemy ? 0 : 8;
             //TODO Throw exceptions here when null entries
             while (sqlite3_step(pStmt) == SQLITE_ROW) {
 
@@ -243,7 +243,7 @@ int selectSavedEntities(struct Player *players, struct Animal *animals) {
                 i++;
             }
 
-            fprintf(stdout, "USER %s 's animals have been selected\n", players[i].name);
+            fprintf(stdout, "USER %s 's animals have been selected\n", playerId);
             sqlite3_finalize(pStmt);
         }
 
