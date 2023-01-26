@@ -1,4 +1,4 @@
-#include "headers/echiquier.h"
+#include "echiquier.h"
 
 
 int main() {

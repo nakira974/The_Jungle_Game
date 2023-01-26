@@ -2,7 +2,7 @@
 // Created by maxime on 07/10/2020.
 //
 
-#include "../headers/echiquier.h"
+#include "echiquier.h"
 #include "database/save.h"
 #include "tools/exception.h"
 
