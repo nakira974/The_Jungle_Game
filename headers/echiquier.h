@@ -93,6 +93,8 @@ bool canEat(struct Animal *enemy, struct Animal ally, struct Player *playerTab);
 
 void generateChessSet();
 
+inline void printGameLogo();
+
 enum Zone movingCheck(struct Animal animal);
 
 void loadGame();
