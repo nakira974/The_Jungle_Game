@@ -22,11 +22,19 @@ bool isWinner = false;
 
 bool readSave() {
 
+    int errorCode = 0;
+
     TRY
     {
         players = malloc(PLAYERS_COUNT * sizeof(Player));
         animals = malloc(ANIMALS_COUNT * sizeof(Animal));
-        selectSavedEntities(players, animals);
+        errorCode = selectSavedEntities(players, animals);
+        if(errorCode != 0)
+            THROW;
+        else{
+            printf("Save has been loaded from sqlite3\r\n");
+            return true;
+        }
     }
     CATCH{
         printf("Can't load save from sqlite3\r\n");
@@ -34,8 +42,6 @@ bool readSave() {
     }
 
     END_TRY;
-    printf("Save has been loaded from sqlite3\r\n");
-    return true;
 }
 
 void writeSave(Animal *animalT) {

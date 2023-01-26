@@ -42,8 +42,6 @@ int selectPlayerId(struct Player player, sqlite3 *dbContext){
     TRY{
         sqlite3_prepare_v2(dbContext, sql, -1, &pStmt, 0);
         sqlite3_bind_text(pStmt, 1, (const char *) player.name, -1, SQLITE_STATIC);
-        const char *finalRequest = sqlite3_sql(pStmt);
-        fprintf(stdout, "%s", finalRequest);
         while (sqlite3_step(pStmt) == SQLITE_ROW) {
             if(sqlite3_column_int(pStmt, 0) != 0){
                 result = sqlite3_column_int(pStmt, 0);
@@ -187,11 +185,9 @@ int insertOrUpdatePlayers(struct Player *players, int nPlayers, sqlite3 *dbConte
     END_TRY;
 
 }
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wincompatible-pointer-types-discards-qualifiers"
+int selectSavedEntities(struct Player *players, struct Animal *animals) {
 
-#pragma clang diagnostic ignored "-Wformat"
-_Noreturn void selectSavedEntities(struct Player *players, struct Animal *animals) {
+    int result = 0;
 
     for(int player=0; player < 2; player++) {
         players[player].id = 0;
@@ -201,7 +197,9 @@ _Noreturn void selectSavedEntities(struct Player *players, struct Animal *animal
     char *sql = "SELECT * FROM Player LIMIT 2;";
 
     sqlite3_stmt *pStmt;
-    sqlite3_prepare_v2(db, sql, -1, &pStmt, 0);
+    result = sqlite3_prepare_v2(db, sql, -1, &pStmt, 0);
+    if(result)
+        return result;
 
     int i = 0;
 
@@ -221,36 +219,39 @@ _Noreturn void selectSavedEntities(struct Player *players, struct Animal *animal
 
     for(int player=0; player < 2; player++){
         if(players[player].id != 0){
-            sqlite3_stmt *pCurrentStatement;
             char* playerId = toString(players[player].id);
-            sql = "SELECT * FROM Animal WHERE playerId=";
-            sql = concat(sql, playerId);
-            sql = concat(sql, ";");
+            sql = "SELECT * FROM Animal WHERE playerId= ?";
 
-            sqlite3_prepare_v2(db, sql, -1, &pCurrentStatement, 0);
+            result = sqlite3_prepare_v2(db, sql, -1, &pStmt, 0);
+            if(result)
+                return result;
+            result = sqlite3_bind_int(pStmt, 1, players[player].id);
+            if(result)
+                return result;
             i = 0;
             //TODO Throw exceptions here when null entries
-            while (sqlite3_step(pCurrentStatement) == SQLITE_ROW) {
+            while (sqlite3_step(pStmt) == SQLITE_ROW) {
 
-                animals[i].type = sqlite3_text_column_to_char(sqlite3_column_text(pCurrentStatement, 1));
-                animals[i].x = sqlite3_column_int(pCurrentStatement, 2);
-                animals[i].y = sqlite3_column_int(pCurrentStatement, 3);
-                animals[i].isEnemy = sqlite3_column_int(pCurrentStatement, 4);
-                animals[i].isAlive = sqlite3_column_int(pCurrentStatement, 5);
-                animals[i].canEat = sqlite3_column_int(pCurrentStatement, 6);
-                animals[i].index = sqlite3_column_int(pCurrentStatement, 7);
-                animals[i].zone = sqlite3_column_int(pCurrentStatement, 8);
-                fprintf(stdout, "ANIMAL ID: %s HAS BEEN SELECTED\n", animals[i].zone = sqlite3_column_int(pCurrentStatement, 0));
+                animals[i].type = sqlite3_text_column_to_char(sqlite3_column_text(pStmt, 1));
+                animals[i].x = sqlite3_column_int(pStmt, 2);
+                animals[i].y = sqlite3_column_int(pStmt, 3);
+                animals[i].isEnemy = sqlite3_column_int(pStmt, 4);
+                animals[i].isAlive = sqlite3_column_int(pStmt, 5);
+                animals[i].canEat = sqlite3_column_int(pStmt, 6);
+                animals[i].index = sqlite3_column_int(pStmt, 7);
+                animals[i].zone = sqlite3_column_int(pStmt, 8);
                 i++;
-
             }
-            sqlite3_finalize(pStmt);
 
-            sqlite3_close(db);
+            fprintf(stdout, "USER %s 's animals have been selected\n", players[i].name);
+            sqlite3_finalize(pStmt);
         }
 
     }
 
+    sqlite3_close(db);
+
+    return result;
 }
 #pragma clang diagnostic pop
 
